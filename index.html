@@ -1268,27 +1268,43 @@ function manualSlash(){
 
 /* ====== 結算 ====== */
 function settleTab2(){
-  const win = currentWinner
-    if(win === null){
-    alert("未選擇贏家")
-  return
-}
-
-const type = winType
-const lose = losePlayer
-const doPi = piMode
+  // 1) 讀本局底番（Tab1 總番）
+  const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
+  if(baseFan <= 0){
+    $("t2_status") && ($("t2_status").innerHTML = "⚠️ Tab1 總番數係 0，先去 Tab1 勾番再返嚟");
+    return;
   }
 
+  // 2) 新 UI：讀「贏家 / 食胡模式 / 放銃 / 劈」
+  const win = (typeof currentWinner === "number") ? currentWinner : null;
+  if(win === null){
+    alert("未選擇贏家（先撳玩家『胡』）");
+    return;
+  }
+
+  const type = (winType === "eat") ? "eat" : "self";     // "self" | "eat"
+  let lose = (typeof losePlayer === "number") ? losePlayer : null; // 食胡先需要
+  const doPi = !!piMode;
+
+  if(type === "eat"){
+    if(lose === null || !Number.isFinite(lose) || lose < 0 || lose > 3){
+      alert("食胡：放銃玩家無效（要 0-3）");
+      return;
+    }
+    if(lose === win){
+      alert("食胡：放銃唔可以同贏家同一個人");
+      return;
+    }
+  }
+
+  // 3) 落 undo snapshot（你原本 undo 架構）
   pushUndoSnapshot();
 
-  const win = safeInt($("t2_win")?.value ?? "0", 0);
-  const type = $("t2_type")?.value || "self";
-  const lose = safeInt($("t2_lose")?.value ?? "1", 1);
-  const doPi = !!$("t2_pi")?.checked;
-
+  // 4) 讀 rate / slash mode
   const rate = Math.max(safeInt($("t2_rate")?.value ?? "10", 10), 0);
   const slashMode = safeInt($("t2_slashMode")?.value ?? "3", 3);
 
+  // 5) 計連拉（同你原本規則：同一贏家先拉）
   let pulledFan = baseFan;
   let isChained = false;
 
@@ -1302,12 +1318,15 @@ const doPi = piMode
     pulledFan = baseFan;
   }
 
+  // 6) 劈
   let settleFan = pulledFan;
   if(doPi) settleFan = floorDown(settleFan / 2);
 
+  // 7) 換錢
   const amount = settleFan * rate;
 
   if(type === "self"){
+    // 自摸：三家各賠 amount，贏家收 3 份
     for(let i=0;i<4;i++){
       if(i !== win){
         applyMoneyChange(i, -amount);
@@ -1315,62 +1334,45 @@ const doPi = piMode
       }
     }
   }else{
-    if(lose === win){
-      alert("放銃唔可以同贏家同一個人");
-      undoStack.pop();
-      return;
-    }
+    // 食胡：放銃單賠
     applyMoneyChange(lose, -amount);
     applyMoneyChange(win, amount);
   }
 
-  if($("t2_pullCount")) $("t2_pullCount").innerText = String(chain_pullCount);
-  if($("t2_slashModeLabel")) $("t2_slashModeLabel").innerText = slashModeLabel(slashMode);
-  if($("t2_lastSettleFan")) $("t2_lastSettleFan").innerText = String(settleFan);
-
-  const parts = [];
-  parts.push(`本局番：${baseFan}`);
-  parts.push(isChained ? `拉後：${pulledFan}` : `第一舖：${pulledFan}`);
-  if(doPi) parts.push(`已劈→${settleFan}`);
-  parts.push(`找數番：${settleFan}`);
-  parts.push(`1番=$${rate} → 金額=$${amount}`);
-  if($("t2_status")) $("t2_status").innerHTML = "✅ " + parts.join("　|　");
-
-  updateLeader();
-
+  // 8) 更新 chain 狀態
   chain_lastWinner = win;
   chain_lastSettleFan = settleFan;
 
+  if($("t2_pullCount")) $("t2_pullCount").innerText = String(chain_pullCount);
+
+  // 9) status
+  const winnerName = $("n"+win)?.value || ["東","南","西","北"][win];
+  const loseName = (type==="eat") ? ($("n"+lose)?.value || ["東","南","西","北"][lose]) : "";
+  const typeTxt = (type==="self") ? "自摸" : `食胡（食 ${loseName}）`;
+
+  const parts = [];
+  parts.push(`贏家：${winnerName}｜${typeTxt}`);
+  parts.push(`本局番：${baseFan}`);
+  parts.push(isChained ? `拉後：${pulledFan}` : `第一舖：${pulledFan}`);
+  parts.push(doPi ? `已劈→${settleFan}` : `找數番：${settleFan}`);
+  parts.push(`1番=$${rate} → 金額=$${amount}`);
+
+  if($("t2_status")) $("t2_status").innerHTML = "✅ " + parts.join("<br>");
+
+  updateLeader();
+  renderStats();
+  saveTab2State();
+
+  // 10) 斬拉（到數）
   if(slashMode !== 999 && chain_pullCount >= slashMode){
     alert("⚔️ 斬拉：到數後重開！");
     chain_lastWinner = null;
     chain_lastSettleFan = 0;
     chain_pullCount = 0;
     if($("t2_pullCount")) $("t2_pullCount").innerText = "0";
-    if($("t2_lastSettleFan")) $("t2_lastSettleFan").innerText = "0";
     if($("t2_status")) $("t2_status").innerHTML += "<br>⚔️ 已斬拉：下一舖當第一舖";
+    saveTab2State();
   }
-
-  const nm = [0,1,2,3].map(i=>$("n"+i)?.value || ["東","南","西","北"][i]);
-  gameHistory.push({
-    ts: Date.now(),
-    winner: win,
-    loser: lose,
-    type,
-    baseFan,
-    pulledFan,
-    settleFan,
-    pi: doPi,
-    slashMode,
-    rate,
-    amount,
-    winnerName: nm[win],
-    loserName: nm[lose],
-  });
-
-  renderHistory();
-  renderStats();
-  saveTab2State();
 }
 
 /* ====== Tab2 reset ====== */
@@ -1641,18 +1643,6 @@ function bindEvents(){
   });
 
   // Tab2 selects
-  $("t2_win")?.addEventListener("change", ()=>{ enforceLoseNotWin(); saveTab2State(); });
-  $("t2_lose")?.addEventListener("change", ()=>{ enforceLoseNotWin(); saveTab2State(); });
-
-  $("t2_slashMode")?.addEventListener("change", ()=>{ updateSlashLabel(); saveTab2State(); });
-  $("t2_rate")?.addEventListener("input", ()=>saveTab2State());
-
-  // Tab2 buttons
-  $("t2_settleBtn")?.addEventListener("click", settleTab2);
-  $("t2_resetBtn")?.addEventListener("click", resetTab2All);
-  $("undoBtn")?.addEventListener("click", undoLast);
-  $("slashBtn")?.addEventListener("click", manualSlash);
-
   $("diceBtn")?.addEventListener("click", diceRoll3);
 
   $("copyHistoryBtn")?.addEventListener("click", copyHistory);
@@ -1686,7 +1676,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 let currentWinner = null
 let winType = "self"
-let losePlayer = 0
+let losePlayer = null
 let piMode = false
 
 function selectWinner(i){
@@ -1695,26 +1685,44 @@ function selectWinner(i){
 }
 
 function openWinType(){
-  if(currentWinner===null){
-    alert("先揀邊個胡")
-    return
+  if(currentWinner === null){
+    alert("先揀邊個胡（撳玩家『胡』）");
+    return;
   }
 
-  let type = prompt("輸入：\n1 = 自摸\n2 = 食胡")
-  if(type=="1"){
-    winType="self"
-  }else{
-    winType="eat"
-    let p = prompt("邊個放銃？輸入 0-3")
-    losePlayer = parseInt(p)
-  }
-}
+  const type = prompt("輸入：\n1 = 自摸\n2 = 食胡");
+  if(type === null) return; // cancel 直接唔做
 
-function togglePi(){
-  piMode = !piMode
-  $("piBtn").innerText = piMode ? "劈 ON" : "劈 OFF"
+  if(type.trim() === "1"){
+    winType = "self";
+    losePlayer = null; // 自摸唔需要放銃
+    return;
+  }
+
+  if(type.trim() === "2"){
+    winType = "eat";
+
+    const p = prompt("邊個放銃？輸入 0-3\n0=東 1=南 2=西 3=北");
+    if(p === null) return; // cancel
+
+    const x = parseInt(p, 10);
+    if(!Number.isFinite(x) || x < 0 || x > 3){
+      alert("放銃輸入要 0-3");
+      return;
+    }
+    if(x === currentWinner){
+      alert("放銃唔可以同贏家同一個人");
+      return;
+    }
+
+    losePlayer = x;
+    return;
+  }
+
+  alert("輸入無效：請輸入 1 或 2");
 }
   </script>
 </body>
 </html>
+
 
