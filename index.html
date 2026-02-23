@@ -369,16 +369,11 @@ details[open]{ animation:fadeIn 0.18s ease; }
         <div class="row" style="margin-top:10px;">
           <span class="badge">連莊次數</span>
           <input class="input num" type="number" id="dealer_times" value="0" min="0" />
-          <span class="small">（連莊番數 = 次數×2+1）</span>
         </div>
       </details>
 
       <!-- ✅ render 完整番表落呢度 -->
       <div id="fanListMount"></div>
-
-      <div class="small" style="margin-top:8px;">
-        ✅ Tab2 會用下面固定「總番數」做本局番
-      </div>
     </div>
 
     <div class="card">
@@ -392,7 +387,7 @@ details[open]{ animation:fadeIn 0.18s ease; }
   <!-- ================= TAB 2 ================= -->
   <div id="tab2" class="container" style="display:none;">
     <div class="card">
-      <h2>🀄 麻雀枱 PRO</h2>
+      <h2>🀄 麻雀枱</h2>
 
       <!-- ===== 上方資訊 ===== -->
       <div class="centerPanel" style="margin-bottom:12px;">
@@ -412,11 +407,11 @@ details[open]{ animation:fadeIn 0.18s ease; }
         <div class="kv"><span>拉</span><span class="badge gold" id="t2_pullCount">0</span></div>
 
         <div class="dice" id="diceText">🎲 -</div>
-        <button class="btn secondary" id="diceBtn" type="button">擲骰（三粒）</button>
+        <button class="btn secondary" id="diceBtn" type="button">擲骰</button>
 
         <div class="row" style="justify-content:center;margin-top:10px;">
           <span class="badge">1番 = $</span>
-          <input class="input num" id="t2_rate" type="number" value="10" min="0">
+          <input class="input num" id="t2_rate" type="number" value="1" min="0">
         </div>
       </div>
 
@@ -1549,5 +1544,6 @@ function settleWithParams(win, type, lose){
   </script>
 </body>
 </html>
+
 
 
