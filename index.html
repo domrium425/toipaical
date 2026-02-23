@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港式台牌計番</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#1e1e1e;
+    color:white;
+    margin:0;
+    padding:15px;
+    padding-bottom:100px;
+}
+.section{
+    background:#2c2c2c;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:12px;
+}
+h2,h3{
+    margin:0;
+}
+label{
+    display:block;
+    margin:6px 0;
+}
+input[type=number]{
+    width:100px;
+    padding:5px;
+    font-size:16px;
+}
+.collapsible{
+    cursor:pointer;
+    padding:10px;
+    background:#333;
+    border-radius:8px;
+    margin-top:10px;
+}
+.content{
+    display:none;
+    padding:10px 5px;
+}
+.fixedTotal{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:black;
+    color:#00ff88;
+    text-align:center;
+    font-size:26px;
+    font-weight:bold;
+    padding:15px 0;
+    border-top:2px solid #00ff88;
+}
+.resultBox{
+    margin-top:10px;
+    background:#333;
+    padding:10px;
+    border-radius:8px;
+}
+</style>
+</head>
+<body>
+
+<div class="section">
+<b>規則：</b><br>
+拉上劈下 開槓計暗間<br>
+順骰冧莊加換一次牌 圍骰加換三次牌 最多換三次
+</div>
+
+<div class="section">
+<h2>陰蟄錢 (即時畀錢)</h2>
+追殺：每家5元<br>
+暗槓：每家5元<br>
+花：每家5元<br>
+草：每家3元<br>
+詐胡：每家30番
+</div>
+
+<div class="section">
+<h2>拉劈計數機</h2>
+
+現針番數：
+<input type="number" id="currentFan" oninput="calcLap()"><br><br>
+
+新針番數：
+<input type="number" id="newFan" oninput="calcLap()">
+
+<div class="resultBox">
+新針拉緊：
+<span id="lapResult">0</span><br><br>
+
+現針即劈：
+<span id="currentHalf">0</span><br><br>
+
+拉完再劈：
+<span id="lapHalf">0</span>
+</div>
+
+</div>
+
+<div class="section">
+<h2>番表</h2>
+<div id="fanContainer"></div>
+</div>
+
+<div class="fixedTotal">
+總番數：<span id="totalFan">0</span> 番
+</div>
+
+<script>
+
+const fanData = {
+
+"莊":[
+["莊",1]
+],
+
+"一般":[
+["花",1],["正花",2],["字",2],["無字",2],["無字花",5],["將眼",2],
+["對碰",2],["獨獨",2],["假獨",1],["老少",5],["門清",5],
+["缺一門",5],["缺五",5],["斷么",5],["不求人",10],["半求人",20],["全求人",40]
+],
+
+"叮":[
+["叮",5],["即食",5],["天叮",40],["地叮",20]
+],
+
+"自摸":[
+["自摸",1],["門清自摸",8],["花摸",1],["槓摸",5],["槓上槓摸",30]
+],
+
+"槓":[
+["槓",1],["暗槓",2],["兩槓",10],["三槓",30],["四槓",100],["五槓",240],
+["搶槓",5],["搶槓上槓",30]
+],
+
+"平胡":[["平胡",10],["無字花大平胡",20]
+],
+
+"雞胡":[["細雞",10],["大雞",20]
+],
+
+"暗間":[["兩暗",5],["三暗",15],["四暗",30],["五暗",60],["間間胡",100]
+],
+
+"般高 + 相逢":[
+["般高",5],["三般高",15],["四般高",30],
+["相逢",3],["三相逢",10],["四相逢",30],["五相逢",60],
+["半姊妹",20],["全姊妹",40]
+],
+
+"兄弟姊妹":[
+["兄弟",5],["小三兄弟",15],["大三兄弟",30],
+["姊妹",3],["小三姊妹",10],["大三姊妹",15]
+],
+
+"步步高":[
+["明三色步步高",5],["暗三色步步高",10],
+["明單色步步高",15],["暗單色步步高",20]
+],
+
+"歸":[
+["明四歸一",5],["明四歸二",15],["明四歸四",60],
+["暗四歸一",10],["暗四歸二",30],["暗四歸四",100]
+],
+
+"一條龍":[
+["明雜龍",8],["暗雜龍",15],["明清龍",15],["暗清龍",20]
+],
+
+"多門齊":[
+["小五門齊",10],["大五門齊",15],
+["小七門齊",15],["大七門齊",20]
+],
+
+"么九":[
+["混帶么",15],["全帶么",30],["混么九",40],["清么九",120]
+],
+
+"奇牌":[
+["混一色",40],["清一色",100],["對對胡",40],["小三元",40],
+["大三元",80],["小三風",40],["大三風",80],["小四喜",60],
+["大四喜",120],["字一色",150],["十六不搭",60],["十三么",150],
+["嚦咕嚦咕",40],["大嚦咕嚦咕",60],["天胡",100],
+["地胡",100],["人胡",80],["七搶一",30],["一搶七",30],["八仙過海",40]
+]
+
+};
+
+function renderFans(){
+let container=document.getElementById("fanContainer");
+
+for(let category in fanData){
+
+let header=document.createElement("div");
+header.className="collapsible";
+header.innerText=category;
+
+let content=document.createElement("div");
+content.className="content";
+
+fanData[category].forEach(item=>{
+content.innerHTML+=`
+<label>
+<input type="checkbox" value="${item[1]}" onchange="updateTotal()"> 
+${item[0]} (${item[1]}番)
+</label>`;
+});
+
+if(category==="莊"){
+content.innerHTML+=`
+<br>連莊次數：
+<input type="number" id="dealerCount" min="0" value="0" onchange="updateTotal()"> 
+(連莊次數 × 2 + 1 番)
+`;
+}
+
+header.onclick=function(){
+content.style.display=
+content.style.display==="block"?"none":"block";
+};
+
+container.appendChild(header);
+container.appendChild(content);
+}
+}
+
+function updateTotal(){
+let total=0;
+
+document.querySelectorAll("input[type=checkbox]:checked")
+.forEach(cb=> total+=parseInt(cb.value));
+
+let dealer=parseInt(document.getElementById("dealerCount")?.value||0);
+if(dealer>0){
+total += dealer*2+1;
+}
+
+document.getElementById("totalFan").innerText=total;
+}
+
+function calcLap(){
+let current=parseFloat(document.getElementById("currentFan").value||0);
+let newFan=parseFloat(document.getElementById("newFan").value||0);
+
+let lap=Math.ceil(current*1.5+newFan);
+let currentHalf=Math.floor(current/2);
+let lapHalf=Math.floor(lap/2);
+
+document.getElementById("lapResult").innerText=lap;
+document.getElementById("currentHalf").innerText=currentHalf;
+document.getElementById("lapHalf").innerText=lapHalf;
+}
+
+renderFans();
+
+</script>
+
+</body>
+</html>
