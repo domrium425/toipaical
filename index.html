@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>港式台牌計番神器</title>
+<title>港式台牌 Ultimate 雙Tab版</title>
+
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
 <style>
 :root{
@@ -16,6 +18,7 @@
 --text:#ffffff;
 }
 
+
 body{
 background:var(--bg);
 color:var(--text);
@@ -25,11 +28,13 @@ padding:15px;
 padding-bottom:120px;
 }
 
+
 /* Tab */
 .tabs{
 display:flex;
 margin-bottom:15px;
 }
+
 
 .tabBtn{
 flex:1;
@@ -40,19 +45,23 @@ color:white;
 cursor:pointer;
 }
 
+
 .tabBtn.active{
 background:var(--accent);
 color:black;
 font-weight:bold;
 }
 
+
 .tabContent{
 display:none;
 }
 
+
 .tabContent.active{
 display:block;
 }
+
 
 /* Card */
 .section{
@@ -61,6 +70,7 @@ padding:15px;
 border-radius:12px;
 margin-bottom:15px;
 }
+
 
 /* 番表 */
 .collapsible{
@@ -73,7 +83,9 @@ display:flex;
 justify-content:space-between;
 }
 
+
 .content{display:none;padding:10px 5px;}
+
 
 .fixedTotal{
 position:fixed;
@@ -88,11 +100,13 @@ justify-content:space-between;
 align-items:center;
 }
 
+
 .totalText{
 color:var(--accent);
 font-size:22px;
 font-weight:bold;
 }
+
 
 .clearBtn{
 background:var(--button);
@@ -103,12 +117,14 @@ border-radius:8px;
 cursor:pointer;
 }
 
+
 /* 四人 */
 .players{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:10px;
 }
+
 
 .playerCard{
 background:#333;
@@ -117,11 +133,13 @@ border-radius:10px;
 text-align:center;
 }
 
+
 .score{
 font-size:26px;
 color:var(--accent);
 margin:10px 0;
 }
+
 
 .addBtn{background:#007aff;color:white;}
 .subBtn{background:#ff3b30;color:white;}
@@ -133,13 +151,16 @@ cursor:pointer;
 margin:2px;
 }
 
+
 .leader{
 outline:3px solid gold;
 }
 
+
 </style>
 </head>
 <body>
+
 
 <!-- TAB BUTTON -->
 <div class="tabs">
@@ -151,8 +172,10 @@ outline:3px solid gold;
 </button>
 </div>
 
+
 <!-- TAB 1 計番 -->
 <div class="tabContent active">
+
 
 <div class="section">
 <h2>拉劈計數機</h2>
@@ -167,10 +190,12 @@ outline:3px solid gold;
 </div>
 </div>
 
+
 <div class="section">
 <h2>番表</h2>
 <div id="fanContainer"></div>
 </div>
+
 
 <div class="fixedTotal">
 <div class="totalText">
@@ -179,14 +204,18 @@ outline:3px solid gold;
 <button class="clearBtn" onclick="clearAll()">清零</button>
 </div>
 
+
 </div>
+
 
 <!-- TAB 2 四人 -->
 <div class="tabContent">
 
+
 <div class="section">
 <h2>四人分數</h2>
 <div class="players">
+
 
 <div class="playerCard" id="p0">
 <h3>東</h3>
@@ -195,12 +224,14 @@ outline:3px solid gold;
 <button class="subBtn" onclick="changeScore(0,-1)">-1</button>
 </div>
 
+
 <div class="playerCard" id="p1">
 <h3>南</h3>
 <div class="score" id="score1">0</div>
 <button class="addBtn" onclick="changeScore(1,1)">+1</button>
 <button class="subBtn" onclick="changeScore(1,-1)">-1</button>
 </div>
+
 
 <div class="playerCard" id="p2">
 <h3>西</h3>
@@ -209,6 +240,7 @@ outline:3px solid gold;
 <button class="subBtn" onclick="changeScore(2,-1)">-1</button>
 </div>
 
+
 <div class="playerCard" id="p3">
 <h3>北</h3>
 <div class="score" id="score3">0</div>
@@ -216,12 +248,16 @@ outline:3px solid gold;
 <button class="subBtn" onclick="changeScore(3,-1)">-1</button>
 </div>
 
+
 </div>
 </div>
 
+
 </div>
+
 
 <script>
+
 
 /* TAB */
 function switchTab(index){
@@ -233,12 +269,15 @@ tabs[index].classList.add("active");
 contents[index].classList.add("active");
 }
 
+
 /* 番表資料 */
 const fanData = {
+
 
 "莊":[
 ["莊",1]
 ],
+
 
 "一般":[
 ["花",1],["正花",2],["字",2],["無字",2],["無字花",5],["將眼",2],
@@ -246,27 +285,34 @@ const fanData = {
 ["缺一門",5],["缺五",5],["斷么",5],["不求人",10],["半求人",20],["全求人",40]
 ],
 
+
 "叮":[
 ["叮",5],["即食",5],["天叮",40],["地叮",20]
 ],
 
+
 "自摸":[
 ["自摸",1],["門清自摸",8],["花摸",1],["槓摸",5],["槓上槓摸",30]
 ],
+
 
 "槓":[
 ["槓",1],["暗槓",2],["兩槓",10],["三槓",30],["四槓",100],["五槓",240],
 ["搶槓",5],["搶槓上槓",30]
 ],
 
+
 "平胡":[["平胡",10],["無字花大平胡",20]
 ],
+
 
 "雞胡":[["細雞",10],["大雞",20]
 ],
 
+
 "暗間":[["兩暗",5],["三暗",15],["四暗",30],["五暗",60],["間間胡",100]
 ],
+
 
 "般高 + 相逢":[
 ["般高",5],["三般高",15],["四般高",30],
@@ -274,33 +320,40 @@ const fanData = {
 ["半姊妹",20],["全姊妹",40]
 ],
 
+
 "兄弟姊妹":[
 ["兄弟",5],["小三兄弟",15],["大三兄弟",30],
 ["姊妹",3],["小三姊妹",10],["大三姊妹",15]
 ],
+
 
 "步步高":[
 ["明三色步步高",5],["暗三色步步高",10],
 ["明單色步步高",15],["暗單色步步高",20]
 ],
 
+
 "歸":[
 ["明四歸一",5],["明四歸二",15],["明四歸四",60],
 ["暗四歸一",10],["暗四歸二",30],["暗四歸四",100]
 ],
 
+
 "一條龍":[
 ["明雜龍",8],["暗雜龍",15],["明清龍",15],["暗清龍",20]
 ],
+
 
 "多門齊":[
 ["小五門齊",10],["大五門齊",15],
 ["小七門齊",15],["大七門齊",20]
 ],
 
+
 "么九":[
 ["混帶么",15],["全帶么",30],["混么九",40],["清么九",120]
 ],
+
 
 "奇牌":[
 ["混一色",40],["清一色",100],["對對胡",40],["小三元",40],
@@ -310,7 +363,9 @@ const fanData = {
 ["地胡",100],["人胡",80],["七搶一",30],["一搶七",30],["八仙過海",40]
 ]
 
+
 };
+
 
 function renderFans(){
 let container=document.getElementById("fanContainer");
@@ -319,8 +374,10 @@ let header=document.createElement("div");
 header.className="collapsible";
 header.innerHTML=`${category}`;
 
+
 let content=document.createElement("div");
 content.className="content";
+
 
 fanData[category].forEach(item=>{
 content.innerHTML+=`
@@ -330,6 +387,7 @@ ${item[0]} (${item[1]}番)
 </label><br>`;
 });
 
+
 if(category==="莊"){
 content.innerHTML+=`
 連莊次數：
@@ -338,15 +396,18 @@ content.innerHTML+=`
 `;
 }
 
+
 header.onclick=function(){
 content.style.display=
 content.style.display==="block"?"none":"block";
 };
 
+
 container.appendChild(header);
 container.appendChild(content);
 }
 }
+
 
 function updateTotal(){
 let total=0;
@@ -357,12 +418,14 @@ if(dealer>0){total+=dealer*2+1;}
 document.getElementById("totalFan").innerText=total;
 }
 
+
 function clearAll(){
 document.querySelectorAll("input[type=checkbox]")
 .forEach(cb=>cb.checked=false);
 document.getElementById("dealerCount").value=0;
 updateTotal();
 }
+
 
 /* 拉劈 */
 function calcLap(){
@@ -376,14 +439,17 @@ document.getElementById("currentHalf").innerText=currentHalf;
 document.getElementById("lapHalf").innerText=lapHalf;
 }
 
+
 /* 四人 */
 let scores=[0,0,0,0];
 const names=["東","南","西","北"];
+
 
 function changeScore(player,amount){
 scores[player]+=amount;
 updateUI();
 }
+
 
 function updateUI(){
 for(let i=0;i<4;i++){
@@ -397,11 +463,15 @@ document.getElementById("p"+index).classList.add("leader");
 }
 }
 
+
 renderFans();
 updateUI();
 
+
 </script>
+
 
 </body>
 </html>
+
 
