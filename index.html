@@ -818,9 +818,8 @@ function renderFanList(){
   fanData.forEach(group=>{
     const d = document.createElement("details");
     const s = document.createElement("summary");
-    const style = catStyle[group.cat] || {icon:"📂", color:"#fff"};
-    s.innerHTML = `<span style="color:${style.color}">${style.icon} ${group.cat}</span>`;
-    d.appendChild(s);
+    const icon = catIcon[group.cat] || "📂";
+    s.innerHTML = `<span style="color:var(--gold);font-weight:900;">${icon} ${group.cat}</span>`;
 
     group.items.forEach(([id, name, fan, hasCount])=>{
       const line = document.createElement("div");
@@ -837,7 +836,6 @@ function renderFanList(){
         line.classList.toggle("active", cb.checked);
         updateTotalFan();
         saveTab1State();
-});
       });
 
       const lab = document.createElement("label");
@@ -1534,6 +1532,7 @@ function bindEvents(){
 </body>
 
 </html>
+
 
 
 
