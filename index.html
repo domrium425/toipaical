@@ -453,7 +453,7 @@ details[open]{ animation:fadeIn 0.18s ease; }
             <input id="s2" class="input score" type="number" value="0">
 
             <div class="row" style="justify-content:center;margin-top:8px;">
-              <button class="btn" type="button" onclick="selectWinner(2)">胡</button>
+              <button class="btn" type="button" onclick="winAndSettle(2)">胡</button>
             </div>
 
             <div class="row" style="justify-content:center;margin-top:8px;">
@@ -497,7 +497,7 @@ details[open]{ animation:fadeIn 0.18s ease; }
             <input id="s0" class="input score" type="number" value="0">
 
             <div class="row" style="justify-content:center;margin-top:8px;">
-              <button class="btn" type="button" onclick="selectWinner(0)">胡</button>
+              <button class="btn" type="button" onclick="winAndSettle(0)">胡</button>
             </div>
 
             <div class="row" style="justify-content:center;margin-top:8px;">
@@ -520,7 +520,7 @@ details[open]{ animation:fadeIn 0.18s ease; }
           <input id="s1" class="input score" type="number" value="0">
 
           <div class="row" style="justify-content:center;margin-top:8px;">
-            <button class="btn" type="button" onclick="selectWinner(1)">胡</button>
+            <button class="btn" type="button" onclick="winAndSettle(1)">胡</button>
           </div>
 
           <div class="row" style="justify-content:center;margin-top:8px;">
@@ -1410,9 +1410,144 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   setTab(1);
 });
+  function winAndSettle(i){
+  // 1) 設定贏家（保留你原本 UI 效果）
+  currentWinner = i;
+  updateWinnerUI();
 
-/* ========= Tab1：清楚記錄 ========= */
+  // 2) 直接用「呢位玩家卡上面」嘅選單去結算
+  const type = ($("wt"+i)?.value === "eat") ? "eat" : "self";
+  let lose = null;
+
+  if(type === "eat"){
+    lose = safeInt($("lose"+i)?.value ?? "-1", -1);
+    if(lose < 0 || lose > 3 || lose === i){
+      alert("食胡：出銃者無效（唔可以係自己）");
+      return;
+    }
+  }
+
+  // 3) 直接計數（走共用結算核心）
+  settleWithParams(i, type, lose);
+}
+
+function settleWithParams(win, type, lose){
+  // 1) 讀本局番（Tab1 總番）
+  const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
+  if(baseFan <= 0){
+    $("t2_status") && ($("t2_status").innerHTML = "⚠️ Tab1 總番數係 0，先去 Tab1 勾番再返嚟");
+    return;
+  }
+
+  // 2) 保障食胡參數
+  if(type === "eat"){
+    if(typeof lose !== "number" || lose < 0 || lose > 3){
+      alert("食胡：出銃者無效（要 0-3）");
+      return;
+    }
+    if(lose === win){
+      alert("食胡：出銃唔可以同贏家同一個人");
+      return;
+    }
+  }
+
+  // 3) 落 undo snapshot
+  pushUndoSnapshot();
+
+  // 4) rate / slash mode
+  const rate = Math.max(safeInt($("t2_rate")?.value ?? "10", 10), 0);
+  const slashMode = safeInt($("t2_slashMode")?.value ?? "3", 3);
+
+  // 5) 計連拉（同一贏家先拉）
+  let pulledFan = baseFan;
+  let isChained = false;
+
+  if(chain_lastWinner === win){
+    chain_pullCount += 1;
+    isChained = true;
+    pulledFan = ceilUp(chain_lastSettleFan * 1.5 + baseFan);
+  }else{
+    chain_pullCount = 0;
+    isChained = false;
+    pulledFan = baseFan;
+  }
+
+  // 6) 劈
+  let settleFan = pulledFan;
+  if(piMode) settleFan = floorDown(settleFan / 2);
+
+  // 7) 換錢
+  const amount = settleFan * rate;
+
+  if(type === "self"){
+    // 自摸：三家各賠 amount，贏家收 3 份
+    for(let i=0;i<4;i++){
+      if(i !== win){
+        applyMoneyChange(i, -amount);
+        applyMoneyChange(win, amount);
+      }
+    }
+  }else{
+    // 食胡：出銃單賠
+    applyMoneyChange(lose, -amount);
+    applyMoneyChange(win, amount);
+  }
+
+  // 8) 更新 chain 狀態
+  chain_lastWinner = win;
+  chain_lastSettleFan = settleFan;
+  if($("t2_pullCount")) $("t2_pullCount").innerText = String(chain_pullCount);
+
+  // 9) status
+  const winnerName = getPlayerName(win);
+  const loseName = (type==="eat") ? getPlayerName(lose) : "";
+  const typeTxt = (type==="self") ? "自摸" : `食胡（食 ${loseName}）`;
+
+  const parts = [];
+  parts.push(`贏家：${winnerName}｜${typeTxt}`);
+  parts.push(`本局番：${baseFan}`);
+  parts.push(isChained ? `拉後：${pulledFan}` : `第一舖：${pulledFan}`);
+  parts.push(piMode ? `已劈→${settleFan}` : `找數番：${settleFan}`);
+  parts.push(`1番=$${rate} → 金額=$${amount}`);
+
+  if($("t2_status")) $("t2_status").innerHTML = "✅ " + parts.join("<br>");
+
+  // 10) 記錄
+  gameHistory.push({
+    ts: Date.now(),
+    winner: win,
+    loser: (type==="eat") ? lose : null,
+    type,
+    baseFan,
+    pulledFan,
+    settleFan,
+    pi: piMode,
+    slashMode,
+    rate,
+    amount,
+    winnerName,
+    loserName: (type==="eat") ? loseName : "",
+  });
+
+  updateLeader();
+  renderHistory();
+  renderStats();
+  saveTab2State();
+
+  // 11) 斬拉（到數）
+  if(slashMode !== 999 && chain_pullCount >= slashMode){
+    alert("⚔️ 斬拉：到數後重開！");
+    chain_lastWinner = null;
+    chain_lastSettleFan = 0;
+    chain_pullCount = 0;
+    if($("t2_pullCount")) $("t2_pullCount").innerText = "0";
+    if($("t2_status")) $("t2_status").innerHTML += "<br>⚔️ 已斬拉：下一舖當第一舖";
+    saveTab2State();
+  }
+}
+
   </script>
 </body>
 </html>
+
 
