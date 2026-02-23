@@ -5,151 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>港式台牌計番</title>
 
+<!-- Font Awesome CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-
-/* ========= 主題變數 ========= */
-
-:root{
---bg:#1e1e1e;
---card:#2c2c2c;
---accent:#00ff88;
---button:#cc0000;
---text:#ffffff;
-}
-
-.theme-green{
---bg:#0f2d1f;
---card:#174f36;
---accent:#00ff99;
---button:#ff4444;
-}
-
-.theme-red{
---bg:#2b0000;
---card:#4d0000;
---accent:#ffcc00;
---button:#ff4444;
-}
-
-.theme-blue{
---bg:#0a1a2f;
---card:#123a63;
---accent:#00ccff;
---button:#ff4444;
-}
-
-.theme-white{
---bg:#f5f5f5;
---card:#ffffff;
---accent:#007aff;
---button:#ff3b30;
---text:#000000;
-}
-
-/* ========= 基本樣式 ========= */
-
 body{
-font-family:Arial;
-background:var(--bg);
-color:var(--text);
-margin:0;
-padding:15px;
-padding-bottom:120px;
-transition:0.3s;
+    font-family:Arial;
+    background:#1e1e1e;
+    color:white;
+    margin:0;
+    padding:15px;
+    padding-bottom:110px;
 }
-
 .section{
-background:var(--card);
-padding:15px;
-margin-bottom:15px;
-border-radius:12px;
+    background:#2c2c2c;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:12px;
 }
-
-h2{margin-top:0}
-
+h2{
+    margin:0 0 10px 0;
+}
+label{
+    display:block;
+    margin:6px 0;
+}
 input[type=number]{
-width:100px;
-padding:5px;
-font-size:16px;
+    width:100px;
+    padding:5px;
+    font-size:16px;
 }
-
 .collapsible{
-cursor:pointer;
-padding:10px;
-background:#333;
-border-radius:8px;
-margin-top:10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+    cursor:pointer;
+    padding:10px;
+    background:#333;
+    border-radius:8px;
+    margin-top:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
-
 .content{
-display:none;
-padding:10px 5px;
+    display:none;
+    padding:10px 5px;
 }
-
-.resultBox{
-margin-top:10px;
-background:#333;
-padding:10px;
-border-radius:8px;
-}
-
 .fixedTotal{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:var(--card);
-border-top:2px solid var(--accent);
-padding:10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:black;
+    border-top:2px solid #00ff88;
+    padding:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
-
 .totalText{
-color:var(--accent);
-font-size:22px;
-font-weight:bold;
+    color:#00ff88;
+    font-size:22px;
+    font-weight:bold;
 }
-
 .clearBtn{
-background:var(--button);
-color:white;
-border:none;
-padding:8px 15px;
-border-radius:8px;
-cursor:pointer;
+    background:#cc0000;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
 }
-
-.themeSelect{
-padding:5px;
-font-size:14px;
+.resultBox{
+    margin-top:10px;
+    background:#333;
+    padding:10px;
+    border-radius:8px;
 }
-
 .rotate{
-transform:rotate(90deg);
-transition:0.2s;
+    transform:rotate(90deg);
+    transition:0.2s;
 }
-
 </style>
 </head>
 <body>
-
-<div class="section">
-<h2><i class="fa-solid fa-palette"></i> 主題切換</h2>
-<select class="themeSelect" onchange="changeTheme(this.value)">
-<option value="">🌙 深色</option>
-<option value="theme-green">🀄 麻雀綠</option>
-<option value="theme-red">🔴 喜慶紅</option>
-<option value="theme-blue">🔵 科技藍</option>
-<option value="theme-white">🤍 白色</option>
-</select>
-</div>
 
 <div class="section">
 <h2><i class="fa-solid fa-scroll"></i> 規則</h2>
@@ -176,9 +114,14 @@ transition:0.2s;
 <input type="number" id="newFan" oninput="calcLap()">
 
 <div class="resultBox">
-新針拉緊：<span id="lapResult">0</span><br><br>
-現針即劈：<span id="currentHalf">0</span><br><br>
-拉完再劈：<span id="lapHalf">0</span>
+新針拉緊：
+<span id="lapResult">0</span><br><br>
+
+現針即劈：
+<span id="currentHalf">0</span><br><br>
+
+拉完再劈：
+<span id="lapHalf">0</span>
 </div>
 </div>
 
@@ -358,20 +301,6 @@ document.getElementById("currentHalf").innerText=currentHalf;
 document.getElementById("lapHalf").innerText=lapHalf;
 }
 
-function changeTheme(theme){
-document.body.className=theme;
-localStorage.setItem("mahjongTheme",theme);
-}
-
-function loadTheme(){
-let saved=localStorage.getItem("mahjongTheme");
-if(saved){
-document.body.className=saved;
-document.querySelector(".themeSelect").value=saved;
-}
-}
-
-loadTheme();
 renderFans();
 
 </script>
