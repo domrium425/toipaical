@@ -404,23 +404,57 @@ details{ overflow:hidden; }
 }
 
 @media (max-width: 420px){
-  .container{ padding:0 10px; }
-  .card{ padding:12px; }
-  header{ font-size:18px; }
-  h2{ font-size:16px; }
-  .small{ font-size:12px; }
-  .badge{ font-size:12px; }
 
-  .mjRowMid{ gap:8px; }
-  .mjPlayer{ min-width:92px; padding:10px; }
-  .mjPlayer .name, .mjPlayer .score{ width:76px; }
+  body{
+    font-size:14px;
+  }
 
-  .centerPanel{ min-width:0; width:100%; flex:1; }
-  .quickGrid{ grid-template-columns:repeat(2, 1fr); }
+  .container{
+    padding:0 8px;
+  }
 
-  .input.num{ width:96px; }
+  .card{
+    padding:10px;
+    border-radius:14px;
+  }
+
+  .row{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .input.num{
+    width:100%;
+  }
+
+  .input.tiny{
+    width:70px;
+  }
+
+  .quickGrid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .mjRowMid{
+    flex-direction:column;
+  }
+
+  .mjPlayer{
+    width:100%;
+  }
+
+  .centerPanel{
+    width:100%;
+  }
+
+  .fixedTotal{
+    font-size:14px;
+  }
+
+  .fixedTotal .big{
+    font-size:16px;
+  }
 }
-  
 </style>
 </head>
 
@@ -1568,6 +1602,7 @@ function bindEvents(){
 </body>
 
 </html>
+
 
 
 
