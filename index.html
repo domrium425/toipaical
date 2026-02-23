@@ -351,6 +351,30 @@ details > summary::-webkit-details-marker{ display:none; }
 
 .historyItem .title{ font-weight:900; }
 .historyItem .meta{ font-size:13px; color:var(--sub); margin-top:4px; }
+
+/* 箭咀 */
+summary::before{
+  content:"▶";
+  display:inline-block;
+  margin-right:6px;
+  transition:0.2s;
+  color:var(--gold);
+}
+
+/* 打開變 ▼ */
+details[open] summary::before{
+  content:"▼";
+}
+
+/* 展開動畫 */
+details[open]{
+  animation:fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(-5px);}
+  to{opacity:1; transform:translateY(0);}
+}
 </style>
 </head>
 
@@ -589,6 +613,18 @@ details > summary::-webkit-details-marker{ display:none; }
 </div>
 
 <script>
+const catStyle = {
+  "莊": {icon:"👑", color:"#d4af37"},
+  "一般": {icon:"🀄", color:"#00ff88"},
+  "叮": {icon:"🔔", color:"#ffaa00"},
+  "自摸": {icon:"🤲", color:"#00ccff"},
+  "槓": {icon:"💥", color:"#ff4444"},
+  "平胡": {icon:"📏", color:"#66ccff"},
+  "雞胡": {icon:"🐔", color:"#ffcc00"},
+  "暗間": {icon:"🌙", color:"#8888ff"},
+  "奇牌": {icon:"✨", color:"#cc66ff"}
+};
+
 /* ========= 工具 ========= */
 const $ = (id)=>document.getElementById(id);
 const ceilUp = (n)=>Math.ceil(n);
@@ -769,7 +805,8 @@ function renderFanList(){
   fanData.forEach(group=>{
     const d = document.createElement("details");
     const s = document.createElement("summary");
-    s.textContent = group.cat;
+    const style = catStyle[group.cat] || {icon:"📂", color:"#fff"};
+    s.innerHTML = `<span style="color:${style.color}">${style.icon} ${group.cat}</span>`;
     d.appendChild(s);
 
     group.items.forEach(([id, name, fan, hasCount])=>{
@@ -1482,6 +1519,7 @@ function bindEvents(){
 </body>
 
 </html>
+
 
 
 
