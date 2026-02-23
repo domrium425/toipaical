@@ -25,10 +25,7 @@ padding-bottom:120px;
 }
 
 /* Tabs */
-.tabs{
-display:flex;
-margin-bottom:15px;
-}
+.tabs{display:flex;margin-bottom:15px;}
 .tabBtn{
 flex:1;
 padding:12px;
@@ -90,12 +87,9 @@ padding:12px;
 border-radius:16px;
 text-align:center;
 margin-bottom:12px;
-transition:0.2s;
 }
-
 .player.leader{outline:3px solid var(--gold);}
 .player.dealer{box-shadow:0 0 20px var(--gold);}
-
 .scoreInput{width:80px;font-size:20px;}
 .money{color:var(--gold);margin-top:6px;}
 
@@ -108,6 +102,8 @@ background:var(--accent);
 font-weight:bold;
 }
 button.danger{background:var(--danger);color:#fff;}
+
+select,input{border:none;border-radius:8px;padding:6px;}
 </style>
 </head>
 
@@ -156,14 +152,41 @@ button.danger{background:var(--danger);color:#fff;}
 
 <div class="section">
 👑 領先：<span id="leaderName">無</span><br><br>
-🎲 <span id="diceResult">-</span><br>
+🎲 <span id="diceResult">-</span>
 <button onclick="rollDice()">擲骰</button>
 <br><br>
 1番 = $
 <input type="number" id="rate" value="10" onchange="updateScores()" style="width:70px">
+<br><br>
+總局數：<span id="rounds">0</span>
 </div>
 
-<button class="danger" onclick="resetTable()">全場清零</button>
+<div class="section">
+<h2>🀄 結算</h2>
+
+贏家：
+<select id="winner"></select>
+
+方式：
+<select id="winType" onchange="toggleShooter()">
+<option value="self">自摸</option>
+<option value="shoot">食胡</option>
+</select>
+
+<span id="shooterArea">
+放銃：
+<select id="shooter"></select>
+</span>
+
+<br><br>
+番數：
+<input type="number" id="fan" value="1" style="width:70px">
+
+<br><br>
+<button onclick="settle()">結算</button>
+</div>
+
+<button class="danger" onclick="resetAll()">全場清零</button>
 
 </div>
 
@@ -336,6 +359,7 @@ document.getElementById("lapHalf").innerText=Math.floor(lap/2);
 }
 
 /* 麻雀枱 */
+let roundCount=0;
 let dealerIndex=null;
 
 function createPlayers(){
@@ -344,38 +368,89 @@ const names=["東","南","西","北"];
 for(let i=0;i<4;i++){
 div.innerHTML+=`
 <div class="player" id="p${i}">
-<input value="${names[i]}" id="name${i}" onchange="saveData()"><br><br>
+<input value="${names[i]}" id="name${i}" onchange="updateDropdowns()"><br><br>
 <input type="number" class="scoreInput" value="0" id="score${i}" onchange="updateScores()">
 <div class="money" id="money${i}">$0</div>
 <button onclick="setDealer(${i})">設為莊</button>
 </div>
 `;
 }
+updateDropdowns();
+}
+
+function updateDropdowns(){
+let winner=document.getElementById("winner");
+let shooter=document.getElementById("shooter");
+winner.innerHTML="";
+shooter.innerHTML="";
+for(let i=0;i<4;i++){
+let name=document.getElementById("name"+i).value;
+winner.innerHTML+=`<option value="${i}">${name}</option>`;
+shooter.innerHTML+=`<option value="${i}">${name}</option>`;
+}
+updateScores();
+}
+
+function toggleShooter(){
+let type=document.getElementById("winType").value;
+document.getElementById("shooterArea").style.display=
+(type==="self")?"none":"inline";
+}
+
+function settle(){
+let winner=parseInt(document.getElementById("winner").value);
+let type=document.getElementById("winType").value;
+let shooter=parseInt(document.getElementById("shooter").value);
+let fan=parseInt(document.getElementById("fan").value||0);
+let rate=parseInt(document.getElementById("rate").value||0);
+
+let amount=fan*rate;
+
+if(type==="self"){
+for(let i=0;i<4;i++){
+if(i!==winner){
+changeScore(i,-amount);
+changeScore(winner,amount);
+}
+}
+}else{
+if(shooter===winner){
+alert("放銃不能等於贏家");
+return;
+}
+changeScore(shooter,-amount);
+changeScore(winner,amount);
+}
+
+roundCount++;
+document.getElementById("rounds").innerText=roundCount;
+updateScores();
+}
+
+function changeScore(i,val){
+let score=parseInt(document.getElementById("score"+i).value||0);
+document.getElementById("score"+i).value=score+val;
 }
 
 function updateScores(){
 let rate=parseInt(document.getElementById("rate").value||0);
-let scores=[];
-let max=-9999;
-let leaderIndex=null;
+let max=-99999;
+let leader=null;
 
 for(let i=0;i<4;i++){
 let score=parseInt(document.getElementById("score"+i).value||0);
-scores[i]=score;
 document.getElementById("money"+i).innerText="$"+(score*rate);
 document.getElementById("p"+i).classList.remove("leader");
-if(score>max){max=score;leaderIndex=i;}
+if(score>max){max=score;leader=i;}
 }
 
 if(max!==0){
-document.getElementById("p"+leaderIndex).classList.add("leader");
+document.getElementById("p"+leader).classList.add("leader");
 document.getElementById("leaderName").innerText=
-document.getElementById("name"+leaderIndex).value;
+document.getElementById("name"+leader).value;
 }else{
 document.getElementById("leaderName").innerText="無";
 }
-
-localStorage.setItem("mahjongData",JSON.stringify(scores));
 }
 
 function setDealer(i){
@@ -393,24 +468,22 @@ document.getElementById("diceResult").innerText=
 d1+" + "+d2+" = "+(d1+d2);
 }
 
-function resetTable(){
+function resetAll(){
 for(let i=0;i<4;i++){
 document.getElementById("score"+i).value=0;
 }
-updateScores();
-}
-
-function saveData(){
+roundCount=0;
+document.getElementById("rounds").innerText=0;
 updateScores();
 }
 
 createPlayers();
 renderFans();
+toggleShooter();
 updateScores();
 
 </script>
 
 </body>
 </html>
-
 
