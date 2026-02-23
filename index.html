@@ -1,26 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-<link rel="icon" href="data:image/svg+xml,
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
-<rect width='200' height='200' rx='40' fill='black'/>
-<text x='50%' y='60%' font-size='110' text-anchor='middle' fill='#d4af37'>🀄</text>
-</svg>">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>港式台牌計番神器 PRO</title>
 
-<link rel="apple-touch-icon" href="data:image/svg+xml,
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
-<rect width='200' height='200' rx='40' fill='black'/>
-<text x='50%' y='60%' font-size='110' text-anchor='middle' fill='#d4af37'>🀄</text>
-</svg>">
+  <!-- ✅ favicon / iOS 主畫面 icon（已 encode，唔會爆） -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="台牌">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>港式台牌計番神器</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="台牌PRO">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<style>
+  <style>
 :root{
   --bg:#0f0f0f;
   --card:#1c1c1c;
@@ -34,12 +27,15 @@
   --line: rgba(128,128,128,0.25);
 }
 
+*{ box-sizing:border-box; }
+
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  padding-bottom:170px;
+  padding-bottom:180px; /* 固定總番 bar */
+  -webkit-text-size-adjust:100%;
 }
 
 body.white{
@@ -55,6 +51,13 @@ body.white{
   --line: rgba(0,0,0,0.12);
 }
 
+.container{
+  padding:0 14px;
+  max-width:980px;
+  margin:0 auto;
+}
+
+/* Header / topbar */
 header{
   padding:14px 14px 8px 14px;
   text-align:center;
@@ -81,12 +84,12 @@ header{
   font-weight:900;
   font-size:13px;
 }
-
 .badge.gold{
   background:rgba(212,175,55,0.18);
   color:var(--gold);
 }
 
+/* Buttons */
 .btn{
   border:none;
   border-radius:12px;
@@ -95,25 +98,26 @@ header{
   background:var(--gold);
   color:#000;
   cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-
 .btn.secondary{
   background:var(--muted);
   color:var(--text);
   font-weight:800;
 }
-
 .btn.danger{
   background:var(--danger);
   color:#fff;
 }
 
+/* Tabs */
 .tabs{
   display:flex;
   gap:8px;
   padding:0 14px 14px 14px;
+  max-width:980px;
+  margin:0 auto;
 }
-
 .tabBtn{
   flex:1;
   border:none;
@@ -123,15 +127,14 @@ header{
   background:var(--muted);
   color:var(--sub);
   cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-
 .tabBtn.active{
   background:var(--gold);
   color:#000;
 }
 
-.container{ padding:0 14px; }
-
+/* Cards */
 .card{
   background:var(--card);
   border-radius:18px;
@@ -139,6 +142,8 @@ header{
   margin-bottom:14px;
   box-shadow: 0 0 22px var(--shadow);
 }
+.innerCard{ margin:12px 0 0 0; background:var(--muted); box-shadow:none; }
+.flatCard{ box-shadow:none; background:var(--card); }
 
 h2{
   margin:0 0 10px 0;
@@ -152,29 +157,13 @@ h2{
   line-height:1.6;
 }
 
+/* Layout helpers */
 .row{
   display:flex;
   flex-wrap:wrap;
   gap:10px;
   align-items:center;
 }
-
-.input, select{
-  border:1px solid rgba(128,128,128,0.35);
-  background:transparent;
-  color:var(--text);
-  border-radius:12px;
-  padding:10px 12px;
-  font-size:14px;
-  outline:none;
-}
-
-body.white .input, body.white select{
-  border:1px solid rgba(0,0,0,0.2);
-}
-
-.input.num{ width:120px; }
-.input.tiny{ width:86px; padding:8px 10px; }
 
 .kv{
   display:flex;
@@ -185,35 +174,97 @@ body.white .input, body.white select{
   margin-top:6px;
 }
 
+/* Inputs */
+.input, select{
+  border:1px solid rgba(128,128,128,0.35);
+  background:transparent;
+  color:var(--text);
+  border-radius:12px;
+  padding:10px 12px;
+  font-size:14px;
+  outline:none;
+  max-width:100%;
+}
+body.white .input, body.white select{
+  border:1px solid rgba(0,0,0,0.2);
+}
+
+/* iOS：避免 select 文字太淡 / 被縮放 */
+select{
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--sub) 50%),
+    linear-gradient(135deg, var(--sub) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 2px),
+    calc(100% - 12px) calc(50% - 2px);
+  background-size:6px 6px, 6px 6px;
+  background-repeat:no-repeat;
+  padding-right:34px;
+}
+
+.input.num{ width:120px; }
+.input.tiny{ width:86px; padding:8px 10px; }
+
+@media (max-width:420px){
+  .input.num{ width:100%; }
+}
+
+/* Table */
 .table{
   width:100%;
   border-collapse:collapse;
   margin-top:8px;
   font-size:14px;
 }
-
 .table td{
   padding:8px 6px;
   border-bottom:1px solid var(--line);
 }
+.tRight{ text-align:right; }
+.strong{ font-weight:900; }
 
-/* 番表摺疊 */
+/* Fan list (details/summary) */
 details{
   background:var(--muted);
   border-radius:14px;
   padding:10px 10px;
   margin:10px 0;
 }
-
 details > summary{
   cursor:pointer;
   font-weight:900;
   color:var(--text);
   list-style:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  -webkit-tap-highlight-color: transparent;
 }
-
 details > summary::-webkit-details-marker{ display:none; }
 
+summary::before{
+  content:"▶";
+  display:inline-block;
+  width:18px;
+  transition:0.2s;
+  color:var(--gold);
+}
+details[open] summary::before{
+  transform:rotate(90deg);
+}
+details[open]{
+  animation:fadeIn 0.18s ease;
+}
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(-4px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.sumGold{ color:var(--gold); font-weight:900; }
+
+/* Fan check line */
 .checkline{
   display:flex;
   align-items:center;
@@ -221,12 +272,16 @@ details > summary::-webkit-details-marker{ display:none; }
   padding:7px 4px;
   border-bottom:1px dashed var(--line);
 }
-
 .checkline:last-child{ border-bottom:none; }
 .checkline label{ flex:1; cursor:pointer; }
 .checkline .fan{ color:var(--gold); font-weight:900; }
+.checkline.active{
+  background:rgba(212,175,55,0.12);
+  border-radius:10px;
+  box-shadow:0 0 10px rgba(212,175,55,0.12);
+}
 
-/* AI */
+/* AI box */
 .aiBox{
   background:rgba(0,255,136,0.08);
   border:1px solid rgba(0,255,136,0.25);
@@ -235,12 +290,11 @@ details > summary::-webkit-details-marker{ display:none; }
   font-size:14px;
   line-height:1.6;
 }
-
 .aiBox .warn{ color:#ffcc00; font-weight:900; }
 .aiBox .tip{ color:var(--accent); font-weight:900; }
 .aiBox .ok{ color:var(--sub); }
 
-/* 固定總番 */
+/* Fixed total bar */
 .fixedTotal{
   position:fixed;
   left:0;
@@ -255,14 +309,13 @@ details > summary::-webkit-details-marker{ display:none; }
   gap:10px;
   z-index:10;
 }
-
 .fixedTotal .big{
   font-size:20px;
   font-weight:900;
   color:var(--gold);
 }
 
-/* Tab2 麻雀枱 */
+/* ===== Tab2 styles ===== */
 .mjTable{
   display:flex;
   flex-direction:column;
@@ -276,24 +329,24 @@ details > summary::-webkit-details-marker{ display:none; }
   align-items:center;
   justify-content:center;
   width:100%;
+  flex-wrap:wrap;
 }
 
 .mjPlayer{
   background:var(--muted);
   border-radius:18px;
   padding:12px;
-  min-width:120px;
+  min-width:140px;
   text-align:center;
   position:relative;
   transition:box-shadow 0.15s ease;
 }
-
 .mjPlayer.leader{
   box-shadow:0 0 0 3px rgba(212,175,55,0.9), 0 0 22px rgba(212,175,55,0.25);
 }
 
-.mjPlayer .name{ width:92px; text-align:center; font-weight:900; }
-.mjPlayer .score{ width:92px; text-align:center; font-size:18px; font-weight:900; }
+.mjPlayer .name{ width:110px; text-align:center; font-weight:900; }
+.mjPlayer .score{ width:110px; text-align:center; font-size:18px; font-weight:900; }
 
 .centerPanel{
   flex:1;
@@ -302,7 +355,8 @@ details > summary::-webkit-details-marker{ display:none; }
   padding:12px;
   text-align:center;
   box-shadow:0 0 22px rgba(0,0,0,0.2);
-  min-width:200px;
+  min-width:240px;
+  max-width:520px;
 }
 
 .centerPanel .big{
@@ -318,13 +372,20 @@ details > summary::-webkit-details-marker{ display:none; }
   margin:6px 0;
 }
 
-.hr{ height:1px; background:var(--line); margin:12px 0; }
+.hr{
+  height:1px;
+  background:var(--line);
+  margin:12px 0;
+}
 
 .quickGrid{
   display:grid;
   grid-template-columns:repeat(4, 1fr);
   gap:6px;
   margin-top:8px;
+}
+@media (max-width:420px){
+  .quickGrid{ grid-template-columns:repeat(2, 1fr); }
 }
 
 .quickBtn{
@@ -335,359 +396,288 @@ details > summary::-webkit-details-marker{ display:none; }
   background:var(--muted);
   color:var(--text);
   font-weight:900;
+  -webkit-tap-highlight-color: transparent;
 }
-
 .quickBtn.active{
   background:rgba(212,175,55,0.25);
   box-shadow:0 0 0 2px rgba(212,175,55,0.75) inset;
 }
 
+.piLabel{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  font-weight:900;
+}
+
+/* History */
 .historyItem{
   padding:10px;
   border-radius:14px;
   background:var(--muted);
   margin-bottom:10px;
 }
-
 .historyItem .title{ font-weight:900; }
-.historyItem .meta{ font-size:13px; color:var(--sub); margin-top:4px; }
-
-/* 箭咀 */
-summary::before{
-  content:"▶";
-  display:inline-block;
-  margin-right:6px;
-  transition:0.2s;
-  color:var(--gold);
+.historyItem .meta{
+  font-size:13px;
+  color:var(--sub);
+  margin-top:4px;
 }
-
-/* 打開變 ▼ */
-details[open] summary::before{
-  content:"▼";
-}
-
-/* 展開動畫 */
-details[open]{
-  animation:fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(-5px);}
-  to{opacity:1; transform:translateY(0);}
-}
-
-.checkline.active{
-  background:rgba(212,175,55,0.15);
-  border-radius:8px;
-  box-shadow:0 0 10px rgba(212,175,55,0.2);
-}
-
-:root{ --bottomBarH: 86px; }
-
-body{
-  padding-bottom: calc(var(--bottomBarH) + env(safe-area-inset-bottom) + 16px);
-}
-
-.fixedTotal{
-  padding-bottom: calc(10px + env(safe-area-inset-bottom));
-}
-
-.row > *{ min-width: 0; }
-.input, select{ max-width: 100%; }
-
-details{ overflow:hidden; }
-.checkline{ align-items:flex-start; }
-.checkline label{
-  line-height:1.3;
-  white-space:normal;
-  word-break:break-word;
-}
-
-@media (max-width: 420px){
-
-  body{
-    font-size:14px;
-  }
-
-  .container{
-    padding:0 8px;
-  }
-
-  .card{
-    padding:10px;
-    border-radius:14px;
-  }
-
-  .row{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .input.num{
-    width:100%;
-  }
-
-  .input.tiny{
-    width:70px;
-  }
-
-  .quickGrid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .mjRowMid{
-    flex-direction:column;
-  }
-
-  .mjPlayer{
-    width:100%;
-  }
-
-  .centerPanel{
-    width:100%;
-  }
-
-  .fixedTotal{
-    font-size:14px;
-  }
-
-  .fixedTotal .big{
-    font-size:16px;
-  }
-}
-</style>
+  </style>
 </head>
 
 <body>
-<header>🀄 港式台牌計番神器 🀄</header>
+  <header>🀄 港式台牌計番神器 🀄</header>
 
-<div class="topbar">
-  <button class="btn secondary" id="themeBtn" type="button">切換主題（黑金/白）</button>
-</div>
-
-<div class="tabs">
-  <button class="tabBtn active" id="tabBtn1" type="button">計番區</button>
-  <button class="tabBtn" id="tabBtn2" type="button">計分區</button>
-</div>
-
-<!-- TAB 1 -->
-<div id="tab1" class="container">
-
-  <div class="card">
-    <h2>規則</h2>
-    <div class="small">
-      拉上劈下　開槓計暗間<br>
-      順骰冧莊加換一次牌　圍骰加換三次牌　最多換三次
-    </div>
+  <div class="topbar">
+    <button class="btn secondary" id="themeBtn" type="button">切換主題（黑金/白）</button>
+    <span class="badge gold">iPhone Safari OK</span>
   </div>
 
-  <div class="card">
-    <h2>陰蟄錢（唔計入總番）</h2>
-    <table class="table">
-      <tr><td>追殺</td><td style="text-align:right;font-weight:900;">每家 5 元</td></tr>
-      <tr><td>暗槓</td><td style="text-align:right;font-weight:900;">每家 5 元</td></tr>
-      <tr><td>花</td><td style="text-align:right;font-weight:900;">每家 5 元</td></tr>
-      <tr><td>草</td><td style="text-align:right;font-weight:900;">每家 3 元</td></tr>
-      <tr><td>詐胡</td><td style="text-align:right;font-weight:900;">每家 30 元</td></tr>
-    </table>
+  <div class="tabs">
+    <button class="tabBtn active" id="tabBtn1" type="button">計番區</button>
+    <button class="tabBtn" id="tabBtn2" type="button">計分區</button>
   </div>
 
-  <div class="card">
-    <h2>底設定（自動加落總番）</h2>
-    <div class="row">
-      <span class="badge">底</span>
-      <input class="input num" type="number" id="baseFan" value="5" min="0">
-      <span class="small">番（預設 5）</span>
-      <button class="btn secondary" type="button" id="resetBaseBtn">重置底=5</button>
-    </div>
-    <div class="small" style="margin-top:6px;">提示：底會記住你上次設定（自動存檔）。</div>
-  </div>
+  <!-- ================= TAB 1：計番 ================= -->
+  <div id="tab1" class="container">
 
-  <div class="card">
-    <h2>拉劈計數機</h2>
-    <div class="row">
-      <div>
-        <div class="small">現針番數</div>
-        <input class="input num" type="number" id="lp_current" value="0" min="0" />
-      </div>
-      <div>
-        <div class="small">新針番數</div>
-        <input class="input num" type="number" id="lp_new" value="0" min="0" />
-      </div>
-      <button class="btn" type="button" id="lp_calcBtn">計算</button>
-    </div>
-
-    <div class="card" style="margin:12px 0 0 0;background:var(--muted);box-shadow:none;">
-      <div class="kv"><span>新針拉緊（向上取整）</span><span class="badge gold" id="lp_pull">0</span></div>
-      <div class="kv"><span>現針即劈（向下取整）</span><span class="badge gold" id="lp_half_now">0</span></div>
-      <div class="kv"><span>拉完再劈（向下取整）</span><span class="badge gold" id="lp_half_after">0</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>番表（勾選即時計總番）</h2>
-
-    <details open>
-      <summary>莊</summary>
-      <div class="checkline">
-        <input type="checkbox" class="fanCheck" data-id="dealer_base" data-fan="1" id="dealer_base" />
-        <label for="dealer_base">莊</label>
-        <span class="fan">1番</span>
-      </div>
-
-      <div class="row" style="margin-top:10px;">
-        <span class="badge">連莊次數</span>
-        <input class="input num" type="number" id="dealer_times" value="0" min="0" />
-        <span class="small">（連莊番數 = 次數×2+1）</span>
-      </div>
-    </details>
-
-    <div id="fanListMount"></div>
-
-    <div class="small" style="margin-top:8px;">
-      ✅ Tab 2 會用呢個「總番數」做本局番
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>🧠 番表 AI 建議</h2>
-    <div class="aiBox" id="aiBox">
-      <div class="ok">✔ 等你勾選之後我先出提示</div>
-    </div>
-  </div>
-</div>
-
-<!-- TAB 2 -->
-<div id="tab2" class="container" style="display:none;">
-  <div class="card">
-    <h2>計分區</h2>
-
-    <div class="centerPanel" style="margin-bottom:12px;">
-      <div class="big">本局番數：<span id="t2_baseFan">0</span> 番</div>
-
-      <div class="kv"><span>拉次數</span><span class="badge gold" id="t2_pullCount">0</span></div>
-      <div class="kv"><span>斬拉模式</span><span class="badge gold" id="t2_slashModeLabel">三拉一斬</span></div>
-      <div class="kv"><span>上一舖結算番數</span><span class="badge gold" id="t2_lastSettleFan">0</span></div>
-
-      <div class="dice" id="diceText">🎲 -</div>
-      <button class="btn secondary" type="button" id="diceBtn">擲骰（三粒）</button>
-
-      <div class="row" style="justify-content:center;margin-top:10px;">
-        <span class="badge">1番 = $</span>
-        <input class="input num" type="number" id="t2_rate" value="10" min="0" />
+    <div class="card">
+      <h2>規則</h2>
+      <div class="small">
+        拉上劈下　開槓計暗間<br>
+        順骰冧莊加換一次牌　圍骰加換三次牌　最多換三次
       </div>
     </div>
 
-    <div class="mjTable">
-      <div class="mjPlayer" id="p3">
-        <input class="input name" id="n3" value="北" />
-        <div style="height:8px;"></div>
-        <input class="input score" id="s3" type="number" value="0" />
+    <div class="card">
+      <h2>陰蟄錢（唔計入總番）</h2>
+      <table class="table">
+        <tr><td>追殺</td><td class="tRight strong">每家 5 元</td></tr>
+        <tr><td>暗槓</td><td class="tRight strong">每家 5 元</td></tr>
+        <tr><td>花</td><td class="tRight strong">每家 5 元</td></tr>
+        <tr><td>草</td><td class="tRight strong">每家 3 元</td></tr>
+        <tr><td>詐胡</td><td class="tRight strong">每家 30 元</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>底設定（自動加落總番）</h2>
+      <div class="row">
+        <span class="badge">底</span>
+        <input class="input num" type="number" id="baseFan" value="5" min="0">
+        <span class="small">番（預設 5）</span>
+        <button class="btn secondary" type="button" id="resetBaseBtn">重置底=5</button>
+      </div>
+      <div class="small" style="margin-top:6px;">提示：底會記住你上次設定（自動存檔）。</div>
+    </div>
+
+    <div class="card">
+      <h2>拉劈計數機</h2>
+      <div class="row">
+        <div style="min-width:140px;">
+          <div class="small">現針番數</div>
+          <input class="input num" type="number" id="lp_current" value="0" min="0" />
+        </div>
+        <div style="min-width:140px;">
+          <div class="small">新針番數</div>
+          <input class="input num" type="number" id="lp_new" value="0" min="0" />
+        </div>
+        <button class="btn" type="button" id="lp_calcBtn">計算</button>
       </div>
 
-      <div class="mjRowMid">
-        <div class="mjPlayer" id="p2">
-          <input class="input name" id="n2" value="西" />
+      <div class="card innerCard">
+        <div class="kv"><span>新針拉緊（向上取整）</span><span class="badge gold" id="lp_pull">0</span></div>
+        <div class="kv"><span>現針即劈（向下取整）</span><span class="badge gold" id="lp_half_now">0</span></div>
+        <div class="kv"><span>拉完再劈（向下取整）</span><span class="badge gold" id="lp_half_after">0</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>番表（勾選即時計總番）</h2>
+
+      <!-- ✅ 莊（固定） -->
+      <details open>
+        <summary><span class="sumGold">👑 莊</span></summary>
+
+        <div class="checkline" id="line_dealer_base">
+          <input type="checkbox" class="fanCheck" data-id="dealer_base" data-fan="1" id="dealer_base" />
+          <label for="dealer_base">莊</label>
+          <span class="fan">1番</span>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <span class="badge">連莊次數</span>
+          <input class="input num" type="number" id="dealer_times" value="0" min="0" />
+          <span class="small">（連莊番數 = 次數×2+1）</span>
+        </div>
+      </details>
+
+      <!-- ✅ Part3 會把「完整番表」render 落呢度 -->
+      <div id="fanListMount"></div>
+
+      <div class="small" style="margin-top:8px;">
+        ✅ Tab2 會用下面固定「總番數」做本局番
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🧠 番表 AI 建議</h2>
+      <div class="aiBox" id="aiBox">
+        <div class="ok">✔ 等你勾選之後我先出提示</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 2：計分 ================= -->
+  <div id="tab2" class="container" style="display:none;">
+    <div class="card">
+      <h2>麻雀枱 PRO（用 Tab1 總番數）</h2>
+
+      <div class="centerPanel" style="margin-bottom:12px;">
+        <div class="big">本局番數：<span id="t2_baseFan">0</span> 番</div>
+
+        <div class="kv"><span>拉次數</span><span class="badge gold" id="t2_pullCount">0</span></div>
+        <div class="kv"><span>斬拉模式</span><span class="badge gold" id="t2_slashModeLabel">三拉一斬</span></div>
+        <div class="kv"><span>上一舖結算番數</span><span class="badge gold" id="t2_lastSettleFan">0</span></div>
+
+        <div class="dice" id="diceText">🎲 -</div>
+        <button class="btn secondary" type="button" id="diceBtn">擲骰（三粒）</button>
+
+        <div class="row" style="justify-content:center;margin-top:10px;">
+          <span class="badge">1番 = $</span>
+          <input class="input num" type="number" id="t2_rate" value="10" min="0" />
+        </div>
+      </div>
+
+      <div class="mjTable">
+        <div class="mjPlayer" id="p3">
+          <input class="input name" id="n3" value="北" />
           <div style="height:8px;"></div>
-          <input class="input score" id="s2" type="number" value="0" />
+          <input class="input score" id="s3" type="number" value="0" />
         </div>
 
-        <div class="centerPanel">
-          <div class="row" style="justify-content:center;">
-            <span class="badge gold">結算</span>
+        <div class="mjRowMid">
+          <div class="mjPlayer" id="p2">
+            <input class="input name" id="n2" value="西" />
+            <div style="height:8px;"></div>
+            <input class="input score" id="s2" type="number" value="0" />
           </div>
 
-          <div class="small" style="margin-top:8px;">快速揀：</div>
+          <div class="centerPanel">
+            <div class="row" style="justify-content:center;">
+              <span class="badge gold">結算</span>
+            </div>
 
-          <div class="small" style="margin-top:6px;font-weight:900;">贏家</div>
-          <div class="quickGrid" id="quickWin"></div>
+            <div class="small" style="margin-top:8px;">快速揀：</div>
 
-          <div class="small" style="margin-top:10px;font-weight:900;">放銃</div>
-          <div class="quickGrid" id="quickLose"></div>
+            <div class="small" style="margin-top:6px;font-weight:900;">贏家</div>
+            <div class="quickGrid" id="quickWin"></div>
 
-          <div class="row" style="justify-content:center;margin-top:10px;">
-            <select class="input" id="t2_win"></select>
-            <select class="input" id="t2_type">
-              <option value="self">自摸（3家全賠）</option>
-              <option value="eat">食胡（放銃全賠）</option>
-            </select>
+            <div class="small" style="margin-top:10px;font-weight:900;">放銃</div>
+            <div class="quickGrid" id="quickLose"></div>
+
+            <div class="row" style="justify-content:center;margin-top:10px;">
+              <select class="input" id="t2_win"></select>
+              <select class="input" id="t2_type">
+                <option value="self">自摸（3家全賠）</option>
+                <option value="eat">食胡（放銃全賠）</option>
+              </select>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:8px;">
+              <span class="badge">放銃</span>
+              <select class="input" id="t2_lose"></select>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:8px;">
+              <label class="piLabel">
+                <input type="checkbox" id="t2_pi" />
+                劈（找數番 ÷2 向下取整）
+              </label>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:10px;">
+              <span class="badge">斬拉模式</span>
+              <select class="input" id="t2_slashMode">
+                <option value="3">三拉一斬</option>
+                <option value="6">六拉一斬</option>
+                <option value="9">九拉一斬</option>
+                <option value="999">永不斬</option>
+              </select>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:12px;">
+              <button class="btn" type="button" id="t2_settleBtn">結算</button>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:10px;flex-wrap:wrap;">
+              <button class="btn secondary" type="button" id="undoBtn">↩️ 撤銷上一舖</button>
+              <button class="btn danger" type="button" id="slashBtn">⚔️ 手動斬拉</button>
+            </div>
+
+            <div class="small" id="t2_status" style="margin-top:10px;">
+              ✔ 用 Tab1 總番數做本局番數
+            </div>
           </div>
 
-          <div class="row" style="justify-content:center;margin-top:8px;">
-            <span class="badge">放銃</span>
-            <select class="input" id="t2_lose"></select>
-          </div>
-
-          <div class="row" style="justify-content:center;margin-top:8px;">
-            <label style="display:flex;gap:8px;align-items:center;font-weight:900;">
-              <input type="checkbox" id="t2_pi" />
-              劈（找數番 ÷2 向下取整）
-            </label>
-          </div>
-
-          <div class="row" style="justify-content:center;margin-top:10px;">
-            <span class="badge">斬拉模式</span>
-            <select class="input" id="t2_slashMode">
-              <option value="3">三拉一斬</option>
-              <option value="6">六拉一斬</option>
-              <option value="9">九拉一斬</option>
-              <option value="999">永不斬</option>
-            </select>
-          </div>
-
-          <div class="row" style="justify-content:center;margin-top:12px;">
-            <button class="btn" type="button" id="t2_settleBtn">結算</button>
-          </div>
-
-          <div class="row" style="justify-content:center;margin-top:10px;">
-            <button class="btn secondary" type="button" id="undoBtn">↩️ 撤銷上一舖</button>
-            <button class="btn danger" type="button" id="slashBtn">⚔️ 手動斬拉</button>
+          <div class="mjPlayer" id="p0">
+            <input class="input name" id="n0" value="東" />
+            <div style="height:8px;"></div>
+            <input class="input score" id="s0" type="number" value="0" />
           </div>
         </div>
 
-        <div class="mjPlayer" id="p0">
-          <input class="input name" id="n0" value="東" />
+        <div class="mjPlayer" id="p1">
+          <input class="input name" id="n1" value="南" />
           <div style="height:8px;"></div>
-          <input class="input score" id="s0" type="number" value="0" />
+          <input class="input score" id="s1" type="number" value="0" />
         </div>
       </div>
 
-      <div class="mjPlayer" id="p1">
-        <input class="input name" id="n1" value="南" />
-        <div style="height:8px;"></div>
-        <input class="input score" id="s1" type="number" value="0" />
+      <div class="row" style="justify-content:center;margin-top:14px;">
+        <button class="btn danger" type="button" id="t2_resetBtn">Tab2 全部清零（分數+拉狀態）</button>
       </div>
-    </div>
 
-    <div class="row" style="justify-content:center;margin-top:14px;">
-      <button class="btn danger" type="button" id="t2_resetBtn">全部清零</button>
-    </div>
+      <div class="hr"></div>
 
-    <div class="hr"></div>
-
-    <div class="card" style="box-shadow:none;background:var(--card);">
-      <h2>📜 每局紀錄</h2>
-      <div id="historyList" class="small">（未有紀錄）</div>
-      <div class="row" style="justify-content:center;margin-top:10px;">
-        <button class="btn" type="button" id="copyHistoryBtn">📤 複製紀錄</button>
-        <button class="btn secondary" type="button" id="clearHistoryBtn">清紀錄</button>
+      <div class="card flatCard">
+        <h2>📜 每局紀錄</h2>
+        <div id="historyList" class="small">（未有紀錄）</div>
+        <div class="row" style="justify-content:center;margin-top:10px;flex-wrap:wrap;">
+          <button class="btn" type="button" id="copyHistoryBtn">📤 複製紀錄</button>
+          <button class="btn secondary" type="button" id="clearHistoryBtn">清紀錄</button>
+        </div>
       </div>
-    </div>
 
-    <div class="card" style="box-shadow:none;background:var(--card);">
-      <h2>🏆 統計</h2>
-      <div id="statsBox" class="small">（未有統計）</div>
+      <div class="card flatCard">
+        <h2>🏆 統計</h2>
+        <div id="statsBox" class="small">（未有統計）</div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- 固定總番 -->
-<div class="fixedTotal">
-  <div class="big">總番數：<span id="totalFan">0</span></div>
-  <button class="btn danger" type="button" id="clearBtn">重新計番</button>
-</div>
+  <!-- ================= 固定總番（兩個 Tab 都見到） ================= -->
+  <div class="fixedTotal">
+    <div class="big">總番數：<span id="totalFan">0</span></div>
+    <button class="btn danger" type="button" id="clearBtn">重新計番</button>
+  </div>
 
-<script>
+  <script>
+const $ = (id) => document.getElementById(id);
+const ceilUp = (n)=>Math.ceil(n);
+const floorDown = (n)=>Math.floor(n);
+
+function safeInt(v, def=0){
+  const n = parseInt(v, 10);
+  return Number.isFinite(n) ? n : def;
+}
+function safeFloat(v, def=0){
+  const n = parseFloat(v);
+  return Number.isFinite(n) ? n : def;
+}
+
+/* ========= 分類 icon ========= */
 const catIcon = {
   "莊":"👑",
   "一般":"🀄",
@@ -707,12 +697,7 @@ const catIcon = {
   "奇牌":"✨"
 };
 
-/* ========= 工具 ========= */
-const $ = (id)=>document.getElementById(id);
-const ceilUp = (n)=>Math.ceil(n);
-const floorDown = (n)=>Math.floor(n);
-
-/* ========= 番表（完整） ========= */
+/* ========= ✅完整番表（同你之前嗰份一致） ========= */
 const fanData = [
   { cat:"一般", items:[
     ["flower","花",1,true],
@@ -857,9 +842,12 @@ function loadTheme(){
   const t = localStorage.getItem("theme");
   setTheme(t === "white");
 }
+
 function setTab(which){
   const t1 = $("tab1"), t2 = $("tab2");
   const b1 = $("tabBtn1"), b2 = $("tabBtn2");
+  if(!t1 || !t2 || !b1 || !b2) return;
+
   if(which === 1){
     t1.style.display = "";
     t2.style.display = "none";
@@ -870,6 +858,7 @@ function setTab(which){
     t2.style.display = "";
     b2.classList.add("active");
     b1.classList.remove("active");
+
     syncBaseFanToTab2();
     refreshPlayersDropdowns();
     renderQuickButtons();
@@ -879,25 +868,24 @@ function setTab(which){
   }
 }
 
-/* ========= Tab1 render 番表 ========= */
+/* ========= Tab1：render 番表 ========= */
 function renderFanList(){
   const mount = $("fanListMount");
   if(!mount) return;
-
   mount.innerHTML = "";
 
-  fanData.forEach(group=>{
+  fanData.forEach((group, gi)=>{
     const d = document.createElement("details");
-
+    if(gi === 0) d.open = true; // 預設打開第一個分類
     const s = document.createElement("summary");
     const icon = catIcon[group.cat] || "📂";
-    s.innerHTML = `<span style="color:var(--gold);font-weight:900;">${icon} ${group.cat}</span>`;
-    
-    d.appendChild(s); // ⭐ 必要
+    s.innerHTML = `<span class="sumGold">${icon} ${group.cat}</span>`;
+    d.appendChild(s);
 
     group.items.forEach(([id, name, fan, hasCount])=>{
       const line = document.createElement("div");
       line.className = "checkline";
+      line.id = "line_" + id;
 
       const cb = document.createElement("input");
       cb.type = "checkbox";
@@ -919,10 +907,6 @@ function renderFanList(){
       line.appendChild(cb);
       line.appendChild(lab);
 
-      const span = document.createElement("span");
-      span.className = "fan";
-      span.textContent = hasCount ? `×${fan}番` : `${fan}番`;
-
       if(hasCount){
         const count = document.createElement("input");
         count.type = "number";
@@ -930,16 +914,23 @@ function renderFanList(){
         count.value = "1";
         count.className = "input tiny fanCount";
         count.dataset.target = id;
-
         count.addEventListener("input", ()=>{
           updateTotalFan();
           saveTab1State();
         });
-
         line.appendChild(count);
+
+        const span = document.createElement("span");
+        span.className = "fan";
+        span.textContent = `×${fan}番`;
+        line.appendChild(span);
+      }else{
+        const span = document.createElement("span");
+        span.className = "fan";
+        span.textContent = `${fan}番`;
+        line.appendChild(span);
       }
 
-      line.appendChild(span);
       d.appendChild(line);
     });
 
@@ -947,53 +938,65 @@ function renderFanList(){
   });
 }
 
-/* ========= Tab1 計總番 ========= */
+/* ========= Tab1：計總番 ========= */
 function getBaseFan(){
-  const base = parseInt($("baseFan").value || "0", 10);
-  return (isNaN(base) || base < 0) ? 0 : base;
+  const el = $("baseFan");
+  if(!el) return 0;
+  const base = safeInt(el.value, 0);
+  return base < 0 ? 0 : base;
+}
+
+function syncBaseFanToTab2(){
+  if($("t2_baseFan") && $("totalFan")){
+    $("t2_baseFan").innerText = $("totalFan").innerText;
+  }
 }
 
 function updateTotalFan(){
   let total = 0;
 
+  // fan list
   document.querySelectorAll(".fanCheck:checked").forEach(cb=>{
-    const fan = parseInt(cb.dataset.fan || "0", 10);
+    const fan = safeInt(cb.dataset.fan, 0);
     const id = cb.dataset.id;
     let count = 1;
 
     const cntInput = document.querySelector(`.fanCount[data-target="${id}"]`);
     if(cntInput){
-      count = parseInt(cntInput.value || "0", 10);
-      if(isNaN(count) || count < 0) count = 0;
+      count = safeInt(cntInput.value, 0);
+      if(count < 0) count = 0;
     }
     total += fan * count;
   });
 
-  const times = parseInt($("dealer_times").value || "0", 10);
+  // 連莊番（次數×2+1）
+  const times = safeInt($("dealer_times")?.value ?? "0", 0);
   if(times > 0) total += (times * 2 + 1);
 
+  // 底
   total += getBaseFan();
 
-  $("totalFan").innerText = String(total);
+  if($("totalFan")) $("totalFan").innerText = String(total);
   syncBaseFanToTab2();
+
   aiSuggest();
 
   localStorage.setItem("baseFan", String(getBaseFan()));
 }
 
-function syncBaseFanToTab2(){
-  $("t2_baseFan").innerText = $("totalFan").innerText;
-}
-
 function clearTab1All(){
-  document.querySelectorAll(".fanCheck").forEach(cb=>cb.checked=false);
-  $("dealer_times").value = "0";
+  document.querySelectorAll(".fanCheck").forEach(cb=>{
+    cb.checked = false;
+    const line = cb.closest(".checkline");
+    if(line) line.classList.remove("active");
+  });
+  if($("dealer_times")) $("dealer_times").value = "0";
   document.querySelectorAll(".fanCount").forEach(inp=>inp.value="1");
   updateTotalFan();
   saveTab1State();
 }
 
-/* ========= AI 建議 ========= */
+/* ========= Tab1：AI 建議 ========= */
 function checkedSet(){
   const s = new Set();
   document.querySelectorAll(".fanCheck:checked").forEach(cb=>s.add(cb.dataset.id));
@@ -1002,10 +1005,14 @@ function checkedSet(){
 function getCountFor(id){
   const input = document.querySelector(`.fanCount[data-target="${id}"]`);
   if(!input) return 1;
-  const v = parseInt(input.value || "0", 10);
-  return isNaN(v) ? 0 : v;
+  const v = safeInt(input.value, 0);
+  return v < 0 ? 0 : v;
 }
+
 function aiSuggest(){
+  const box = $("aiBox");
+  if(!box) return;
+
   const ids = checkedSet();
   const msgs = [];
 
@@ -1037,22 +1044,73 @@ function aiSuggest(){
   if(ids.has("zi")) msgs.push(`<span class="ok">ℹ️ 字數量：${getCountFor("zi")}（×2番）</span>`);
   msgs.push(`<span class="ok">ℹ️ 底：${getBaseFan()}番（自動加）</span>`);
 
-  $("aiBox").innerHTML = msgs.length ? msgs.join("<br>") : `<div class="ok">✔ 暫時無衝突／建議</div>`;
+  box.innerHTML = msgs.length ? msgs.join("<br>") : `<div class="ok">✔ 暫時無衝突／建議</div>`;
 }
 
-/* ========= 拉劈計數機（Tab1） ========= */
+/* ========= Tab1：拉劈計數機 ========= */
 function calcLapPi(){
-  const cur = parseFloat($("lp_current").value || "0");
-  const nw  = parseFloat($("lp_new").value || "0");
+  const cur = safeFloat($("lp_current")?.value ?? "0", 0);
+  const nw  = safeFloat($("lp_new")?.value ?? "0", 0);
+
   const pull = ceilUp(cur * 1.5 + nw);
   const halfNow = floorDown(cur / 2);
   const halfAfter = floorDown(pull / 2);
-  $("lp_pull").innerText = String(pull);
-  $("lp_half_now").innerText = String(halfNow);
-  $("lp_half_after").innerText = String(halfAfter);
+
+  if($("lp_pull")) $("lp_pull").innerText = String(pull);
+  if($("lp_half_now")) $("lp_half_now").innerText = String(halfNow);
+  if($("lp_half_after")) $("lp_half_after").innerText = String(halfAfter);
 }
 
-/* ========= Tab2：拉/劈/斬拉/Undo ========= */
+/* ========= localStorage（Tab1） ========= */
+function saveTab1State(){
+  const checks = {};
+  document.querySelectorAll(".fanCheck").forEach(cb=>{
+    checks[cb.dataset.id] = cb.checked ? 1 : 0;
+  });
+
+  const counts = {};
+  document.querySelectorAll(".fanCount").forEach(inp=>{
+    counts[inp.dataset.target] = inp.value;
+  });
+
+  const state = {
+    checks,
+    counts,
+    dealer_times: $("dealer_times")?.value ?? "0",
+    lp_current: $("lp_current")?.value ?? "0",
+    lp_new: $("lp_new")?.value ?? "0",
+  };
+  localStorage.setItem("tab1_state", JSON.stringify(state));
+}
+
+function loadTab1State(){
+  const raw = localStorage.getItem("tab1_state");
+  if(!raw) return;
+  try{
+    const s = JSON.parse(raw);
+
+    if(s?.checks){
+      document.querySelectorAll(".fanCheck").forEach(cb=>{
+        cb.checked = !!s.checks[cb.dataset.id];
+        const line = cb.closest(".checkline");
+        if(line) line.classList.toggle("active", cb.checked);
+      });
+    }
+
+    if(s?.counts){
+      document.querySelectorAll(".fanCount").forEach(inp=>{
+        const v = s.counts[inp.dataset.target];
+        if(v !== undefined) inp.value = String(v);
+      });
+    }
+
+    if(s?.dealer_times !== undefined && $("dealer_times")) $("dealer_times").value = String(s.dealer_times);
+    if(s?.lp_current !== undefined && $("lp_current")) $("lp_current").value = String(s.lp_current);
+    if(s?.lp_new !== undefined && $("lp_new")) $("lp_new").value = String(s.lp_new);
+  }catch(e){}
+}
+
+/* ========= Tab2：連拉/劈/斬拉/Undo ========= */
 let chain_lastWinner = null;
 let chain_lastSettleFan = 0;
 let chain_pullCount = 0;
@@ -1070,14 +1128,18 @@ function slashModeLabel(v){
 function refreshPlayersDropdowns(){
   const winSel = $("t2_win");
   const loseSel = $("t2_lose");
+  if(!winSel || !loseSel) return;
+
   const names = [
-    $("n0").value || "東",
-    $("n1").value || "南",
-    $("n2").value || "西",
-    $("n3").value || "北",
+    $("n0")?.value || "東",
+    $("n1")?.value || "南",
+    $("n2")?.value || "西",
+    $("n3")?.value || "北",
   ];
+
   winSel.innerHTML = "";
   loseSel.innerHTML = "";
+
   names.forEach((nm, i)=>{
     const o1 = document.createElement("option");
     o1.value = String(i);
@@ -1096,29 +1158,35 @@ function refreshPlayersDropdowns(){
 }
 
 function enforceLoseNotWin(){
-  const w = parseInt($("t2_win").value,10);
-  let l = parseInt($("t2_lose").value,10);
+  const winSel = $("t2_win");
+  const loseSel = $("t2_lose");
+  if(!winSel || !loseSel) return;
+
+  const w = safeInt(winSel.value, 0);
+  let l = safeInt(loseSel.value, 1);
+
   if(l === w){
-    l = (w+1)%4;
-    $("t2_lose").value = String(l);
+    l = (w + 1) % 4;
+    loseSel.value = String(l);
   }
   selectedWin = w;
   selectedLose = l;
   updateQuickActive();
 }
 
-function updateLeader(){
-  const scores = [0,1,2,3].map(i=>parseInt($("s"+i).value||"0",10));
-  const max = Math.max(...scores);
-  [0,1,2,3].forEach(i=>$("p"+i).classList.remove("leader"));
-  const lead = scores.indexOf(max);
-  if(scores.some(x=>x!==0)) $("p"+lead).classList.add("leader");
-}
-
 function applyMoneyChange(idx, delta){
   const el = $("s"+idx);
-  const cur = parseInt(el.value || "0", 10);
+  if(!el) return;
+  const cur = safeInt(el.value, 0);
   el.value = String(cur + delta);
+}
+
+function updateLeader(){
+  const scores = [0,1,2,3].map(i=>safeInt($("s"+i)?.value ?? "0", 0));
+  const max = Math.max(...scores);
+  [0,1,2,3].forEach(i=>$("p"+i)?.classList.remove("leader"));
+  const lead = scores.indexOf(max);
+  if(scores.some(x=>x!==0)) $("p"+lead)?.classList.add("leader");
 }
 
 /* ====== History / Undo ====== */
@@ -1127,10 +1195,10 @@ let undoStack = [];
 
 function pushUndoSnapshot(){
   const snap = {
-    scores: [0,1,2,3].map(i=>parseInt($("s"+i).value||"0",10)),
-    names: [0,1,2,3].map(i=>($("n"+i).value||"")),
-    rate: $("t2_rate").value,
-    slashMode: $("t2_slashMode").value,
+    scores: [0,1,2,3].map(i=>safeInt($("s"+i)?.value ?? "0", 0)),
+    names: [0,1,2,3].map(i=>($("n"+i)?.value || "")),
+    rate: $("t2_rate")?.value ?? "10",
+    slashMode: $("t2_slashMode")?.value ?? "3",
     selectedWin,
     selectedLose,
     chain: { lastWinner: chain_lastWinner, lastSettleFan: chain_lastSettleFan, pullCount: chain_pullCount },
@@ -1143,21 +1211,22 @@ function undoLast(){
   if(undoStack.length === 0){ alert("無得撤銷"); return; }
   const snap = undoStack.pop();
 
-  snap.names.forEach((v,i)=>$("n"+i).value = v || ["東","南","西","北"][i]);
-  snap.scores.forEach((v,i)=>$("s"+i).value = String(v||0));
-  $("t2_rate").value = snap.rate || "10";
-  $("t2_slashMode").value = snap.slashMode || "3";
-  $("t2_slashModeLabel").innerText = slashModeLabel(parseInt($("t2_slashMode").value,10));
+  snap.names.forEach((v,i)=>{ const el=$("n"+i); if(el) el.value = v || ["東","南","西","北"][i]; });
+  snap.scores.forEach((v,i)=>{ const el=$("s"+i); if(el) el.value = String(v||0); });
 
-  selectedWin = snap.selectedWin ?? 0;
-  selectedLose = snap.selectedLose ?? 1;
+  if($("t2_rate")) $("t2_rate").value = snap.rate || "10";
+  if($("t2_slashMode")) $("t2_slashMode").value = snap.slashMode || "3";
+
+  selectedWin = (snap.selectedWin ?? 0);
+  selectedLose = (snap.selectedLose ?? 1);
 
   chain_lastWinner = (snap.chain.lastWinner === null || snap.chain.lastWinner === undefined) ? null : snap.chain.lastWinner;
-  chain_lastSettleFan = parseInt(snap.chain.lastSettleFan || "0",10);
-  chain_pullCount = parseInt(snap.chain.pullCount || "0",10);
+  chain_lastSettleFan = safeInt(snap.chain.lastSettleFan, 0);
+  chain_pullCount = safeInt(snap.chain.pullCount, 0);
 
-  $("t2_pullCount").innerText = String(chain_pullCount);
-  $("t2_lastSettleFan").innerText = String(chain_lastSettleFan);
+  if($("t2_pullCount")) $("t2_pullCount").innerText = String(chain_pullCount);
+  if($("t2_lastSettleFan")) $("t2_lastSettleFan").innerText = String(chain_lastSettleFan);
+  if($("t2_slashModeLabel")) $("t2_slashModeLabel").innerText = slashModeLabel(safeInt($("t2_slashMode")?.value ?? "3", 3));
 
   gameHistory = snap.history || [];
   refreshPlayersDropdowns();
@@ -1172,29 +1241,29 @@ function manualSlash(){
   chain_lastWinner = null;
   chain_lastSettleFan = 0;
   chain_pullCount = 0;
-  $("t2_pullCount").innerText = "0";
-  $("t2_lastSettleFan").innerText = "0";
-  $("t2_status").innerHTML = "⚔️ 已手動斬拉：下一舖當第一舖";
+  if($("t2_pullCount")) $("t2_pullCount").innerText = "0";
+  if($("t2_lastSettleFan")) $("t2_lastSettleFan").innerText = "0";
+  if($("t2_status")) $("t2_status").innerHTML = "⚔️ 已手動斬拉：下一舖當第一舖";
   saveTab2State();
 }
 
 /* ====== 結算 ====== */
 function settleTab2(){
-  const baseFan = parseInt($("totalFan").innerText || "0", 10);
+  const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
   if(baseFan <= 0){
-    $("t2_status").innerHTML = "⚠️ Tab1 總番數係 0，先去 Tab1 勾番再返嚟結算";
+    if($("t2_status")) $("t2_status").innerHTML = "⚠️ Tab1 總番數係 0，先去 Tab1 勾番再返嚟結算";
     return;
   }
 
   pushUndoSnapshot();
 
-  const win = parseInt($("t2_win").value, 10);
-  const type = $("t2_type").value; // self / eat
-  const lose = parseInt($("t2_lose").value, 10);
-  const doPi = $("t2_pi").checked;
+  const win = safeInt($("t2_win")?.value ?? "0", 0);
+  const type = $("t2_type")?.value || "self";
+  const lose = safeInt($("t2_lose")?.value ?? "1", 1);
+  const doPi = !!$("t2_pi")?.checked;
 
-  const rate = parseInt($("t2_rate").value || "0", 10);
-  const slashMode = parseInt($("t2_slashMode").value || "3", 10);
+  const rate = Math.max(safeInt($("t2_rate")?.value ?? "10", 10), 0);
+  const slashMode = safeInt($("t2_slashMode")?.value ?? "3", 3);
 
   let pulledFan = baseFan;
   let isChained = false;
@@ -1212,7 +1281,7 @@ function settleTab2(){
   let settleFan = pulledFan;
   if(doPi) settleFan = floorDown(settleFan / 2);
 
-  const amount = settleFan * Math.max(rate, 0);
+  const amount = settleFan * rate;
 
   if(type === "self"){
     for(let i=0;i<4;i++){
@@ -1231,9 +1300,9 @@ function settleTab2(){
     applyMoneyChange(win, amount);
   }
 
-  $("t2_pullCount").innerText = String(chain_pullCount);
-  $("t2_slashModeLabel").innerText = slashModeLabel(slashMode);
-  $("t2_lastSettleFan").innerText = String(settleFan);
+  if($("t2_pullCount")) $("t2_pullCount").innerText = String(chain_pullCount);
+  if($("t2_slashModeLabel")) $("t2_slashModeLabel").innerText = slashModeLabel(slashMode);
+  if($("t2_lastSettleFan")) $("t2_lastSettleFan").innerText = String(settleFan);
 
   const parts = [];
   parts.push(`本局番：${baseFan}`);
@@ -1241,7 +1310,7 @@ function settleTab2(){
   if(doPi) parts.push(`已劈→${settleFan}`);
   parts.push(`找數番：${settleFan}`);
   parts.push(`1番=$${rate} → 金額=$${amount}`);
-  $("t2_status").innerHTML = "✅ " + parts.join("　|　");
+  if($("t2_status")) $("t2_status").innerHTML = "✅ " + parts.join("　|　");
 
   updateLeader();
 
@@ -1253,12 +1322,12 @@ function settleTab2(){
     chain_lastWinner = null;
     chain_lastSettleFan = 0;
     chain_pullCount = 0;
-    $("t2_pullCount").innerText = "0";
-    $("t2_lastSettleFan").innerText = "0";
-    $("t2_status").innerHTML += "<br>⚔️ 已斬拉：下一舖當第一舖";
+    if($("t2_pullCount")) $("t2_pullCount").innerText = "0";
+    if($("t2_lastSettleFan")) $("t2_lastSettleFan").innerText = "0";
+    if($("t2_status")) $("t2_status").innerHTML += "<br>⚔️ 已斬拉：下一舖當第一舖";
   }
 
-  const nm = [0,1,2,3].map(i=>$("n"+i).value || ["東","南","西","北"][i]);
+  const nm = [0,1,2,3].map(i=>$("n"+i)?.value || ["東","南","西","北"][i]);
   gameHistory.push({
     ts: Date.now(),
     winner: win,
@@ -1282,13 +1351,13 @@ function settleTab2(){
 
 /* ====== Tab2 reset ====== */
 function resetTab2All(){
-  ["s0","s1","s2","s3"].forEach(id=>$(id).value="0");
+  ["s0","s1","s2","s3"].forEach(id=>{ if($(id)) $(id).value="0"; });
   chain_lastWinner = null;
   chain_lastSettleFan = 0;
   chain_pullCount = 0;
-  $("t2_pullCount").innerText = "0";
-  $("t2_lastSettleFan").innerText = "0";
-  $("t2_status").innerHTML = "✔ 已清零";
+  if($("t2_pullCount")) $("t2_pullCount").innerText = "0";
+  if($("t2_lastSettleFan")) $("t2_lastSettleFan").innerText = "0";
+  if($("t2_status")) $("t2_status").innerHTML = "✔ 已清零";
   undoStack = [];
   gameHistory = [];
   updateLeader();
@@ -1297,7 +1366,7 @@ function resetTab2All(){
   saveTab2State();
 }
 
-/* ========= 三粒骰動畫 ========= */
+/* ========= 骰（三粒動畫） ========= */
 function diceRoll3(){
   const diceFaces = ["⚀","⚁","⚂","⚃","⚄","⚅"];
   let t = 0;
@@ -1306,21 +1375,23 @@ function diceRoll3(){
     const b = Math.floor(Math.random()*6);
     const c = Math.floor(Math.random()*6);
     const total = a + b + c + 3;
-    $("diceText").innerText = `🎲 ${diceFaces[a]} ${diceFaces[b]} ${diceFaces[c]}（${total}）`;
+    if($("diceText")) $("diceText").innerText = `🎲 ${diceFaces[a]} ${diceFaces[b]} ${diceFaces[c]}（${total}）`;
     t++;
     if(t >= 12) clearInterval(timer);
   }, 80);
 }
 
-/* ========= 快速選人（東南西北） ========= */
+/* ========= 快速選人 ========= */
 function renderQuickButtons(){
   const winBox = $("quickWin");
   const loseBox = $("quickLose");
+  if(!winBox || !loseBox) return;
+
   const labels = [
-    $("n0").value || "東",
-    $("n1").value || "南",
-    $("n2").value || "西",
-    $("n3").value || "北",
+    $("n0")?.value || "東",
+    $("n1")?.value || "南",
+    $("n2")?.value || "西",
+    $("n3")?.value || "北",
   ];
   winBox.innerHTML = "";
   loseBox.innerHTML = "";
@@ -1331,7 +1402,7 @@ function renderQuickButtons(){
     b1.textContent = lb;
     b1.type = "button";
     b1.onclick = ()=>{
-      $("t2_win").value = String(i);
+      if($("t2_win")) $("t2_win").value = String(i);
       enforceLoseNotWin();
       saveTab2State();
     };
@@ -1342,9 +1413,9 @@ function renderQuickButtons(){
     b2.textContent = lb;
     b2.type = "button";
     b2.onclick = ()=>{
-      const w = parseInt($("t2_win").value,10);
+      const w = safeInt($("t2_win")?.value ?? "0", 0);
       if(i === w){ alert("放銃唔可以同贏家同一個人"); return; }
-      $("t2_lose").value = String(i);
+      if($("t2_lose")) $("t2_lose").value = String(i);
       enforceLoseNotWin();
       saveTab2State();
     };
@@ -1355,10 +1426,14 @@ function renderQuickButtons(){
 }
 
 function updateQuickActive(){
-  const w = parseInt($("t2_win").value,10);
-  const l = parseInt($("t2_lose").value,10);
-  [...$("quickWin").children].forEach((btn,i)=>btn.classList.toggle("active", i===w));
-  [...$("quickLose").children].forEach((btn,i)=>btn.classList.toggle("active", i===l));
+  const w = safeInt($("t2_win")?.value ?? "0", 0);
+  const l = safeInt($("t2_lose")?.value ?? "1", 1);
+  const winBox = $("quickWin");
+  const loseBox = $("quickLose");
+  if(!winBox || !loseBox) return;
+
+  [...winBox.children].forEach((btn,i)=>btn.classList.toggle("active", i===w));
+  [...loseBox.children].forEach((btn,i)=>btn.classList.toggle("active", i===l));
 }
 
 /* ========= History / Stats / Copy ========= */
@@ -1372,6 +1447,7 @@ function fmtTime(ts){
 
 function renderHistory(){
   const box = $("historyList");
+  if(!box) return;
   if(!gameHistory.length){ box.innerHTML = "（未有紀錄）"; return; }
 
   box.innerHTML = gameHistory.slice().reverse().map((r,idxFromEnd)=>{
@@ -1395,8 +1471,10 @@ function renderHistory(){
 
 function renderStats(){
   const box = $("statsBox");
-  const names = [0,1,2,3].map(i=>$("n"+i).value || ["東","南","西","北"][i]);
-  const scores = [0,1,2,3].map(i=>parseInt($("s"+i).value||"0",10));
+  if(!box) return;
+
+  const names = [0,1,2,3].map(i=>$("n"+i)?.value || ["東","南","西","北"][i]);
+  const scores = [0,1,2,3].map(i=>safeInt($("s"+i)?.value ?? "0", 0));
 
   const winCount = [0,0,0,0];
   gameHistory.forEach(r=>{ if(typeof r.winner==="number") winCount[r.winner]++; });
@@ -1437,54 +1515,13 @@ function clearHistory(){
   saveTab2State();
 }
 
-/* ========= 儲存 / 還原（localStorage） ========= */
-function saveTab1State(){
-  const checks = {};
-  document.querySelectorAll(".fanCheck").forEach(cb=>{
-    checks[cb.dataset.id] = cb.checked ? 1 : 0;
-  });
-  const counts = {};
-  document.querySelectorAll(".fanCount").forEach(inp=>{
-    counts[inp.dataset.target] = inp.value;
-  });
-  const state = {
-    checks,
-    counts,
-    dealer_times: $("dealer_times").value || "0",
-    lp_current: $("lp_current").value || "0",
-    lp_new: $("lp_new").value || "0",
-  };
-  localStorage.setItem("tab1_state", JSON.stringify(state));
-}
-
-function loadTab1State(){
-  const raw = localStorage.getItem("tab1_state");
-  if(!raw) return;
-  try{
-    const s = JSON.parse(raw);
-    if(s?.checks){
-      document.querySelectorAll(".fanCheck").forEach(cb=>{
-        cb.checked = !!s.checks[cb.dataset.id];
-      });
-    }
-    if(s?.counts){
-      document.querySelectorAll(".fanCount").forEach(inp=>{
-        const v = s.counts[inp.dataset.target];
-        if(v !== undefined) inp.value = String(v);
-      });
-    }
-    if(s?.dealer_times !== undefined) $("dealer_times").value = String(s.dealer_times);
-    if(s?.lp_current !== undefined) $("lp_current").value = String(s.lp_current);
-    if(s?.lp_new !== undefined) $("lp_new").value = String(s.lp_new);
-  }catch(e){}
-}
-
+/* ========= localStorage（Tab2） ========= */
 function saveTab2State(){
   const state = {
-    names: [0,1,2,3].map(i=>$("n"+i).value || ""),
-    scores: [0,1,2,3].map(i=>$("s"+i).value || "0"),
-    rate: $("t2_rate").value || "10",
-    slashMode: $("t2_slashMode").value || "3",
+    names: [0,1,2,3].map(i=>$("n"+i)?.value || ""),
+    scores: [0,1,2,3].map(i=>$("s"+i)?.value || "0"),
+    rate: $("t2_rate")?.value || "10",
+    slashMode: $("t2_slashMode")?.value || "3",
     selectedWin,
     selectedLose,
     chain: { lastWinner: chain_lastWinner, lastSettleFan: chain_lastSettleFan, pullCount: chain_pullCount },
@@ -1498,50 +1535,73 @@ function loadTab2State(){
   if(!raw) return;
   try{
     const s = JSON.parse(raw);
-    if(s?.names) s.names.forEach((v,i)=>{ if(typeof v==="string") $("n"+i).value = v || ["東","南","西","北"][i]; });
-    if(s?.scores) s.scores.forEach((v,i)=>{ $("s"+i).value = String(v||"0"); });
-    if(s?.rate !== undefined) $("t2_rate").value = String(s.rate);
-    if(s?.slashMode !== undefined) $("t2_slashMode").value = String(s.slashMode);
+
+    if(s?.names) s.names.forEach((v,i)=>{ const el=$("n"+i); if(el && typeof v==="string") el.value = v || ["東","南","西","北"][i]; });
+    if(s?.scores) s.scores.forEach((v,i)=>{ const el=$("s"+i); if(el) el.value = String(v||"0"); });
+
+    if(s?.rate !== undefined && $("t2_rate")) $("t2_rate").value = String(s.rate);
+    if(s?.slashMode !== undefined && $("t2_slashMode")) $("t2_slashMode").value = String(s.slashMode);
+
     if(s?.selectedWin !== undefined) selectedWin = s.selectedWin;
     if(s?.selectedLose !== undefined) selectedLose = s.selectedLose;
 
     if(s?.chain){
       chain_lastWinner = (s.chain.lastWinner === null || s.chain.lastWinner === undefined) ? null : s.chain.lastWinner;
-      chain_lastSettleFan = parseInt(s.chain.lastSettleFan || "0",10);
-      chain_pullCount = parseInt(s.chain.pullCount || "0",10);
-      $("t2_pullCount").innerText = String(chain_pullCount);
-      $("t2_lastSettleFan").innerText = String(chain_lastSettleFan);
+      chain_lastSettleFan = safeInt(s.chain.lastSettleFan, 0);
+      chain_pullCount = safeInt(s.chain.pullCount, 0);
+      if($("t2_pullCount")) $("t2_pullCount").innerText = String(chain_pullCount);
+      if($("t2_lastSettleFan")) $("t2_lastSettleFan").innerText = String(chain_lastSettleFan);
     }
+
     if(Array.isArray(s?.history)) gameHistory = s.history;
   }catch(e){}
 }
 
 function updateSlashLabel(){
-  $("t2_slashModeLabel").innerText = slashModeLabel(parseInt($("t2_slashMode").value,10));
+  if($("t2_slashModeLabel")){
+    $("t2_slashModeLabel").innerText = slashModeLabel(safeInt($("t2_slashMode")?.value ?? "3", 3));
+  }
 }
 
 /* ========= 綁事件 ========= */
 function bindEvents(){
-  $("themeBtn").addEventListener("click", ()=>setTheme(!document.body.classList.contains("white")));
-  $("tabBtn1").addEventListener("click", ()=>setTab(1));
-  $("tabBtn2").addEventListener("click", ()=>setTab(2));
+  // Theme
+  $("themeBtn")?.addEventListener("click", ()=>setTheme(!document.body.classList.contains("white")));
 
-  $("lp_calcBtn").addEventListener("click", ()=>{ calcLapPi(); saveTab1State(); });
-  $("lp_current").addEventListener("input", ()=>{ calcLapPi(); saveTab1State(); });
-  $("lp_new").addEventListener("input", ()=>{ calcLapPi(); saveTab1State(); });
+  // Tabs
+  $("tabBtn1")?.addEventListener("click", ()=>setTab(1));
+  $("tabBtn2")?.addEventListener("click", ()=>setTab(2));
 
-  $("dealer_times").addEventListener("input", ()=>{ updateTotalFan(); saveTab1State(); });
-  $("clearBtn").addEventListener("click", clearTab1All);
+  // Tab1 - 拉劈
+  $("lp_calcBtn")?.addEventListener("click", ()=>{ calcLapPi(); saveTab1State(); });
+  $("lp_current")?.addEventListener("input", ()=>{ calcLapPi(); saveTab1State(); });
+  $("lp_new")?.addEventListener("input", ()=>{ calcLapPi(); saveTab1State(); });
 
-  $("baseFan").addEventListener("input", ()=>{ updateTotalFan(); });
-  $("resetBaseBtn").addEventListener("click", ()=>{
-    $("baseFan").value = "5";
+  // Tab1 - 莊 checkbox（固定嗰個）
+  $("dealer_base")?.addEventListener("change", (e)=>{
+    const line = $("line_dealer_base");
+    if(line) line.classList.toggle("active", e.target.checked);
+    updateTotalFan();
+    saveTab1State();
+  });
+
+  // Tab1 - 連莊
+  $("dealer_times")?.addEventListener("input", ()=>{ updateTotalFan(); saveTab1State(); });
+
+  // Tab1 - 底
+  $("baseFan")?.addEventListener("input", ()=>{ updateTotalFan(); });
+  $("resetBaseBtn")?.addEventListener("click", ()=>{
+    if($("baseFan")) $("baseFan").value = "5";
     localStorage.setItem("baseFan","5");
     updateTotalFan();
   });
 
+  // Tab1 - 清勾
+  $("clearBtn")?.addEventListener("click", clearTab1All);
+
+  // Tab2 - player name/score
   ["n0","n1","n2","n3"].forEach(id=>{
-    $(id).addEventListener("input", ()=>{
+    $(id)?.addEventListener("input", ()=>{
       refreshPlayersDropdowns();
       renderQuickButtons();
       renderStats();
@@ -1549,36 +1609,38 @@ function bindEvents(){
     });
   });
   ["s0","s1","s2","s3"].forEach(id=>{
-    $(id).addEventListener("input", ()=>{
+    $(id)?.addEventListener("input", ()=>{
       updateLeader();
       renderStats();
       saveTab2State();
     });
   });
 
-  $("t2_win").addEventListener("change", ()=>{ enforceLoseNotWin(); saveTab2State(); });
-  $("t2_lose").addEventListener("change", ()=>{ enforceLoseNotWin(); saveTab2State(); });
+  // Tab2 selects
+  $("t2_win")?.addEventListener("change", ()=>{ enforceLoseNotWin(); saveTab2State(); });
+  $("t2_lose")?.addEventListener("change", ()=>{ enforceLoseNotWin(); saveTab2State(); });
 
-  $("t2_slashMode").addEventListener("change", ()=>{ updateSlashLabel(); saveTab2State(); });
-  $("t2_rate").addEventListener("input", saveTab2State);
+  $("t2_slashMode")?.addEventListener("change", ()=>{ updateSlashLabel(); saveTab2State(); });
+  $("t2_rate")?.addEventListener("input", ()=>saveTab2State());
 
-  $("t2_settleBtn").addEventListener("click", settleTab2);
-  $("t2_resetBtn").addEventListener("click", resetTab2All);
-  $("undoBtn").addEventListener("click", undoLast);
-  $("slashBtn").addEventListener("click", manualSlash);
+  // Tab2 buttons
+  $("t2_settleBtn")?.addEventListener("click", settleTab2);
+  $("t2_resetBtn")?.addEventListener("click", resetTab2All);
+  $("undoBtn")?.addEventListener("click", undoLast);
+  $("slashBtn")?.addEventListener("click", manualSlash);
 
-  $("diceBtn").addEventListener("click", diceRoll3);
+  $("diceBtn")?.addEventListener("click", diceRoll3);
 
-  $("copyHistoryBtn").addEventListener("click", copyHistory);
-  $("clearHistoryBtn").addEventListener("click", clearHistory);
+  $("copyHistoryBtn")?.addEventListener("click", copyHistory);
+  $("clearHistoryBtn")?.addEventListener("click", clearHistory);
 }
 
 /* ========= 初始化 ========= */
-(function init(){
+document.addEventListener("DOMContentLoaded", ()=>{
   loadTheme();
 
   const savedBase = localStorage.getItem("baseFan");
-  if(savedBase !== null) $("baseFan").value = String(savedBase);
+  if(savedBase !== null && $("baseFan")) $("baseFan").value = String(savedBase);
 
   renderFanList();
   bindEvents();
@@ -1595,28 +1657,8 @@ function bindEvents(){
   renderHistory();
   renderStats();
 
-  setTab(1);
-})();
-</script>
-
+  setTab(1); // default Tab1
+});
+  </script>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
