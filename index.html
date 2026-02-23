@@ -813,13 +813,18 @@ function setTab(which){
 /* ========= Tab1 render 番表 ========= */
 function renderFanList(){
   const mount = $("fanListMount");
+  if(!mount) return;
+
   mount.innerHTML = "";
 
   fanData.forEach(group=>{
     const d = document.createElement("details");
+
     const s = document.createElement("summary");
     const icon = catIcon[group.cat] || "📂";
     s.innerHTML = `<span style="color:var(--gold);font-weight:900;">${icon} ${group.cat}</span>`;
+    
+    d.appendChild(s); // ⭐ 必要
 
     group.items.forEach(([id, name, fan, hasCount])=>{
       const line = document.createElement("div");
@@ -845,6 +850,10 @@ function renderFanList(){
       line.appendChild(cb);
       line.appendChild(lab);
 
+      const span = document.createElement("span");
+      span.className = "fan";
+      span.textContent = hasCount ? `×${fan}番` : `${fan}番`;
+
       if(hasCount){
         const count = document.createElement("input");
         count.type = "number";
@@ -852,24 +861,16 @@ function renderFanList(){
         count.value = "1";
         count.className = "input tiny fanCount";
         count.dataset.target = id;
-        count.title = "數量";
+
         count.addEventListener("input", ()=>{
           updateTotalFan();
           saveTab1State();
         });
-        line.appendChild(count);
 
-        const span = document.createElement("span");
-        span.className = "fan";
-        span.textContent = `×${fan}番`;
-        line.appendChild(span);
-      }else{
-        const span = document.createElement("span");
-        span.className = "fan";
-        span.textContent = fan + "番";
-        line.appendChild(span);
+        line.appendChild(count);
       }
 
+      line.appendChild(span);
       d.appendChild(line);
     });
 
@@ -1532,6 +1533,7 @@ function bindEvents(){
 </body>
 
 </html>
+
 
 
 
