@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>港式台牌計番神器 PRO</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>港式台牌計番神器 PRO</title>
 
-<!-- ✅ favicon / iOS 加到主畫面 icon（已URL encode，唔會爆） -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
+  <!-- ✅ favicon / iOS 主畫面 icon（已 encode，唔會爆） -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="台牌PRO">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="台牌PRO">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<style>
-:root{
+  <style>
+    :root{
   --bg:#0f0f0f;
   --card:#1c1c1c;
   --muted:#2a2a2a;
@@ -26,15 +26,14 @@
   --shadow: rgba(212,175,55,0.12);
   --line: rgba(128,128,128,0.25);
 }
-
+*{ box-sizing:border-box; }
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  padding-bottom:180px; /* 固定總番 bar */
+  padding-bottom:180px;
 }
-
 body.white{
   --bg:#f5f5f5;
   --card:#ffffff;
@@ -48,10 +47,7 @@ body.white{
   --line: rgba(0,0,0,0.12);
 }
 
-/* ✅ 版面：避免 iPhone 細屏「唔show唔晒」 */
 .container{ padding:0 14px; max-width:980px; margin:0 auto; }
-*{ box-sizing:border-box; }
-
 header{
   padding:14px 14px 8px 14px;
   text-align:center;
@@ -59,7 +55,6 @@ header{
   font-weight:900;
   letter-spacing:0.5px;
 }
-
 .topbar{
   display:flex;
   gap:10px;
@@ -92,15 +87,8 @@ header{
   color:#000;
   cursor:pointer;
 }
-.btn.secondary{
-  background:var(--muted);
-  color:var(--text);
-  font-weight:800;
-}
-.btn.danger{
-  background:var(--danger);
-  color:#fff;
-}
+.btn.secondary{ background:var(--muted); color:var(--text); font-weight:800; }
+.btn.danger{ background:var(--danger); color:#fff; }
 
 .tabs{
   display:flex;
@@ -119,10 +107,7 @@ header{
   color:var(--sub);
   cursor:pointer;
 }
-.tabBtn.active{
-  background:var(--gold);
-  color:#000;
-}
+.tabBtn.active{ background:var(--gold); color:#000; }
 
 .card{
   background:var(--card);
@@ -131,25 +116,17 @@ header{
   margin-bottom:14px;
   box-shadow: 0 0 22px var(--shadow);
 }
+.innerCard{ margin:12px 0 0 0; background:var(--muted); box-shadow:none; }
+.flatCard{ box-shadow:none; background:var(--card); }
 
 h2{
   margin:0 0 10px 0;
   color:var(--gold);
   font-size:18px;
 }
+.small{ color:var(--sub); font-size:13px; line-height:1.6; }
 
-.small{
-  color:var(--sub);
-  font-size:13px;
-  line-height:1.6;
-}
-
-.row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  align-items:center;
-}
+.row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
 
 .input, select{
   border:1px solid rgba(128,128,128,0.35);
@@ -161,9 +138,7 @@ h2{
   outline:none;
   max-width:100%;
 }
-body.white .input, body.white select{
-  border:1px solid rgba(0,0,0,0.2);
-}
+body.white .input, body.white select{ border:1px solid rgba(0,0,0,0.2); }
 
 .input.num{ width:120px; }
 .input.tiny{ width:86px; padding:8px 10px; }
@@ -180,18 +155,11 @@ body.white .input, body.white select{
   margin-top:6px;
 }
 
-.table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:8px;
-  font-size:14px;
-}
-.table td{
-  padding:8px 6px;
-  border-bottom:1px solid var(--line);
-}
+.table{ width:100%; border-collapse:collapse; margin-top:8px; font-size:14px; }
+.table td{ padding:8px 6px; border-bottom:1px solid var(--line); }
+.tRight{ text-align:right; }
+.strong{ font-weight:900; }
 
-/* ✅ 番表摺疊 */
 details{
   background:var(--muted);
   border-radius:14px;
@@ -209,7 +177,6 @@ details > summary{
 }
 details > summary::-webkit-details-marker{ display:none; }
 
-/* ✅ summary 左邊箭咀 icon */
 summary::before{
   content:"▶";
   display:inline-block;
@@ -217,16 +184,13 @@ summary::before{
   transition:0.2s;
   color:var(--gold);
 }
-details[open] summary::before{
-  transform:rotate(90deg);
-}
-
-/* ✅ 展開動畫 */
-details[open]{ animation:fadeIn 0.2s ease; }
+details[open] summary::before{ transform:rotate(90deg); }
+details[open]{ animation:fadeIn 0.18s ease; }
 @keyframes fadeIn{
-  from{opacity:0; transform:translateY(-5px);}
+  from{opacity:0; transform:translateY(-4px);}
   to{opacity:1; transform:translateY(0);}
 }
+.sumGold{ color:var(--gold); font-weight:900; }
 
 .checkline{
   display:flex;
@@ -238,14 +202,12 @@ details[open]{ animation:fadeIn 0.2s ease; }
 .checkline:last-child{ border-bottom:none; }
 .checkline label{ flex:1; cursor:pointer; }
 .checkline .fan{ color:var(--gold); font-weight:900; }
-
 .checkline.active{
   background:rgba(212,175,55,0.12);
   border-radius:10px;
   box-shadow:0 0 10px rgba(212,175,55,0.12);
 }
 
-/* ✅ AI box */
 .aiBox{
   background:rgba(0,255,136,0.08);
   border:1px solid rgba(0,255,136,0.25);
@@ -258,7 +220,6 @@ details[open]{ animation:fadeIn 0.2s ease; }
 .aiBox .tip{ color:var(--accent); font-weight:900; }
 .aiBox .ok{ color:var(--sub); }
 
-/* ✅ 固定總番 bar */
 .fixedTotal{
   position:fixed;
   left:0;
@@ -273,27 +234,11 @@ details[open]{ animation:fadeIn 0.2s ease; }
   gap:10px;
   z-index:10;
 }
-.fixedTotal .big{
-  font-size:20px;
-  font-weight:900;
-  color:var(--gold);
-}
+.fixedTotal .big{ font-size:20px; font-weight:900; color:var(--gold); }
 
-/* ===== Tab2 樣式（Part2 會用） ===== */
-.mjTable{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  align-items:center;
-}
-.mjRowMid{
-  display:flex;
-  gap:12px;
-  align-items:center;
-  justify-content:center;
-  width:100%;
-  flex-wrap:wrap;
-}
+/* ===== Tab2 ===== */
+.mjTable{ display:flex; flex-direction:column; gap:12px; align-items:center; }
+.mjRowMid{ display:flex; gap:12px; align-items:center; justify-content:center; width:100%; flex-wrap:wrap; }
 .mjPlayer{
   background:var(--muted);
   border-radius:18px;
@@ -303,9 +248,7 @@ details[open]{ animation:fadeIn 0.2s ease; }
   position:relative;
   transition:box-shadow 0.15s ease;
 }
-.mjPlayer.leader{
-  box-shadow:0 0 0 3px rgba(212,175,55,0.9), 0 0 22px rgba(212,175,55,0.25);
-}
+.mjPlayer.leader{ box-shadow:0 0 0 3px rgba(212,175,55,0.9), 0 0 22px rgba(212,175,55,0.25); }
 .mjPlayer .name{ width:110px; text-align:center; font-weight:900; }
 .mjPlayer .score{ width:110px; text-align:center; font-size:18px; font-weight:900; }
 
@@ -319,28 +262,12 @@ details[open]{ animation:fadeIn 0.2s ease; }
   min-width:240px;
   max-width:520px;
 }
-.centerPanel .big{
-  font-size:18px;
-  font-weight:900;
-  color:var(--gold);
-}
-.dice{
-  font-size:18px;
-  font-weight:900;
-  color:var(--gold);
-  margin:6px 0;
-}
+.centerPanel .big{ font-size:18px; font-weight:900; color:var(--gold); }
+.dice{ font-size:18px; font-weight:900; color:var(--gold); margin:6px 0; }
 .hr{ height:1px; background:var(--line); margin:12px 0; }
 
-.quickGrid{
-  display:grid;
-  grid-template-columns:repeat(4, 1fr);
-  gap:6px;
-  margin-top:8px;
-}
-@media (max-width:420px){
-  .quickGrid{ grid-template-columns:repeat(2, 1fr); }
-}
+.quickGrid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; margin-top:8px; }
+@media (max-width:420px){ .quickGrid{ grid-template-columns:repeat(2, 1fr); } }
 .quickBtn{
   padding:10px 8px;
   border-radius:12px;
@@ -355,6 +282,8 @@ details[open]{ animation:fadeIn 0.2s ease; }
   box-shadow:0 0 0 2px rgba(212,175,55,0.75) inset;
 }
 
+.piLabel{ display:flex; gap:8px; align-items:center; font-weight:900; }
+
 .historyItem{
   padding:10px;
   border-radius:14px;
@@ -363,274 +292,267 @@ details[open]{ animation:fadeIn 0.2s ease; }
 }
 .historyItem .title{ font-weight:900; }
 .historyItem .meta{ font-size:13px; color:var(--sub); margin-top:4px; }
-</style>
+  </style>
 </head>
 
 <body>
-<header>🀄 港式台牌計番神器 PRO 🀄</header>
+  <header>🀄 港式台牌計番神器 PRO 🀄</header>
 
-<div class="topbar">
-  <button class="btn secondary" id="themeBtn" type="button">切換主題（黑金/白）</button>
-  <span class="badge gold">iPhone Safari OK</span>
-</div>
-
-<div class="tabs">
-  <button class="tabBtn active" id="tabBtn1" type="button">計番區</button>
-  <button class="tabBtn" id="tabBtn2" type="button">計分區</button>
-</div>
-
-<!-- ================= TAB 1 ================= -->
-<div id="tab1" class="container">
-
-  <div class="card">
-    <h2>規則</h2>
-    <div class="small">
-      拉上劈下　開槓計暗間<br>
-      順骰冧莊加換一次牌　圍骰加換三次牌　最多換三次
-    </div>
+  <div class="topbar">
+    <button class="btn secondary" id="themeBtn" type="button">切換主題（黑金/白）</button>
+    <span class="badge gold">iPhone Safari OK</span>
   </div>
 
-  <div class="card">
-    <h2>陰蟄錢（唔計入總番）</h2>
-    <table class="table">
-      <tr><td>追殺</td><td style="text-align:right;font-weight:900;">每家 5 元</td></tr>
-      <tr><td>暗槓</td><td style="text-align:right;font-weight:900;">每家 5 元</td></tr>
-      <tr><td>花</td><td style="text-align:right;font-weight:900;">每家 5 元</td></tr>
-      <tr><td>草</td><td style="text-align:right;font-weight:900;">每家 3 元</td></tr>
-      <tr><td>詐胡</td><td style="text-align:right;font-weight:900;">每家 30 元</td></tr>
-    </table>
+  <div class="tabs">
+    <button class="tabBtn active" id="tabBtn1" type="button">計番區</button>
+    <button class="tabBtn" id="tabBtn2" type="button">計分區</button>
   </div>
 
-  <div class="card">
-    <h2>底設定（自動加落總番）</h2>
-    <div class="row">
-      <span class="badge">底</span>
-      <input class="input num" type="number" id="baseFan" value="5" min="0">
-      <span class="small">番（預設 5）</span>
-      <button class="btn secondary" type="button" id="resetBaseBtn">重置底=5</button>
-    </div>
-    <div class="small" style="margin-top:6px;">提示：底會記住你上次設定（自動存檔）。</div>
-  </div>
-
-  <div class="card">
-    <h2>拉劈計數機</h2>
-    <div class="row">
-      <div style="min-width:140px;">
-        <div class="small">現針番數</div>
-        <input class="input num" type="number" id="lp_current" value="0" min="0" />
-      </div>
-      <div style="min-width:140px;">
-        <div class="small">新針番數</div>
-        <input class="input num" type="number" id="lp_new" value="0" min="0" />
-      </div>
-      <button class="btn" type="button" id="lp_calcBtn">計算</button>
-    </div>
-
-    <div class="card" style="margin:12px 0 0 0;background:var(--muted);box-shadow:none;">
-      <div class="kv"><span>新針拉緊（向上取整）</span><span class="badge gold" id="lp_pull">0</span></div>
-      <div class="kv"><span>現針即劈（向下取整）</span><span class="badge gold" id="lp_half_now">0</span></div>
-      <div class="kv"><span>拉完再劈（向下取整）</span><span class="badge gold" id="lp_half_after">0</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>番表（勾選即時計總番）</h2>
-
-    <details open>
-      <summary><span style="color:var(--gold);font-weight:900;">👑 莊</span></summary>
-
-      <div class="checkline" id="line_dealer_base">
-        <input type="checkbox" class="fanCheck" data-id="dealer_base" data-fan="1" id="dealer_base" />
-        <label for="dealer_base">莊</label>
-        <span class="fan">1番</span>
-      </div>
-
-      <div class="row" style="margin-top:10px;">
-        <span class="badge">連莊次數</span>
-        <input class="input num" type="number" id="dealer_times" value="0" min="0" />
-        <span class="small">（連莊番數 = 次數×2+1）</span>
-      </div>
-    </details>
-
-    <div id="fanListMount"></div>
-
-    <div class="small" style="margin-top:8px;">
-      ✅ Tab2 會用下面固定「總番數」做本局番
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>🧠 番表 AI 建議</h2>
-    <div class="aiBox" id="aiBox">
-      <div class="ok">✔ 等你勾選之後我先出提示</div>
-    </div>
-  </div>
-
-</div>
-<!-- ================= TAB 2 ================= -->
-<div id="tab2" class="container" style="display:none;">
-  <div class="card">
-    <h2>麻雀枱 PRO（用 Tab1 總番數）</h2>
-
-    <div class="centerPanel" style="margin-bottom:12px;">
-      <div class="big">本局番數：<span id="t2_baseFan">0</span> 番</div>
-
-      <div class="kv"><span>拉次數</span><span class="badge gold" id="t2_pullCount">0</span></div>
-      <div class="kv"><span>斬拉模式</span><span class="badge gold" id="t2_slashModeLabel">三拉一斬</span></div>
-      <div class="kv"><span>上一舖結算番數</span><span class="badge gold" id="t2_lastSettleFan">0</span></div>
-
-      <div class="dice" id="diceText">🎲 -</div>
-      <button class="btn secondary" type="button" id="diceBtn">擲骰（三粒）</button>
-
-      <div class="row" style="justify-content:center;margin-top:10px;">
-        <span class="badge">1番 = $</span>
-        <input class="input num" type="number" id="t2_rate" value="10" min="0" />
+  <!-- ================= TAB 1 ================= -->
+  <div id="tab1" class="container">
+    <div class="card">
+      <h2>規則</h2>
+      <div class="small">
+        拉上劈下　開槓計暗間<br>
+        順骰冧莊加換一次牌　圍骰加換三次牌　最多換三次
       </div>
     </div>
 
-    <div class="mjTable">
-      <div class="mjPlayer" id="p3">
-        <input class="input name" id="n3" value="北" />
-        <div style="height:8px;"></div>
-        <input class="input score" id="s3" type="number" value="0" />
+    <div class="card">
+      <h2>陰蟄錢（唔計入總番）</h2>
+      <table class="table">
+        <tr><td>追殺</td><td class="tRight strong">每家 5 元</td></tr>
+        <tr><td>暗槓</td><td class="tRight strong">每家 5 元</td></tr>
+        <tr><td>花</td><td class="tRight strong">每家 5 元</td></tr>
+        <tr><td>草</td><td class="tRight strong">每家 3 元</td></tr>
+        <tr><td>詐胡</td><td class="tRight strong">每家 30 元</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>底設定（自動加落總番）</h2>
+      <div class="row">
+        <span class="badge">底</span>
+        <input class="input num" type="number" id="baseFan" value="5" min="0">
+        <span class="small">番（預設 5）</span>
+        <button class="btn secondary" type="button" id="resetBaseBtn">重置底=5</button>
+      </div>
+      <div class="small" style="margin-top:6px;">提示：底會記住你上次設定（自動存檔）。</div>
+    </div>
+
+    <div class="card">
+      <h2>拉劈計數機</h2>
+      <div class="row">
+        <div style="min-width:140px;">
+          <div class="small">現針番數</div>
+          <input class="input num" type="number" id="lp_current" value="0" min="0" />
+        </div>
+        <div style="min-width:140px;">
+          <div class="small">新針番數</div>
+          <input class="input num" type="number" id="lp_new" value="0" min="0" />
+        </div>
+        <button class="btn" type="button" id="lp_calcBtn">計算</button>
       </div>
 
-      <div class="mjRowMid">
-        <div class="mjPlayer" id="p2">
-          <input class="input name" id="n2" value="西" />
+      <div class="card innerCard">
+        <div class="kv"><span>新針拉緊（向上取整）</span><span class="badge gold" id="lp_pull">0</span></div>
+        <div class="kv"><span>現針即劈（向下取整）</span><span class="badge gold" id="lp_half_now">0</span></div>
+        <div class="kv"><span>拉完再劈（向下取整）</span><span class="badge gold" id="lp_half_after">0</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>番表（勾選即時計總番）</h2>
+
+      <!-- 莊（固定） -->
+      <details open>
+        <summary><span class="sumGold">👑 莊</span></summary>
+
+        <div class="checkline" id="line_dealer_base">
+          <input type="checkbox" class="fanCheck" data-id="dealer_base" data-fan="1" id="dealer_base" />
+          <label for="dealer_base">莊</label>
+          <span class="fan">1番</span>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <span class="badge">連莊次數</span>
+          <input class="input num" type="number" id="dealer_times" value="0" min="0" />
+          <span class="small">（連莊番數 = 次數×2+1）</span>
+        </div>
+      </details>
+
+      <!-- ✅ JS 會 render 完整番表落呢度 -->
+      <div id="fanListMount"></div>
+
+      <div class="small" style="margin-top:8px;">
+        ✅ Tab2 會用下面固定「總番數」做本局番
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🧠 番表 AI 建議</h2>
+      <div class="aiBox" id="aiBox">
+        <div class="ok">✔ 等你勾選之後我先出提示</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 2 ================= -->
+  <div id="tab2" class="container" style="display:none;">
+    <div class="card">
+      <h2>麻雀枱 PRO（用 Tab1 總番數）</h2>
+
+      <div class="centerPanel" style="margin-bottom:12px;">
+        <div class="big">本局番數：<span id="t2_baseFan">0</span> 番</div>
+
+        <div class="kv"><span>拉次數</span><span class="badge gold" id="t2_pullCount">0</span></div>
+        <div class="kv"><span>斬拉模式</span><span class="badge gold" id="t2_slashModeLabel">三拉一斬</span></div>
+        <div class="kv"><span>上一舖結算番數</span><span class="badge gold" id="t2_lastSettleFan">0</span></div>
+
+        <div class="dice" id="diceText">🎲 -</div>
+        <button class="btn secondary" type="button" id="diceBtn">擲骰（三粒）</button>
+
+        <div class="row" style="justify-content:center;margin-top:10px;">
+          <span class="badge">1番 = $</span>
+          <input class="input num" type="number" id="t2_rate" value="10" min="0" />
+        </div>
+      </div>
+
+      <div class="mjTable">
+        <div class="mjPlayer" id="p3">
+          <input class="input name" id="n3" value="北" />
           <div style="height:8px;"></div>
-          <input class="input score" id="s2" type="number" value="0" />
+          <input class="input score" id="s3" type="number" value="0" />
         </div>
 
-        <div class="centerPanel">
-          <div class="row" style="justify-content:center;">
-            <span class="badge gold">結算</span>
+        <div class="mjRowMid">
+          <div class="mjPlayer" id="p2">
+            <input class="input name" id="n2" value="西" />
+            <div style="height:8px;"></div>
+            <input class="input score" id="s2" type="number" value="0" />
           </div>
 
-          <div class="small" style="margin-top:8px;">快速揀：</div>
+          <div class="centerPanel">
+            <div class="row" style="justify-content:center;">
+              <span class="badge gold">結算</span>
+            </div>
 
-          <div class="small" style="margin-top:6px;font-weight:900;">贏家</div>
-          <div class="quickGrid" id="quickWin"></div>
+            <div class="small" style="margin-top:8px;">快速揀：</div>
 
-          <div class="small" style="margin-top:10px;font-weight:900;">放銃</div>
-          <div class="quickGrid" id="quickLose"></div>
+            <div class="small" style="margin-top:6px;font-weight:900;">贏家</div>
+            <div class="quickGrid" id="quickWin"></div>
 
-          <div class="row" style="justify-content:center;margin-top:10px;">
-            <select class="input" id="t2_win"></select>
-            <select class="input" id="t2_type">
-              <option value="self">自摸（3家全賠）</option>
-              <option value="eat">食胡（放銃全賠）</option>
-            </select>
+            <div class="small" style="margin-top:10px;font-weight:900;">放銃</div>
+            <div class="quickGrid" id="quickLose"></div>
+
+            <div class="row" style="justify-content:center;margin-top:10px;">
+              <select class="input" id="t2_win"></select>
+              <select class="input" id="t2_type">
+                <option value="self">自摸（3家全賠）</option>
+                <option value="eat">食胡（放銃全賠）</option>
+              </select>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:8px;">
+              <span class="badge">放銃</span>
+              <select class="input" id="t2_lose"></select>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:8px;">
+              <label class="piLabel">
+                <input type="checkbox" id="t2_pi" />
+                劈（找數番 ÷2 向下取整）
+              </label>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:10px;">
+              <span class="badge">斬拉模式</span>
+              <select class="input" id="t2_slashMode">
+                <option value="3">三拉一斬</option>
+                <option value="6">六拉一斬</option>
+                <option value="9">九拉一斬</option>
+                <option value="999">永不斬</option>
+              </select>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:12px;">
+              <button class="btn" type="button" id="t2_settleBtn">結算</button>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:10px;flex-wrap:wrap;">
+              <button class="btn secondary" type="button" id="undoBtn">↩️ 撤銷上一舖</button>
+              <button class="btn danger" type="button" id="slashBtn">⚔️ 手動斬拉</button>
+            </div>
+
+            <div class="small" id="t2_status" style="margin-top:10px;">
+              ✔ 用 Tab1 總番數做本局番數
+            </div>
           </div>
 
-          <div class="row" style="justify-content:center;margin-top:8px;">
-            <span class="badge">放銃</span>
-            <select class="input" id="t2_lose"></select>
-          </div>
-
-          <div class="row" style="justify-content:center;margin-top:8px;">
-            <label style="display:flex;gap:8px;align-items:center;font-weight:900;">
-              <input type="checkbox" id="t2_pi" />
-              劈（找數番 ÷2 向下取整）
-            </label>
-          </div>
-
-          <div class="row" style="justify-content:center;margin-top:10px;">
-            <span class="badge">斬拉模式</span>
-            <select class="input" id="t2_slashMode">
-              <option value="3">三拉一斬</option>
-              <option value="6">六拉一斬</option>
-              <option value="9">九拉一斬</option>
-              <option value="999">永不斬</option>
-            </select>
-          </div>
-
-          <div class="row" style="justify-content:center;margin-top:12px;">
-            <button class="btn" type="button" id="t2_settleBtn">結算</button>
-          </div>
-
-          <div class="row" style="justify-content:center;margin-top:10px;flex-wrap:wrap;">
-            <button class="btn secondary" type="button" id="undoBtn">↩️ 撤銷上一舖</button>
-            <button class="btn danger" type="button" id="slashBtn">⚔️ 手動斬拉</button>
-          </div>
-
-          <div class="small" id="t2_status" style="margin-top:10px;">
-            ✔ 用 Tab1 總番數做本局番數
+          <div class="mjPlayer" id="p0">
+            <input class="input name" id="n0" value="東" />
+            <div style="height:8px;"></div>
+            <input class="input score" id="s0" type="number" value="0" />
           </div>
         </div>
 
-        <div class="mjPlayer" id="p0">
-          <input class="input name" id="n0" value="東" />
+        <div class="mjPlayer" id="p1">
+          <input class="input name" id="n1" value="南" />
           <div style="height:8px;"></div>
-          <input class="input score" id="s0" type="number" value="0" />
+          <input class="input score" id="s1" type="number" value="0" />
         </div>
       </div>
 
-      <div class="mjPlayer" id="p1">
-        <input class="input name" id="n1" value="南" />
-        <div style="height:8px;"></div>
-        <input class="input score" id="s1" type="number" value="0" />
+      <div class="row" style="justify-content:center;margin-top:14px;">
+        <button class="btn danger" type="button" id="t2_resetBtn">Tab2 全部清零（分數+拉狀態）</button>
       </div>
-    </div>
 
-    <div class="row" style="justify-content:center;margin-top:14px;">
-      <button class="btn danger" type="button" id="t2_resetBtn">Tab2 全部清零（分數+拉狀態）</button>
-    </div>
+      <div class="hr"></div>
 
-    <div class="hr"></div>
-
-    <div class="card" style="box-shadow:none;background:var(--card);">
-      <h2>📜 每局紀錄</h2>
-      <div id="historyList" class="small">（未有紀錄）</div>
-      <div class="row" style="justify-content:center;margin-top:10px;flex-wrap:wrap;">
-        <button class="btn" type="button" id="copyHistoryBtn">📤 複製紀錄</button>
-        <button class="btn secondary" type="button" id="clearHistoryBtn">清紀錄</button>
+      <div class="card flatCard">
+        <h2>📜 每局紀錄</h2>
+        <div id="historyList" class="small">（未有紀錄）</div>
+        <div class="row" style="justify-content:center;margin-top:10px;flex-wrap:wrap;">
+          <button class="btn" type="button" id="copyHistoryBtn">📤 複製紀錄</button>
+          <button class="btn secondary" type="button" id="clearHistoryBtn">清紀錄</button>
+        </div>
       </div>
-    </div>
 
-    <div class="card" style="box-shadow:none;background:var(--card);">
-      <h2>🏆 統計</h2>
-      <div id="statsBox" class="small">（未有統計）</div>
+      <div class="card flatCard">
+        <h2>🏆 統計</h2>
+        <div id="statsBox" class="small">（未有統計）</div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ===== 固定總番（Tab1/Tab2 都見到）===== -->
-<div class="fixedTotal">
-  <div class="big">總番數：<span id="totalFan">0</span></div>
-  <button class="btn danger" type="button" id="clearBtn">重新計番</button>
-</div>
-<script>
+  <!-- ===== 固定總番（Tab1/Tab2 都見到）===== -->
+  <div class="fixedTotal">
+    <div class="big">總番數：<span id="totalFan">0</span></div>
+    <button class="btn danger" type="button" id="clearBtn">重新計番</button>
+  </div>
 
-/* ========= 基本 ========= */
-const $ = id => document.getElementById(id);
+  <script>
+const $ = id => document.getElementById(id)
+const ceilUp = n => Math.ceil(n)
+const floorDown = n => Math.floor(n)
 
 /* ========= icon ========= */
 const catIcon = {
-  "一般":"🀄",
-  "叮":"🔔",
-  "自摸":"🤲",
-  "槓":"💥",
-  "平胡":"📏",
-  "雞胡":"🐔",
-  "暗間":"🌙",
-  "般高 + 相逢":"📶",
-  "兄弟姊妹":"👥",
-  "步步高":"📈",
-  "歸":"🔄",
-  "一條龍":"🐉",
-  "多門齊":"🚪",
-  "么九":"9️⃣",
-  "奇牌":"✨"
-};
+  "一般":"🀄","叮":"🔔","自摸":"🤲","槓":"💥",
+  "平胡":"📏","雞胡":"🐔","暗間":"🌙",
+  "般高 + 相逢":"📶","兄弟姊妹（碰牌）":"👥",
+  "步步高":"📈","歸":"🔄","一條龍":"🐉",
+  "多門齊":"🚪","么九":"9️⃣","奇牌":"✨"
+}
 
 /* ========= 完整番表 ========= */
 const fanData = [
+
 {cat:"一般",items:[
 ["flower","花",1,true],
 ["zflower","正花",2,true],
-["zi","字",2,true],
 ["noflower","無花",2,false],
+["zi","字",2,true],
 ["nozi","無字",2,false],
 ["noziflower","無字花",5,false],
 ["jeung","將眼",2,false],
@@ -703,7 +625,7 @@ const fanData = [
 ["fulljm","全姊妹",40,false]
 ]},
 
-{cat:"兄弟姊妹",items:[
+{cat:"兄弟姊妹（碰牌）",items:[
 ["bro","兄弟",5,false],
 ["3bro","小三兄弟",15,false],
 ["big3bro","大三兄弟",30,false],
@@ -771,158 +693,147 @@ const fanData = [
 ["1c7","一搶七",30,false],
 ["8sin","八仙過海",40,false]
 ]}
-];
+]
 
 /* ========= render 番表 ========= */
-function renderFans(){
-let html="";
-fanData.forEach(group=>{
-let icon = catIcon[group.cat]||"📂";
-html+=`<details><summary>${icon} ${group.cat}</summary>`;
+function renderFanList(){
+let box = $("fanListMount")
+if(!box) return
+box.innerHTML=""
 
-group.items.forEach(item=>{
+fanData.forEach(g=>{
+let html=`<details>
+<summary>${catIcon[g.cat]||"📂"} ${g.cat}</summary>`
+
+g.items.forEach(i=>{
 html+=`
 <div class="checkline">
 <label>
-<input type="checkbox" class="fan" data-id="${item[0]}" data-fan="${item[2]}" onchange="updateTotal()">
-${item[1]}
+<input type="checkbox" class="fanCheck" data-id="${i[0]}" data-fan="${i[2]}" onchange="updateTotalFan()">
+${i[1]}
 </label>
-${item[3]?`<input type="number" value="1" min="0" class="count" data-id="${item[0]}" onchange="updateTotal()">`:``}
-<span>${item[2]}番</span>
-</div>`;
-});
+${i[3]?`<input type="number" class="fanCount" value="1" data-id="${i[0]}" onchange="updateTotalFan()">`:``}
+<span class="fan">${i[2]}番</span>
+</div>`
+})
 
-html+="</details>";
-});
-$("list").innerHTML=html;
+html+="</details>"
+box.innerHTML+=html
+})
 }
 
 /* ========= 計番 ========= */
-function updateTotal(){
-let total = parseInt($("baseFan").value)||0;
+function updateTotalFan(){
+let total = parseInt($("baseFan")?.value)||0
 
-document.querySelectorAll(".fan:checked").forEach(cb=>{
-let fan = parseInt(cb.dataset.fan);
-let id = cb.dataset.id;
-let count = 1;
+document.querySelectorAll(".fanCheck:checked").forEach(cb=>{
+let fan=parseInt(cb.dataset.fan)
+let id=cb.dataset.id
+let count=1
 
-let c = document.querySelector(`.count[data-id="${id}"]`);
-if(c) count = parseInt(c.value)||0;
+let c=document.querySelector(`.fanCount[data-id="${id}"]`)
+if(c) count=parseInt(c.value)||0
 
-total += fan * count;
-});
+total+=fan*count
+})
 
-$("total").innerText = total;
-$("base").innerText = total;
+let t=parseInt($("dealer_times")?.value)||0
+if(t>0) total+=t*2+1
 
-aiCheck();
+$("totalFan").innerText=total
+$("t2_baseFan").innerText=total
+aiCheck()
 }
 
 /* ========= AI ========= */
 function aiCheck(){
-let txt="";
-let checked = [...document.querySelectorAll(".fan:checked")].map(c=>c.dataset.id);
+let txt=""
+let ids=[...document.querySelectorAll(".fanCheck:checked")].map(x=>x.dataset.id)
 
-if(checked.includes("flower") && checked.includes("noflower"))
-txt+="⚠️ 花 同 無花衝突\n";
+if(ids.includes("flower") && ids.includes("noflower"))
+txt+="⚠️ 花同無花衝突\n"
 
-if(checked.includes("zi") && checked.includes("nozi"))
-txt+="⚠️ 字 同 無字衝突\n";
+if(ids.includes("zi") && ids.includes("nozi"))
+txt+="⚠️ 字同無字衝突\n"
 
-$("ai").innerText = txt || "✔ OK";
+$("aiBox").innerText = txt || "✔ OK"
 }
 
 /* ========= 拉劈 ========= */
-function lap(){
-let c = parseFloat($("cur").value)||0;
-let n = parseFloat($("new").value)||0;
-let r = Math.ceil(c*1.5+n);
-$("lapResult").innerText = "拉="+r+" 劈="+Math.floor(r/2);
+function calcLap(){
+let c=parseFloat($("lp_current").value)||0
+let n=parseFloat($("lp_new").value)||0
+let r=Math.ceil(c*1.5+n)
+
+$("lp_pull").innerText=r
+$("lp_half_now").innerText=Math.floor(c/2)
+$("lp_half_after").innerText=Math.floor(r/2)
 }
 
 /* ========= Tab ========= */
-function tab(n){
-$("t1").style.display=n==1?"block":"none";
-$("t2").style.display=n==2?"block":"none";
-}
+$("tabBtn1").onclick=()=>{$("tab1").style.display="block";$("tab2").style.display="none"}
+$("tabBtn2").onclick=()=>{$("tab1").style.display="none";$("tab2").style.display="block"}
 
-/* ========= 麻雀枱 ========= */
-let lastWinner=null;
-let lastFan=0;
-let pull=0;
+/* ========= Tab2 ========= */
+let lastWinner=null
+let lastFan=0
+let pull=0
 
 function settle(){
-let base = parseInt($("base").innerText)||0;
-let w = $("win").value;
-let l = $("lose").value;
+let base=parseInt($("totalFan").innerText)||0
+let win=parseInt($("t2_win").value)
+let lose=parseInt($("t2_lose").value)
+let rate=parseInt($("t2_rate").value)||1
 
-let fan = base;
+let fan=base
 
-if(lastWinner==w){
-pull++;
-fan = Math.ceil(lastFan*1.5 + base);
+if(lastWinner===win){
+pull++
+fan=Math.ceil(lastFan*1.5+base)
 }else{
-pull=0;
+pull=0
 }
 
-if($("pi").checked){
-fan = Math.floor(fan/2);
+if($("t2_pi").checked){
+fan=Math.floor(fan/2)
 }
 
-if(w!=l){
-$("s"+w).value = (parseInt($("s"+w).value)||0) + fan;
-$("s"+l).value = (parseInt($("s"+l).value)||0) - fan;
+if($("t2_type").value==="self"){
+for(let i=0;i<4;i++){
+if(i!==win){
+$("s"+i).value-=fan*rate
+$("s"+win).value=parseInt($("s"+win).value)+fan*rate
+}
+}
+}else{
+$("s"+lose).value-=fan*rate
+$("s"+win).value=parseInt($("s"+win).value)+fan*rate
 }
 
-lastWinner=w;
-lastFan=fan;
+lastWinner=win
+lastFan=fan
 
-if(pull >= parseInt($("mode").value)){
-alert("斬拉");
-pull=0;
-lastWinner=null;
+let mode=parseInt($("t2_slashMode").value)
+if(pull>=mode && mode!==999){
+alert("斬拉")
+pull=0
+lastWinner=null
 }
 
-$("pull").innerText = pull;
-
-save();
+$("t2_pullCount").innerText=pull
 }
 
 /* ========= 骰 ========= */
-function dice(){
-let a=Math.ceil(Math.random()*6);
-let b=Math.ceil(Math.random()*6);
-let c=Math.ceil(Math.random()*6);
-$("dice").innerText = a+"+"+b+"+"+c;
-}
-
-/* ========= clear ========= */
-function clearAll(){
-document.querySelectorAll(".fan").forEach(c=>c.checked=false);
-updateTotal();
-}
-
-/* ========= storage ========= */
-function save(){
-let data={
-scores:[0,1,2,3].map(i=>$("s"+i).value)
-};
-localStorage.setItem("mj",JSON.stringify(data));
-}
-function load(){
-let d=localStorage.getItem("mj");
-if(!d)return;
-d=JSON.parse(d);
-d.scores.forEach((v,i)=>$("s"+i).value=v);
+$("diceBtn").onclick=()=>{
+let a=1+Math.floor(Math.random()*6)
+let b=1+Math.floor(Math.random()*6)
+let c=1+Math.floor(Math.random()*6)
+$("diceText").innerText=`🎲 ${a}+${b}+${c}=${a+b+c}`
 }
 
 /* ========= init ========= */
-renderFans();
-updateTotal();
-load();
-
-</script>
-
+renderFanList()
+updateTotalFan()
+  </script>
 </body>
-
 </html>
