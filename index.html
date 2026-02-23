@@ -3,145 +3,237 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>港式台牌計番</title>
+<title>港式台牌 Ultimate 雙Tab版</title>
 
-<!-- Font Awesome CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+:root{
+--bg:#1e1e1e;
+--card:#2c2c2c;
+--accent:#00ff88;
+--button:#cc0000;
+--text:#ffffff;
+}
+
 body{
-    font-family:Arial;
-    background:#1e1e1e;
-    color:white;
-    margin:0;
-    padding:15px;
-    padding-bottom:110px;
+background:var(--bg);
+color:var(--text);
+font-family:Arial;
+margin:0;
+padding:15px;
+padding-bottom:120px;
 }
+
+/* Tab */
+.tabs{
+display:flex;
+margin-bottom:15px;
+}
+
+.tabBtn{
+flex:1;
+padding:10px;
+background:#333;
+border:none;
+color:white;
+cursor:pointer;
+}
+
+.tabBtn.active{
+background:var(--accent);
+color:black;
+font-weight:bold;
+}
+
+.tabContent{
+display:none;
+}
+
+.tabContent.active{
+display:block;
+}
+
+/* Card */
 .section{
-    background:#2c2c2c;
-    padding:15px;
-    margin-bottom:15px;
-    border-radius:12px;
+background:var(--card);
+padding:15px;
+border-radius:12px;
+margin-bottom:15px;
 }
-h2{
-    margin:0 0 10px 0;
-}
-label{
-    display:block;
-    margin:6px 0;
-}
-input[type=number]{
-    width:100px;
-    padding:5px;
-    font-size:16px;
-}
+
+/* 番表 */
 .collapsible{
-    cursor:pointer;
-    padding:10px;
-    background:#333;
-    border-radius:8px;
-    margin-top:10px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+cursor:pointer;
+padding:10px;
+background:#333;
+border-radius:8px;
+margin-top:10px;
+display:flex;
+justify-content:space-between;
 }
-.content{
-    display:none;
-    padding:10px 5px;
-}
+
+.content{display:none;padding:10px 5px;}
+
 .fixedTotal{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:black;
-    border-top:2px solid #00ff88;
-    padding:10px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:var(--card);
+border-top:2px solid var(--accent);
+padding:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
+
 .totalText{
-    color:#00ff88;
-    font-size:22px;
-    font-weight:bold;
+color:var(--accent);
+font-size:22px;
+font-weight:bold;
 }
+
 .clearBtn{
-    background:#cc0000;
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:8px;
-    font-size:16px;
-    cursor:pointer;
+background:var(--button);
+color:white;
+border:none;
+padding:8px 15px;
+border-radius:8px;
+cursor:pointer;
 }
-.resultBox{
-    margin-top:10px;
-    background:#333;
-    padding:10px;
-    border-radius:8px;
+
+/* 四人 */
+.players{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
 }
-.rotate{
-    transform:rotate(90deg);
-    transition:0.2s;
+
+.playerCard{
+background:#333;
+padding:15px;
+border-radius:10px;
+text-align:center;
 }
+
+.score{
+font-size:26px;
+color:var(--accent);
+margin:10px 0;
+}
+
+.addBtn{background:#007aff;color:white;}
+.subBtn{background:#ff3b30;color:white;}
+button{
+padding:6px 12px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin:2px;
+}
+
+.leader{
+outline:3px solid gold;
+}
+
 </style>
 </head>
 <body>
 
-<div class="section">
-<h2><i class="fa-solid fa-scroll"></i> 規則</h2>
-拉上劈下 開槓計暗間<br>
-順骰冧莊加換一次牌 圍骰加換三次牌 最多換三次
+<!-- TAB BUTTON -->
+<div class="tabs">
+<button class="tabBtn active" onclick="switchTab(0)">
+<i class="fa-solid fa-calculator"></i> 計番
+</button>
+<button class="tabBtn" onclick="switchTab(1)">
+<i class="fa-solid fa-users"></i> 四人同步
+</button>
 </div>
 
-<div class="section">
-<h2><i class="fa-solid fa-coins"></i> 陰蟄錢</h2>
-追殺：每家5<br>
-暗槓：每家5<br>
-花：每家5<br>
-草：每家3<br>
-詐胡：每家30
-</div>
+<!-- TAB 1 計番 -->
+<div class="tabContent active">
 
 <div class="section">
-<h2><i class="fa-solid fa-calculator"></i> 拉劈計數機</h2>
-
+<h2>拉劈計數機</h2>
 現針番數：
 <input type="number" id="currentFan" oninput="calcLap()"><br><br>
-
 新針番數：
 <input type="number" id="newFan" oninput="calcLap()">
-
-<div class="resultBox">
-新針拉緊：
-<span id="lapResult">0</span><br><br>
-
-現針即劈：
-<span id="currentHalf">0</span><br><br>
-
-拉完再劈：
-<span id="lapHalf">0</span>
+<div style="margin-top:10px;background:#333;padding:10px;border-radius:8px;">
+新針拉緊：<span id="lapResult">0</span><br><br>
+現針即劈：<span id="currentHalf">0</span><br><br>
+拉完再劈：<span id="lapHalf">0</span>
 </div>
 </div>
 
 <div class="section">
-<h2><i class="fa-solid fa-list-check"></i> 番表</h2>
+<h2>番表</h2>
 <div id="fanContainer"></div>
 </div>
 
 <div class="fixedTotal">
 <div class="totalText">
-<i class="fa-solid fa-star"></i>
 總番數：<span id="totalFan">0</span> 番
 </div>
-<button class="clearBtn" onclick="clearAll()">
-<i class="fa-solid fa-rotate-left"></i> 清零
-</button>
+<button class="clearBtn" onclick="clearAll()">清零</button>
+</div>
+
+</div>
+
+<!-- TAB 2 四人 -->
+<div class="tabContent">
+
+<div class="section">
+<h2>四人分數</h2>
+<div class="players">
+
+<div class="playerCard" id="p0">
+<h3>東</h3>
+<div class="score" id="score0">0</div>
+<button class="addBtn" onclick="changeScore(0,1)">+1</button>
+<button class="subBtn" onclick="changeScore(0,-1)">-1</button>
+</div>
+
+<div class="playerCard" id="p1">
+<h3>南</h3>
+<div class="score" id="score1">0</div>
+<button class="addBtn" onclick="changeScore(1,1)">+1</button>
+<button class="subBtn" onclick="changeScore(1,-1)">-1</button>
+</div>
+
+<div class="playerCard" id="p2">
+<h3>西</h3>
+<div class="score" id="score2">0</div>
+<button class="addBtn" onclick="changeScore(2,1)">+1</button>
+<button class="subBtn" onclick="changeScore(2,-1)">-1</button>
+</div>
+
+<div class="playerCard" id="p3">
+<h3>北</h3>
+<div class="score" id="score3">0</div>
+<button class="addBtn" onclick="changeScore(3,1)">+1</button>
+<button class="subBtn" onclick="changeScore(3,-1)">-1</button>
+</div>
+
+</div>
+</div>
+
 </div>
 
 <script>
 
+/* TAB */
+function switchTab(index){
+let tabs=document.querySelectorAll(".tabBtn");
+let contents=document.querySelectorAll(".tabContent");
+tabs.forEach(t=>t.classList.remove("active"));
+contents.forEach(c=>c.classList.remove("active"));
+tabs[index].classList.add("active");
+contents[index].classList.add("active");
+}
+
+/* 番表資料 */
 const fanData = {
 
 "莊":[
@@ -222,12 +314,10 @@ const fanData = {
 
 function renderFans(){
 let container=document.getElementById("fanContainer");
-
 for(let category in fanData){
-
 let header=document.createElement("div");
 header.className="collapsible";
-header.innerHTML=`${category} <i class="fa-solid fa-chevron-right"></i>`;
+header.innerHTML=`${category}`;
 
 let content=document.createElement("div");
 content.className="content";
@@ -237,26 +327,20 @@ content.innerHTML+=`
 <label>
 <input type="checkbox" value="${item[1]}" onchange="updateTotal()"> 
 ${item[0]} (${item[1]}番)
-</label>`;
+</label><br>`;
 });
 
 if(category==="莊"){
 content.innerHTML+=`
-<br>連莊次數：
+連莊次數：
 <input type="number" id="dealerCount" min="0" value="0" onchange="updateTotal()"> 
-(次數 × 2 + 1 番)
+(次數 ×2 +1)
 `;
 }
 
 header.onclick=function(){
-let icon=header.querySelector("i");
-if(content.style.display==="block"){
-content.style.display="none";
-icon.classList.remove("rotate");
-}else{
-content.style.display="block";
-icon.classList.add("rotate");
-}
+content.style.display=
+content.style.display==="block"?"none":"block";
 };
 
 container.appendChild(header);
@@ -266,42 +350,55 @@ container.appendChild(content);
 
 function updateTotal(){
 let total=0;
-
 document.querySelectorAll("input[type=checkbox]:checked")
-.forEach(cb=> total+=parseInt(cb.value));
-
+.forEach(cb=>total+=parseInt(cb.value));
 let dealer=parseInt(document.getElementById("dealerCount")?.value||0);
-if(dealer>0){
-total += dealer*2+1;
-}
-
+if(dealer>0){total+=dealer*2+1;}
 document.getElementById("totalFan").innerText=total;
 }
 
 function clearAll(){
 document.querySelectorAll("input[type=checkbox]")
-.forEach(cb=> cb.checked=false);
-
-let dealer=document.getElementById("dealerCount");
-if(dealer) dealer.value=0;
-
+.forEach(cb=>cb.checked=false);
+document.getElementById("dealerCount").value=0;
 updateTotal();
 }
 
+/* 拉劈 */
 function calcLap(){
 let current=parseFloat(document.getElementById("currentFan").value||0);
 let newFan=parseFloat(document.getElementById("newFan").value||0);
-
 let lap=Math.ceil(current*1.5+newFan);
 let currentHalf=Math.floor(current/2);
 let lapHalf=Math.floor(lap/2);
-
 document.getElementById("lapResult").innerText=lap;
 document.getElementById("currentHalf").innerText=currentHalf;
 document.getElementById("lapHalf").innerText=lapHalf;
 }
 
+/* 四人 */
+let scores=[0,0,0,0];
+const names=["東","南","西","北"];
+
+function changeScore(player,amount){
+scores[player]+=amount;
+updateUI();
+}
+
+function updateUI(){
+for(let i=0;i<4;i++){
+document.getElementById("score"+i).innerText=scores[i];
+document.getElementById("p"+i).classList.remove("leader");
+}
+let max=Math.max(...scores);
+if(max>0){
+let index=scores.indexOf(max);
+document.getElementById("p"+index).classList.add("leader");
+}
+}
+
 renderFans();
+updateUI();
 
 </script>
 
