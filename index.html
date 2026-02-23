@@ -3,179 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>港式台牌 Ultimate 雙Tab版</title>
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<title>港式台牌 Ultimate Pro Max</title>
 
 <style>
 :root{
---bg:#1e1e1e;
---card:#2c2c2c;
+--bg:#0f0f0f;
+--card:#1c1c1c;
+--gold:#d4af37;
 --accent:#00ff88;
---button:#cc0000;
+--danger:#cc0000;
 --text:#ffffff;
 }
 
-
 body{
+margin:0;
 background:var(--bg);
 color:var(--text);
-font-family:Arial;
-margin:0;
+font-family:-apple-system,BlinkMacSystemFont;
 padding:15px;
 padding-bottom:120px;
 }
 
-
-/* Tab */
+/* Tabs */
 .tabs{
 display:flex;
 margin-bottom:15px;
 }
-
-
 .tabBtn{
 flex:1;
-padding:10px;
-background:#333;
+padding:12px;
+background:#222;
 border:none;
-color:white;
-cursor:pointer;
-}
-
-
-.tabBtn.active{
-background:var(--accent);
-color:black;
+color:#aaa;
 font-weight:bold;
 }
-
-
-.tabContent{
-display:none;
+.tabBtn.active{
+background:var(--gold);
+color:black;
 }
+.tabContent{display:none;}
+.tabContent.active{display:block;}
 
-
-.tabContent.active{
-display:block;
-}
-
-
-/* Card */
 .section{
 background:var(--card);
 padding:15px;
-border-radius:12px;
+border-radius:20px;
 margin-bottom:15px;
+box-shadow:0 0 25px rgba(212,175,55,0.15);
 }
 
+h2{color:var(--gold);}
 
 /* 番表 */
 .collapsible{
-cursor:pointer;
+background:#222;
 padding:10px;
-background:#333;
-border-radius:8px;
+border-radius:10px;
 margin-top:10px;
-display:flex;
-justify-content:space-between;
+cursor:pointer;
 }
-
-
 .content{display:none;padding:10px 5px;}
-
 
 .fixedTotal{
 position:fixed;
 bottom:0;
 left:0;
 width:100%;
-background:var(--card);
-border-top:2px solid var(--accent);
+background:#111;
+border-top:2px solid var(--gold);
 padding:10px;
 display:flex;
 justify-content:space-between;
 align-items:center;
 }
 
-
 .totalText{
-color:var(--accent);
+color:var(--gold);
 font-size:22px;
 font-weight:bold;
 }
 
-
-.clearBtn{
-background:var(--button);
-color:white;
-border:none;
-padding:8px 15px;
-border-radius:8px;
-cursor:pointer;
-}
-
-
-/* 四人 */
-.players{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-
-.playerCard{
-background:#333;
-padding:15px;
-border-radius:10px;
+/* 麻雀枱 */
+.player{
+background:#222;
+padding:12px;
+border-radius:16px;
 text-align:center;
+margin-bottom:12px;
+transition:0.2s;
 }
 
+.player.leader{outline:3px solid var(--gold);}
+.player.dealer{box-shadow:0 0 20px var(--gold);}
 
-.score{
-font-size:26px;
-color:var(--accent);
-margin:10px 0;
-}
+.scoreInput{width:80px;font-size:20px;}
+.money{color:var(--gold);margin-top:6px;}
 
-
-.addBtn{background:#007aff;color:white;}
-.subBtn{background:#ff3b30;color:white;}
 button{
-padding:6px 12px;
 border:none;
-border-radius:8px;
-cursor:pointer;
-margin:2px;
+border-radius:12px;
+padding:8px 14px;
+margin-top:6px;
+background:var(--accent);
+font-weight:bold;
 }
-
-
-.leader{
-outline:3px solid gold;
-}
-
-
+button.danger{background:var(--danger);color:#fff;}
 </style>
 </head>
+
 <body>
 
-
-<!-- TAB BUTTON -->
 <div class="tabs">
-<button class="tabBtn active" onclick="switchTab(0)">
-<i class="fa-solid fa-calculator"></i> 計番
-</button>
-<button class="tabBtn" onclick="switchTab(1)">
-<i class="fa-solid fa-users"></i> 四人同步
-</button>
+<button class="tabBtn active" onclick="switchTab(0)">計番</button>
+<button class="tabBtn" onclick="switchTab(1)">麻雀枱</button>
 </div>
-
 
 <!-- TAB 1 計番 -->
 <div class="tabContent active">
-
 
 <div class="section">
 <h2>拉劈計數機</h2>
@@ -183,90 +127,54 @@ outline:3px solid gold;
 <input type="number" id="currentFan" oninput="calcLap()"><br><br>
 新針番數：
 <input type="number" id="newFan" oninput="calcLap()">
-<div style="margin-top:10px;background:#333;padding:10px;border-radius:8px;">
+
+<div style="margin-top:10px;background:#222;padding:10px;border-radius:10px;">
 新針拉緊：<span id="lapResult">0</span><br><br>
 現針即劈：<span id="currentHalf">0</span><br><br>
 拉完再劈：<span id="lapHalf">0</span>
 </div>
 </div>
 
-
 <div class="section">
 <h2>番表</h2>
 <div id="fanContainer"></div>
 </div>
 
-
 <div class="fixedTotal">
 <div class="totalText">
 總番數：<span id="totalFan">0</span> 番
 </div>
-<button class="clearBtn" onclick="clearAll()">清零</button>
+<button class="danger" onclick="clearAll()">清零</button>
 </div>
 
-
 </div>
 
-
-<!-- TAB 2 四人 -->
+<!-- TAB 2 麻雀枱 -->
 <div class="tabContent">
 
+<div class="section" id="players"></div>
 
 <div class="section">
-<h2>四人分數</h2>
-<div class="players">
-
-
-<div class="playerCard" id="p0">
-<h3>東</h3>
-<div class="score" id="score0">0</div>
-<button class="addBtn" onclick="changeScore(0,1)">+1</button>
-<button class="subBtn" onclick="changeScore(0,-1)">-1</button>
+👑 領先：<span id="leaderName">無</span><br><br>
+🎲 <span id="diceResult">-</span><br>
+<button onclick="rollDice()">擲骰</button>
+<br><br>
+1番 = $
+<input type="number" id="rate" value="10" onchange="updateScores()" style="width:70px">
 </div>
 
-
-<div class="playerCard" id="p1">
-<h3>南</h3>
-<div class="score" id="score1">0</div>
-<button class="addBtn" onclick="changeScore(1,1)">+1</button>
-<button class="subBtn" onclick="changeScore(1,-1)">-1</button>
-</div>
-
-
-<div class="playerCard" id="p2">
-<h3>西</h3>
-<div class="score" id="score2">0</div>
-<button class="addBtn" onclick="changeScore(2,1)">+1</button>
-<button class="subBtn" onclick="changeScore(2,-1)">-1</button>
-</div>
-
-
-<div class="playerCard" id="p3">
-<h3>北</h3>
-<div class="score" id="score3">0</div>
-<button class="addBtn" onclick="changeScore(3,1)">+1</button>
-<button class="subBtn" onclick="changeScore(3,-1)">-1</button>
-</div>
-
+<button class="danger" onclick="resetTable()">全場清零</button>
 
 </div>
-</div>
-
-
-</div>
-
 
 <script>
 
-
-/* TAB */
-function switchTab(index){
-let tabs=document.querySelectorAll(".tabBtn");
-let contents=document.querySelectorAll(".tabContent");
-tabs.forEach(t=>t.classList.remove("active"));
-contents.forEach(c=>c.classList.remove("active"));
-tabs[index].classList.add("active");
-contents[index].classList.add("active");
+/* Tab */
+function switchTab(i){
+document.querySelectorAll(".tabBtn").forEach(t=>t.classList.remove("active"));
+document.querySelectorAll(".tabContent").forEach(c=>c.classList.remove("active"));
+document.querySelectorAll(".tabBtn")[i].classList.add("active");
+document.querySelectorAll(".tabContent")[i].classList.add("active");
 }
 
 
@@ -372,42 +280,34 @@ let container=document.getElementById("fanContainer");
 for(let category in fanData){
 let header=document.createElement("div");
 header.className="collapsible";
-header.innerHTML=`${category}`;
-
-
+header.innerHTML=category;
 let content=document.createElement("div");
 content.className="content";
-
 
 fanData[category].forEach(item=>{
 content.innerHTML+=`
 <label>
-<input type="checkbox" value="${item[1]}" onchange="updateTotal()"> 
+<input type="checkbox" value="${item[1]}" onchange="updateTotal()">
 ${item[0]} (${item[1]}番)
 </label><br>`;
 });
 
-
 if(category==="莊"){
 content.innerHTML+=`
 連莊次數：
-<input type="number" id="dealerCount" min="0" value="0" onchange="updateTotal()"> 
+<input type="number" id="dealerCount" min="0" value="0" onchange="updateTotal()">
 (次數 ×2 +1)
 `;
 }
 
-
 header.onclick=function(){
-content.style.display=
-content.style.display==="block"?"none":"block";
+content.style.display=content.style.display==="block"?"none":"block";
 };
-
 
 container.appendChild(header);
 container.appendChild(content);
 }
 }
-
 
 function updateTotal(){
 let total=0;
@@ -418,58 +318,97 @@ if(dealer>0){total+=dealer*2+1;}
 document.getElementById("totalFan").innerText=total;
 }
 
-
 function clearAll(){
-document.querySelectorAll("input[type=checkbox]")
-.forEach(cb=>cb.checked=false);
-document.getElementById("dealerCount").value=0;
+document.querySelectorAll("input[type=checkbox]").forEach(cb=>cb.checked=false);
+let dealer=document.getElementById("dealerCount");
+if(dealer) dealer.value=0;
 updateTotal();
 }
-
 
 /* 拉劈 */
 function calcLap(){
 let current=parseFloat(document.getElementById("currentFan").value||0);
 let newFan=parseFloat(document.getElementById("newFan").value||0);
 let lap=Math.ceil(current*1.5+newFan);
-let currentHalf=Math.floor(current/2);
-let lapHalf=Math.floor(lap/2);
 document.getElementById("lapResult").innerText=lap;
-document.getElementById("currentHalf").innerText=currentHalf;
-document.getElementById("lapHalf").innerText=lapHalf;
+document.getElementById("currentHalf").innerText=Math.floor(current/2);
+document.getElementById("lapHalf").innerText=Math.floor(lap/2);
 }
 
+/* 麻雀枱 */
+let dealerIndex=null;
 
-/* 四人 */
-let scores=[0,0,0,0];
+function createPlayers(){
+let div=document.getElementById("players");
 const names=["東","南","西","北"];
-
-
-function changeScore(player,amount){
-scores[player]+=amount;
-updateUI();
-}
-
-
-function updateUI(){
 for(let i=0;i<4;i++){
-document.getElementById("score"+i).innerText=scores[i];
+div.innerHTML+=`
+<div class="player" id="p${i}">
+<input value="${names[i]}" id="name${i}" onchange="saveData()"><br><br>
+<input type="number" class="scoreInput" value="0" id="score${i}" onchange="updateScores()">
+<div class="money" id="money${i}">$0</div>
+<button onclick="setDealer(${i})">設為莊</button>
+</div>
+`;
+}
+}
+
+function updateScores(){
+let rate=parseInt(document.getElementById("rate").value||0);
+let scores=[];
+let max=-9999;
+let leaderIndex=null;
+
+for(let i=0;i<4;i++){
+let score=parseInt(document.getElementById("score"+i).value||0);
+scores[i]=score;
+document.getElementById("money"+i).innerText="$"+(score*rate);
 document.getElementById("p"+i).classList.remove("leader");
-}
-let max=Math.max(...scores);
-if(max>0){
-let index=scores.indexOf(max);
-document.getElementById("p"+index).classList.add("leader");
-}
+if(score>max){max=score;leaderIndex=i;}
 }
 
+if(max!==0){
+document.getElementById("p"+leaderIndex).classList.add("leader");
+document.getElementById("leaderName").innerText=
+document.getElementById("name"+leaderIndex).value;
+}else{
+document.getElementById("leaderName").innerText="無";
+}
 
+localStorage.setItem("mahjongData",JSON.stringify(scores));
+}
+
+function setDealer(i){
+dealerIndex=i;
+for(let x=0;x<4;x++){
+document.getElementById("p"+x).classList.remove("dealer");
+}
+document.getElementById("p"+i).classList.add("dealer");
+}
+
+function rollDice(){
+let d1=Math.floor(Math.random()*6)+1;
+let d2=Math.floor(Math.random()*6)+1;
+document.getElementById("diceResult").innerText=
+d1+" + "+d2+" = "+(d1+d2);
+}
+
+function resetTable(){
+for(let i=0;i<4;i++){
+document.getElementById("score"+i).value=0;
+}
+updateScores();
+}
+
+function saveData(){
+updateScores();
+}
+
+createPlayers();
 renderFans();
-updateUI();
-
+updateScores();
 
 </script>
-
 
 </body>
 </html>
