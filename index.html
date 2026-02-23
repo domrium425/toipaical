@@ -570,7 +570,7 @@ details > summary::-webkit-details-marker{ display:none; }
 <!-- 固定總番 -->
 <div class="fixedTotal">
   <div class="big">總番數：<span id="totalFan">0</span></div>
-  <button class="btn danger" type="button" id="clearBtn">一鍵清零（Tab1）</button>
+  <button class="btn danger" type="button" id="clearBtn">重新計番</button>
 </div>
 
 <script>
@@ -584,6 +584,7 @@ const fanData = [
   { cat:"一般", items:[
     ["flower","花",1,true],
     ["zflower","正花",2,true],
+    ["noflower","無花",2,flase],
     ["zi","字",2,true],
     ["nozi","無字",2,false],
     ["noziflower","無字花",5,false],
@@ -873,6 +874,7 @@ function aiSuggest(){
   const ids = checkedSet();
   const msgs = [];
 
+  if(ids.has("flower") && ids.has("noflower")) msgs.push(`<span class="warn">⚠️「花」同「無花」唔可以同時勾</span>`);
   if(ids.has("zi") && ids.has("nozi")) msgs.push(`<span class="warn">⚠️「字」同「無字」衝突</span>`);
   if(ids.has("chun1color") && ids.has("hun1color")) msgs.push(`<span class="warn">⚠️「清一色」已包含「混一色」，建議只留清一色</span>`);
   if(ids.has("chunpyun") && ids.has("banpyun")) msgs.push(`<span class="warn">⚠️「全求人」通常涵蓋「半求人」，建議只留全求人</span>`);
@@ -1465,6 +1467,7 @@ function bindEvents(){
 </body>
 
 </html>
+
 
 
 
