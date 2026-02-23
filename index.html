@@ -531,102 +531,121 @@ details[open]{
 
   <!-- ================= TAB 2：計分 ================= -->
   <div id="tab2" class="container" style="display:none;">
-    <div class="card">
-      <h2>麻雀枱 PRO（用 Tab1 總番數）</h2>
 
-      <div class="centerPanel" style="margin-bottom:12px;">
-        <div class="big">本局番數：<span id="t2_baseFan">0</span> 番</div>
+  <div class="card">
+    <h2>🀄 麻雀枱 PRO</h2>
 
-        <div class="kv"><span>拉次數</span><span class="badge gold" id="t2_pullCount">0</span></div>
-        <div class="kv"><span>斬拉模式</span><span class="badge gold" id="t2_slashModeLabel">三拉一斬</span></div>
-        <div class="kv"><span>上一舖結算番數</span><span class="badge gold" id="t2_lastSettleFan">0</span></div>
+    <!-- ===== 上方資訊 ===== -->
+    <div class="centerPanel">
 
-        <div class="dice" id="diceText">🎲 -</div>
-        <button class="btn secondary" type="button" id="diceBtn">擲骰（三粒）</button>
+      <div class="big">本局番數：<span id="t2_baseFan">0</span></div>
 
-        <div class="row" style="justify-content:center;margin-top:10px;">
-          <span class="badge">1番 = $</span>
-          <input class="input num" type="number" id="t2_rate" value="10" min="0" />
+      <!-- 拉斬模式（移到骰上面） -->
+      <div class="row" style="justify-content:center;margin-top:8px;">
+        <span class="badge">斬拉</span>
+        <select id="t2_slashMode" class="input">
+          <option value="3">三拉一斬</option>
+          <option value="6">六拉一斬</option>
+          <option value="9">九拉一斬</option>
+          <option value="999">唔斬</option>
+        </select>
+      </div>
+
+      <!-- 拉次數 -->
+      <div class="kv">
+        <span>拉</span>
+        <span class="badge gold" id="t2_pullCount">0</span>
+      </div>
+
+      <!-- 骰 -->
+      <div class="dice" id="diceText">🎲 -</div>
+      <button class="btn secondary" id="diceBtn">擲骰（三粒）</button>
+
+      <!-- 金額 -->
+      <div class="row" style="justify-content:center;margin-top:10px;">
+        <span class="badge">1番 = $</span>
+        <input class="input num" id="t2_rate" type="number" value="10">
+      </div>
+
+    </div>
+
+    <!-- ===== 麻雀枱 ===== -->
+    <div class="mjTable">
+
+      <!-- 北 -->
+      <div class="mjPlayer" id="p3">
+        <input id="n3" class="input name" value="北">
+        <input id="s3" class="input score" type="number" value="0">
+
+        <!-- 食胡 -->
+        <div class="row" style="justify-content:center;margin-top:6px;">
+          <button class="btn" onclick="selectWinner(3)">胡</button>
         </div>
       </div>
 
-      <div class="mjTable">
-        <div class="mjPlayer" id="p3">
-          <input class="input name" id="n3" value="北" />
-          <div style="height:8px;"></div>
-          <input class="input score" id="s3" type="number" value="0" />
+      <!-- 中間 -->
+      <div class="mjRowMid">
+
+        <!-- 西 -->
+        <div class="mjPlayer" id="p2">
+          <input id="n2" class="input name" value="西">
+          <input id="s2" class="input score" type="number" value="0">
+          <button class="btn" onclick="selectWinner(2)">胡</button>
         </div>
 
-        <div class="mjRowMid">
-          <div class="mjPlayer" id="p2">
-            <input class="input name" id="n2" value="西" />
-            <div style="height:8px;"></div>
-            <input class="input score" id="s2" type="number" value="0" />
+        <!-- 中央操作 -->
+        <div class="centerPanel">
+
+          <!-- 食胡模式 -->
+          <div class="row" style="justify-content:center;">
+            <button class="btn" onclick="openWinType()">食胡</button>
           </div>
 
-          <div class="centerPanel">
-            <div class="row" style="justify-content:center;">
-              <span class="badge gold">結算</span>
-            </div>
-
-            <div class="small" style="margin-top:8px;">快速揀：</div>
-
-            <div class="small" style="margin-top:6px;font-weight:900;">贏家</div>
-            <div class="quickGrid" id="quickWin"></div>
-
-            <div class="small" style="margin-top:10px;font-weight:900;">放銃</div>
-            <div class="quickGrid" id="quickLose"></div>
-
-            <div class="row" style="justify-content:center;margin-top:10px;">
-              <select class="input" id="t2_win"></select>
-              <select class="input" id="t2_type">
-                <option value="self">自摸（3家全賠）</option>
-                <option value="eat">食胡（放銃全賠）</option>
-              </select>
-            </div>
-
-            <div class="row" style="justify-content:center;margin-top:8px;">
-              <span class="badge">放銃</span>
-              <select class="input" id="t2_lose"></select>
-            </div>
-
-            <div class="row" style="justify-content:center;margin-top:8px;">
-              <label class="piLabel">
-                <input type="checkbox" id="t2_pi" />
-                劈（找數番 ÷2 向下取整）
-              </label>
-            </div>
-
-            <div class="row" style="justify-content:center;margin-top:10px;">
-              <span class="badge">斬拉模式</span>
-              <select class="input" id="t2_slashMode">
-                <option value="3">三拉一斬</option>
-                <option value="6">六拉一斬</option>
-                <option value="9">九拉一斬</option>
-                <option value="999">永不斬</option>
-              </select>
-            </div>
-
-            <div class="row" style="justify-content:center;margin-top:12px;">
-              <button class="btn" type="button" id="t2_settleBtn">結算</button>
-            </div>
-
-            <div class="row" style="justify-content:center;margin-top:10px;flex-wrap:wrap;">
-              <button class="btn secondary" type="button" id="undoBtn">↩️ 撤銷上一舖</button>
-              <button class="btn danger" type="button" id="slashBtn">⚔️ 手動斬拉</button>
-            </div>
-
-            <div class="small" id="t2_status" style="margin-top:10px;">
-              ✔ 用 Tab1 總番數做本局番數
-            </div>
+          <!-- 劈 -->
+          <div class="row" style="justify-content:center;margin-top:10px;">
+            <button class="btn secondary" onclick="togglePi()" id="piBtn">劈 OFF</button>
           </div>
 
-          <div class="mjPlayer" id="p0">
-            <input class="input name" id="n0" value="東" />
-            <div style="height:8px;"></div>
-            <input class="input score" id="s0" type="number" value="0" />
+          <!-- 結算 -->
+          <div class="row" style="justify-content:center;margin-top:12px;">
+            <button class="btn" onclick="settleTab2()">結算</button>
           </div>
+
+          <!-- 撤銷 / 斬 -->
+          <div class="row" style="justify-content:center;margin-top:10px;">
+            <button class="btn secondary" onclick="undoLast()">撤銷</button>
+            <button class="btn danger" onclick="manualSlash()">斬拉</button>
+          </div>
+
+          <div class="small" id="t2_status">✔ 等你操作</div>
+
         </div>
+
+        <!-- 東 -->
+        <div class="mjPlayer" id="p0">
+          <input id="n0" class="input name" value="東">
+          <input id="s0" class="input score" type="number" value="0">
+          <button class="btn" onclick="selectWinner(0)">胡</button>
+        </div>
+
+      </div>
+
+      <!-- 南 -->
+      <div class="mjPlayer" id="p1">
+        <input id="n1" class="input name" value="南">
+        <input id="s1" class="input score" type="number" value="0">
+        <button class="btn" onclick="selectWinner(1)">胡</button>
+      </div>
+
+    </div>
+
+    <!-- 清零 -->
+    <div class="row" style="justify-content:center;margin-top:14px;">
+      <button class="btn danger" onclick="resetTab2All()">全部清零</button>
+    </div>
+
+  </div>
+</div>
 
         <div class="mjPlayer" id="p1">
           <input class="input name" id="n1" value="南" />
@@ -1249,10 +1268,15 @@ function manualSlash(){
 
 /* ====== 結算 ====== */
 function settleTab2(){
-  const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
-  if(baseFan <= 0){
-    if($("t2_status")) $("t2_status").innerHTML = "⚠️ Tab1 總番數係 0，先去 Tab1 勾番再返嚟結算";
-    return;
+  const win = currentWinner
+    if(win === null){
+    alert("未選擇贏家")
+  return
+}
+
+const type = winType
+const lose = losePlayer
+const doPi = piMode
   }
 
   pushUndoSnapshot();
@@ -1659,6 +1683,38 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   setTab(1); // default Tab1
 });
+
+let currentWinner = null
+let winType = "self"
+let losePlayer = 0
+let piMode = false
+
+function selectWinner(i){
+  currentWinner = i
+  alert("已選擇 " + $("n"+i).value + " 做贏家")
+}
+
+function openWinType(){
+  if(currentWinner===null){
+    alert("先揀邊個胡")
+    return
+  }
+
+  let type = prompt("輸入：\n1 = 自摸\n2 = 食胡")
+  if(type=="1"){
+    winType="self"
+  }else{
+    winType="eat"
+    let p = prompt("邊個放銃？輸入 0-3")
+    losePlayer = parseInt(p)
+  }
+}
+
+function togglePi(){
+  piMode = !piMode
+  $("piBtn").innerText = piMode ? "劈 ON" : "劈 OFF"
+}
   </script>
 </body>
 </html>
+
