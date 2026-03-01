@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>港式台牌計番神器</title>
+  <title>台牌神器</title>
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
@@ -550,7 +550,7 @@ details[open] summary::before{ transform:rotate(90deg); }
   <header>🀄 港式台牌計番神器 🀄</header>
 
   <div class="topbar">
-    <button class="btn secondary" id="themeBtn" type="button">切換主題（黑金/白）</button>
+    <button class="btn secondary" id="themeBtn" type="button">切換主題</button>
   </div>
 
   <div class="tabs">
@@ -1283,7 +1283,7 @@ function slashSeat(seatIdx){
   pushUndoSnapshot();
   pulledNeedle[pid] = 0;
 
-  $("t2_info").textContent = `⚔️ ${getPlayerName(pid)} 已斬（只斬自己被拉針）`;
+  $("t2_info").textContent = `⚔️ ${getPlayerName(pid)} 已斬`;
   renderAllTab2();
   saveTab2State();
 }
@@ -1742,7 +1742,7 @@ function confirmSeatModal(){
     seatMap = {E:draft.E, S:draft.S, W:draft.W, N:draft.N};
     saveSeatMap(seatMap);
   }
-  $("t2_info").textContent = "🪑 已執位（真換位，分數同步）";
+  $("t2_info").textContent = "🪑 已執位）";
   renderAllTab2();
   saveTab2State();
   closeSeatModal();
@@ -1816,7 +1816,7 @@ function confirmYinModal(){
 
   applyYinMoney(yinTypeSel, yinPlayerSel);
 
-  $("t2_info").innerHTML = `💰 陰蟄錢：${yinTypeSel} → ${getPlayerName(yinPlayerSel)}（已按規則加減分）`;
+  $("t2_info").innerHTML = `💰 陰蟄錢：${yinTypeSel} → ${getPlayerName(yinPlayerSel)}`;
 
   gameHistory.push({
     kind:"yin",
@@ -1930,7 +1930,7 @@ function bindEvents(){
     chain_lastWinner = null;
     chain_lastSettleFan = 0;
     dealerStreak = [0,0,0,0];
-    $("t2_info").textContent = "🧹 已清零（可按撤銷復原）";
+    $("t2_info").textContent = "🧹 已清零";
     renderAllTab2();
     saveTab2State();
   });
@@ -1961,3 +1961,4 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 </body>
 </html>
+
