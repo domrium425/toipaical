@@ -24,7 +24,19 @@
   --danger:#cc0000;
   --shadow: rgba(212,175,55,0.12);
   --line: rgba(128,128,128,0.25);
+
+  /* ✅ board tuning */
+  --boardSize: min(92vw, 350px);
+  --seatSize: 23%;
+  --centerSize: 38%; /* ✅ shrink center square */
 }
+@media (max-height:760px){
+  :root{ --boardSize: min(92vw, 330px); }
+}
+@media (max-height:700px){
+  :root{ --boardSize: min(92vw, 310px); }
+}
+
 *{ box-sizing:border-box; }
 
 body{
@@ -265,7 +277,6 @@ details[open] summary::before{ transform:rotate(90deg); }
   justify-content:center;
 }
 
-/* 食胡資料：放喺起莊/執位下面一行 */
 .t2InfoLine{
   margin:8px auto 12px auto;
   padding:10px 12px;
@@ -280,17 +291,7 @@ details[open] summary::before{ transform:rotate(90deg); }
 .t2InfoLine .dim{ color:var(--sub); }
 .t2InfoLine .gold{ color:var(--gold); font-weight:900; }
 
-/* ✅ Board wrapper: NO outer square frame */
-:root{
-  --boardSize: min(92vw, 350px);
-}
-@media (max-height:760px){
-  :root{ --boardSize: min(92vw, 330px); }
-}
-@media (max-height:700px){
-  :root{ --boardSize: min(92vw, 310px); }
-}
-
+/* board */
 .mjBoard{
   width:var(--boardSize);
   aspect-ratio:1 / 1;
@@ -299,8 +300,6 @@ details[open] summary::before{ transform:rotate(90deg); }
   overflow:visible;
   margin:0 auto;
 }
-
-/* inner table square only (the "felt") */
 .mjTableSquare{
   position:absolute;
   inset:0;
@@ -314,8 +313,6 @@ details[open] summary::before{ transform:rotate(90deg); }
 body.white .mjTableSquare{
   background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
 }
-
-/* inner frame like real table */
 .mjTableSquare::after{
   content:"";
   position:absolute;
@@ -324,12 +321,12 @@ body.white .mjTableSquare{
   border:1px solid rgba(212,175,55,0.20);
 }
 
-/* center square must stay square */
+/* ✅ center square smaller + give padding for dirs */
 .mjCenter{
   position:absolute;
   left:50%; top:50%;
   transform:translate(-50%,-50%);
-  width:42%;
+  width:var(--centerSize);
   aspect-ratio:1 / 1;
   height:auto;
   background:rgba(0,0,0,0.18);
@@ -339,23 +336,21 @@ body.white .mjTableSquare{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  padding:10px;
+  padding:12px;            /* slightly larger padding */
   text-align:center;
-  gap:8px;
+  gap:10px;
 }
 body.white .mjCenter{ background:rgba(0,0,0,0.03); }
-
-/* inner inner */
 .mjCenter::after{
   content:"";
   position:absolute;
-  inset:8px;
+  inset:10px;              /* inner frame */
   border-radius:14px;
   border:1px solid rgba(212,175,55,0.20);
   pointer-events:none;
 }
 
-/* 東南西北 inside center */
+/* ✅ East/South/West/North inside center, keep away from inner frame */
 .centerDirs{
   position:absolute;
   inset:0;
@@ -368,12 +363,12 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   font-size:12px;
   opacity:0.95;
 }
-.centerDir.n{ top:6px; left:50%; transform:translateX(-50%); }
-.centerDir.s{ bottom:6px; left:50%; transform:translateX(-50%); }
-.centerDir.w{ left:6px; top:50%; transform:translateY(-50%); }
-.centerDir.e{ right:6px; top:50%; transform:translateY(-50%); }
+.centerDir.n{ top:18px; left:50%; transform:translateX(-50%); }
+.centerDir.s{ bottom:18px; left:50%; transform:translateX(-50%); }
+.centerDir.w{ left:18px; top:50%; transform:translateY(-50%); }
+.centerDir.e{ right:18px; top:50%; transform:translateY(-50%); }
 
-/* 食胡掣放喺東南西北中間 */
+/* 食胡 button */
 .centerBtn{
   position:relative;
   z-index:2;
@@ -389,9 +384,7 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   width:auto;
 }
 
-/* seats: square */
-:root{ --seatSize: 23%; }
-
+/* seats */
 .mjSeat{
   position:absolute;
   width:var(--seatSize);
@@ -400,14 +393,12 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   display:flex;
   overflow:visible;
 }
-
-/* positions */
 .mjSeat.n{ top:12px; left:50%; transform:translateX(-50%); }
 .mjSeat.s{ bottom:12px; left:50%; transform:translateX(-50%); }
 .mjSeat.w{ left:12px; top:50%; transform:translateY(-50%); }
 .mjSeat.e{ right:12px; top:50%; transform:translateY(-50%); }
 
-/* inner per player, square content */
+/* ✅ player box: allow a bit more height inside square */
 .mjSeatInner{
   width:100%;
   height:100%;
@@ -417,7 +408,7 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   padding:6px;
   display:flex;
   flex-direction:column;
-  gap:6px;
+  gap:5px;
   overflow:hidden;
 }
 .mjSeatInner.dealer{
@@ -425,17 +416,17 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   box-shadow:0 0 0 2px rgba(212,175,55,0.14) inset, 0 0 16px rgba(212,175,55,0.18);
 }
 
-/* player name smaller by 2pt (vs original) */
+/* ✅ 玩家名再細 2pt (was 10px; now 8px) */
 .mjName{
   width:100%;
   text-align:center;
   font-weight:900;
-  font-size:10px;
-  padding:7px 8px;
+  font-size:8px;
+  padding:6px 6px;
   border-radius:12px;
 }
 
-/* score keep big */
+/* score big */
 .mjScore{
   text-align:center;
   font-weight:900;
@@ -448,20 +439,21 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   padding:0;
 }
 
-/* ✅ 斬掣：放喺玩家 box 下面（但唔爆 box） */
+/* ✅ 斬 button: ensure always visible */
 .mjSlash{
   width:100%;
   border:none;
   border-radius:12px;
-  padding:6px 8px;         /* smaller */
+  padding:7px 8px;      /* a bit taller */
   font-weight:900;
   cursor:pointer;
   -webkit-tap-highlight-color: transparent;
-  font-size:10px;          /* same as 玩家名 */
+  font-size:8px;        /* same as 玩家名 */
   background:rgba(0,255,136,0.10);
   border:1px solid rgba(0,255,136,0.18);
   color:var(--accent);
   line-height:1;
+  flex:0 0 auto;
 }
 .mjSlash:disabled{
   opacity:0.35;
@@ -506,7 +498,6 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   margin-bottom:10px;
 }
 
-/* settle: two columns, 4 rows */
 .modalGrid2{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -536,10 +527,7 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   border:2px solid rgba(212,175,55,0.95);
   box-shadow:0 0 0 2px rgba(212,175,55,0.18) inset;
 }
-.pickCol.dimmed{
-  opacity:0.35;
-  pointer-events:none;
-}
+.pickBtn.hidden{ display:none; }
 
 .modalFooter{
   display:flex;
@@ -646,9 +634,7 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
     <div class="card">
       <h2>番表（勾選即時計總番）</h2>
       <div class="detailsGrid" id="fanDetailsGrid"></div>
-      <div class="small" style="margin-top:8px;">
-        ✅ Tab2 會用下面固定「總番數」做本局番
-      </div>
+      <div class="small" style="margin-top:8px;">✅ Tab2 會用下面固定「總番數」做本局番</div>
     </div>
 
     <div class="card">
@@ -684,7 +670,6 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
       </div>
 
       <div class="mjBoard" id="mjBoard">
-        <!-- ✅ no outer square frame, only inner felt square -->
         <div class="mjTableSquare" aria-hidden="true"></div>
 
         <div class="mjSeat n" id="seatN"></div>
@@ -699,7 +684,6 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
             <div class="centerDir w">西</div>
             <div class="centerDir e">東</div>
           </div>
-          <!-- ✅ 食胡掣放喺東南西北中間 -->
           <button class="centerBtn" type="button" id="btnOpenSettle">食胡</button>
         </div>
       </div>
@@ -746,15 +730,15 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
         <div>
           <div class="small" style="margin-bottom:6px;color:var(--sub);">右：出銃玩家</div>
           <div class="pickCol" id="pickLosers"></div>
+          <!-- ✅ 自摸掣移到「出銃」最下面 -->
+          <div class="modalSmall" style="margin-top:10px;">
+            <div class="check">
+              <input type="checkbox" id="chkSelfDraw">
+              <label for="chkSelfDraw">自摸</label>
+            </div>
+            <div class="dim">剔「自摸」會自動 dim 出銃玩家。</div>
+          </div>
         </div>
-      </div>
-
-      <div class="modalSmall">
-        <div class="check">
-          <input type="checkbox" id="chkSelfDraw">
-          <label for="chkSelfDraw">自摸</label>
-        </div>
-        <div class="dim">剔「自摸」會自動 dim 出銃玩家。</div>
       </div>
 
       <div class="modalFooter">
@@ -1250,12 +1234,12 @@ function updateInfoLine(extraHtml=""){
   const streakTxt = `（連莊 <span class="gold">${dealerStreak}</span>）`;
   const pullTxt = (chain_lastWinner === null)
     ? `拉：<span class="gold">0</span>`
-    : `拉：<span class="gold">${chain_pullCount}</span>（上次贏家：${pName(chain_lastWinner)}｜上次找數番：${chain_lastSettleFan}）`;
+    : `拉：<span class="gold">${chain_pullCount}</span>（上次贏家：${escapeHtml(pName(chain_lastWinner))}｜上次找數番：${chain_lastSettleFan}）`;
 
   const base = baseFanVal();
   const rate = rateVal();
   const head = `
-    <span>莊：<span class="gold">${dealerName}</span>${streakTxt}</span>
+    <span>莊：<span class="gold">${escapeHtml(dealerName)}</span>${streakTxt}</span>
     <span class="dim">｜</span>
     <span>本局番：<span class="gold">${base}</span></span>
     <span class="dim">｜</span>
@@ -1529,20 +1513,30 @@ function rebuildPickRows(){
     lBox.appendChild(bl);
   }
 
-  applySelfDrawDim();
+  applySelfDrawDimAndHideWinnersInLosers();
 }
 
-function applySelfDrawDim(){
+function applySelfDrawDimAndHideWinnersInLosers(){
   const isSelf = !!$("chkSelfDraw")?.checked;
+
+  // ✅ hide winners from loser side
+  const lBox = $("pickLosers");
+  if(lBox){
+    const btns = [...lBox.querySelectorAll(".pickBtn")];
+    btns.forEach((btn, idx)=>{
+      btn.classList.toggle("hidden", pickWinners.has(idx));
+      if(pickWinners.has(idx) && pickLosers.has(idx)) pickLosers.delete(idx);
+    });
+  }
+
+  // ✅ dim losers column when self-draw
   const rightCol = $("pickLosers")?.parentElement;
   if(rightCol) rightCol.classList.toggle("dimmed", isSelf);
 
   if(isSelf){
     pickLosers.clear();
-    // refresh active states
-    const lBox = $("pickLosers");
     if(lBox){
-      [...lBox.querySelectorAll(".pickBtn")].forEach((btn, idx)=>{
+      [...lBox.querySelectorAll(".pickBtn")].forEach(btn=>{
         btn.classList.remove("active");
       });
     }
@@ -1816,9 +1810,8 @@ function bindEvents(){
   $("btnOpenSettle")?.addEventListener("click", openSettleModal);
   $("btnCancelSettle")?.addEventListener("click", ()=>hideModal("modalSettle"));
   $("btnConfirmSettle")?.addEventListener("click", confirmSettleModal);
-
   $("chkSelfDraw")?.addEventListener("change", ()=>{
-    applySelfDrawDim();
+    applySelfDrawDimAndHideWinnersInLosers();
   });
 
   $("btnSetDealer")?.addEventListener("click", openDealerModal);
