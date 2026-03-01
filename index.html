@@ -101,6 +101,23 @@ header{
 .btn.secondary{ background:var(--muted); color:var(--text); font-weight:800; }
 .btn.danger{ background:var(--danger); color:#fff; }
 
+.btn.smallBtn{
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.baseRow{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.baseRow .spacer{
+  flex:1;
+}
+
 .tabs{
   display:flex;
   gap:8px;
@@ -132,6 +149,26 @@ header{
 
 h2{ margin:0 0 10px 0; color:var(--gold); font-size:18px; }
 .small{ color:var(--sub); font-size:13px; line-height:1.6; }
+
+.m{
+  font-size:14px;
+  color:var(--sub);
+}
+
+.xs{
+  font-size:12px;
+  color:var(--sub);
+}
+
+.xxs{
+  font-size:11px;
+  color:var(--sub);
+}
+
+.xxxs{
+  font-size:7px;
+  color:var(--sub);
+}
 
 .row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
 .kv{ display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--sub); margin-top:6px; }
@@ -372,37 +409,110 @@ details[open] summary::before{ transform:rotate(90deg); }
 }
 .slashBtn:disabled{ opacity:0.35; }
 
-/* 中央枱：只保留一個外框（避免疊線） */
+/* === 真麻雀枱中心：木框 + 雙層框 + 綠絨 === */
 .center{
   width:100%;
   height:100%;
-  background:#0a3a1d;
-  border-radius:12px;
   position:relative;
+  border-radius:18px;
+  overflow:hidden;
+
   display:flex;
   justify-content:center;
   align-items:center;
+
+  /* 綠色枱面（唔影響尺寸） */
+  background:
+    radial-gradient(120% 120% at 50% 45%, rgba(255,255,255,0.08), rgba(0,0,0,0.25) 60%),
+    linear-gradient(135deg, #0e4a2a, #07361f);
 }
+
+/* 外層木框（木紋） */
+.center::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:18px;
+  pointer-events:none;
+
+  /* 木紋：多層漸層疊出紋理 */
+  background:
+    linear-gradient(90deg,
+      rgba(255,255,255,0.06) 0%,
+      rgba(0,0,0,0.10) 12%,
+      rgba(255,255,255,0.04) 25%,
+      rgba(0,0,0,0.12) 38%,
+      rgba(255,255,255,0.05) 55%,
+      rgba(0,0,0,0.10) 70%,
+      rgba(255,255,255,0.03) 100%),
+    repeating-linear-gradient(90deg,
+      rgba(0,0,0,0.16) 0px,
+      rgba(0,0,0,0.16) 2px,
+      rgba(255,255,255,0.03) 3px,
+      rgba(255,255,255,0.03) 6px),
+    linear-gradient(135deg, #5a3a1f, #3b2414 55%, #2a180d);
+
+  /* 只顯示邊框：中間挖空 */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+
+  padding:10px;           /* 木框厚度（想厚啲就加大） */
+  box-shadow:
+    0 18px 28px rgba(0,0,0,0.35),
+    inset 0 0 0 2px rgba(255,255,255,0.10),
+    inset 0 0 22px rgba(0,0,0,0.35);
+}
+
+/* 內層第二圈框（偏金屬/象牙邊） */
+.center::after{
+  content:"";
+  position:absolute;
+  inset:8.5px;             /* 跟上面 padding 對應 */
+  border-radius:14px;
+  pointer-events:none;
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+
+  padding:8px;            /* 第二圈框厚度 */
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.22), rgba(0,0,0,0.20)),
+    rgba(212,175,55,0.12);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.18),
+    inset 0 0 18px rgba(0,0,0,0.25);
+}
+
+/* 你原本 inner 框：用嚟做「枱面內框」 */
 .center .outer{
   position:absolute;
-  inset:18%;
-  border:2px solid rgba(255,255,255,0.22);
-  border-radius:10px;
+  inset:26%;              /* ✅ 調細/調大：控制內框大小 */
+  border:2px solid rgba(255,255,255,0.20);
+  border-radius:12px;
+  box-shadow:
+    inset 0 0 12px rgba(0,0,0,0.25);
 }
 
 /* 風位字：貼近啲但唔掂線 */
 .wind{
   position:absolute;
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
   color:#fff;
   opacity:0.9;
   pointer-events:none;
 }
-.wind.top{ top:9px; left:50%; transform:translateX(-50%); }
-.wind.bottom{ bottom:9px; left:50%; transform:translateX(-50%); }
-.wind.left{ left:9px; top:50%; transform:translateY(-50%); }
-.wind.right{ right:9px; top:50%; transform:translateY(-50%); }
+.wind.top{ top:21px; left:50%; transform:translateX(-50%); }
+.wind.bottom{ bottom:22px; left:50%; transform:translateX(-50%); }
+.wind.left{ left:23px; top:50%; transform:translateY(-50%); }
+.wind.right{ right:23px; top:50%; transform:translateY(-50%); }
 
 /* 中間食胡掣：只框住兩個字 */
 .winBtn{
@@ -414,8 +524,11 @@ details[open] summary::before{ transform:rotate(90deg); }
   background:var(--gold);
   color:#000;
   cursor:pointer;
-  position:relative;
-  z-index:2;
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  z-index:3;
 }
 
 .t2BottomRow{
@@ -556,7 +669,7 @@ details[open] summary::before{ transform:rotate(90deg); }
   <header>🀄 港式台牌計番神器 🀄</header>
 
   <div class="topbar">
-    <button class="btn secondary" id="themeBtn" type="button">切換主題</button>
+    <button class="btn secondary smallBtn" id="themeBtn" type="button">切換主題</button>
   </div>
 
   <div class="tabs">
@@ -568,14 +681,14 @@ details[open] summary::before{ transform:rotate(90deg); }
   <div id="tab1" class="container">
     <div class="card">
       <h2>規則</h2>
-      <div class="small">
+      <div class="m">
         拉上劈下　開槓計暗間<br>
         順骰冧莊加換一次牌　圍骰加換三次牌　最多換三次
       </div>
     </div>
 
     <div class="card">
-      <h2>陰蟄錢（唔計入總番）</h2>
+      <h2>陰蟄錢</h2>
       <table class="table">
         <tr><td>追殺</td><td class="tRight strong">每家 5 元</td></tr>
         <tr><td>暗槓</td><td class="tRight strong">每家 5 元</td></tr>
@@ -586,7 +699,7 @@ details[open] summary::before{ transform:rotate(90deg); }
     </div>
 
     <div class="card">
-      <h2>計分設定</h2>
+      <h2>打幾錢</h2>
       <div class="row">
         <span class="badge">1番 = $</span>
         <input class="input num" id="rate" type="number" value="1" min="0" inputmode="numeric">
@@ -595,18 +708,21 @@ details[open] summary::before{ transform:rotate(90deg); }
 
     <div class="card">
       <h2>底設定</h2>
-      <div class="row">
+      <div class="row baseRow">
         <span class="badge">底</span>
-        <input class="input num" type="number" id="baseFan" value="5" min="0" inputmode="numeric">
+        <input class="input num" type="number" id="baseFan">
         <span class="small">番</span>
-        <br><button class="btn secondary" type="button" id="resetBaseBtn">重置底</button>
-      </div>
+
+        <div class="spacer"></div>
+
+  <button class="btn secondary smallBtn" id="resetBaseBtn">重置底</button>
+</div>
     </div>
 
     <div class="card">
       <h2>番表</h2>
         <div class="small"> ✔ 勾選即時計總番</div>
-        <div class="small"> </div>
+        <div class="xxxs">　</div>
       <div id="fanListMount" class="fanGrid tab1FanBody"></div>
     </div>
 
@@ -627,9 +743,9 @@ details[open] summary::before{ transform:rotate(90deg); }
       </div>
 
       <div class="t2RowCenter" style="margin-top:10px;">
-        <button class="btn secondary" type="button" id="dealerBtn">起莊</button>
-        <button class="btn secondary" type="button" id="seatBtn">執位</button>
-        <button class="btn secondary" type="button" id="yinBtn">收陰蟄錢</button>
+        <button class="btn secondary smallBtn" type="button" id="dealerBtn">起莊</button>
+        <button class="btn secondary smallBtn" type="button" id="seatBtn">執位</button>
+        <button class="btn secondary smallBtn" type="button" id="yinBtn">收陰蟄錢</button>
       </div>
 
       <div class="t2InfoLine" id="t2_info">✔ 未開始</div>
@@ -1086,8 +1202,8 @@ function aiSuggest(){
   if(ids.has("chun1color") && ids.has("hun1color")) msgs.push(`<span class="warn">⚠️「清一色」已包含「混一色」，建議只留清一色</span>`);
   if(ids.has("chunpyun") && ids.has("banpyun")) msgs.push(`<span class="warn">⚠️「全求人」通常涵蓋「半求人」，建議只留全求人</span>`);
 
-  msgs.push(`<span class="ok">ℹ️ 底：${getBaseFan()}番（自動加）</span>`);
-  msgs.push(`<span class="ok">ℹ️ 1番=$${getRate()}（Tab2 用）</span>`);
+  msgs.push(`<span class="ok">ℹ️ 底：${getBaseFan()}番</span>`);
+  msgs.push(`<span class="ok">ℹ️ 1番 = $${getRate()}</span>`);
 
   box.innerHTML = msgs.join("<br>");
 }
@@ -1965,9 +2081,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
   syncFanBadgeToTab2();
 
   setTab(1);
+  
 });
 </script>
 </body>
 </html>
-
 
