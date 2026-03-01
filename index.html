@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>港式台牌計番神器 PRO</title>
+  <title>港式台牌計番神器</title>
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
@@ -117,7 +117,6 @@ header{
   margin-bottom:14px;
   box-shadow: 0 0 22px var(--shadow);
 }
-.innerCard{ margin:12px 0 0 0; background:var(--muted); box-shadow:none; }
 .flatCard{ box-shadow:none; background:var(--card); }
 
 h2{ margin:0 0 10px 0; color:var(--gold); font-size:18px; }
@@ -153,7 +152,6 @@ select{
 }
 
 .input.num{ width:120px; }
-.input.tiny{ width:110px; padding:8px 10px; }
 @media (max-width:420px){
   .input.num{ width:100%; }
 }
@@ -282,7 +280,7 @@ details[open] summary::before{ transform:rotate(90deg); }
 .t2InfoLine .dim{ color:var(--sub); }
 .t2InfoLine .gold{ color:var(--gold); font-weight:900; }
 
-/* board size force square in mobile */
+/* ✅ Board wrapper: NO outer square frame */
 :root{
   --boardSize: min(92vw, 350px);
 }
@@ -297,26 +295,36 @@ details[open] summary::before{ transform:rotate(90deg); }
   width:var(--boardSize);
   aspect-ratio:1 / 1;
   height:auto;
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
-  border:2px solid rgba(212,175,55,0.6);
-  border-radius:22px;
   position:relative;
-  box-shadow:0 0 22px rgba(0,0,0,0.25);
-  overflow:hidden;
+  overflow:visible;
   margin:0 auto;
 }
 
+/* inner table square only (the "felt") */
+.mjTableSquare{
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+  border:1px solid rgba(212,175,55,0.25);
+  box-shadow:0 0 22px rgba(0,0,0,0.25);
+  overflow:hidden;
+  pointer-events:none;
+}
+body.white .mjTableSquare{
+  background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
+}
+
 /* inner frame like real table */
-.mjBoard::after{
+.mjTableSquare::after{
   content:"";
   position:absolute;
   inset:10px;
   border-radius:18px;
-  border:1px solid rgba(212,175,55,0.25);
-  pointer-events:none;
+  border:1px solid rgba(212,175,55,0.20);
 }
 
-/* center square */
+/* center square must stay square */
 .mjCenter{
   position:absolute;
   left:50%; top:50%;
@@ -347,27 +355,10 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   pointer-events:none;
 }
 
-.mjCenter .centerBtn{
-  border:none;
-  border-radius:10px;
-  padding:8px 10px;
-  font-weight:900;
-  cursor:pointer;
-  background:rgba(212,175,55,0.22);
-  border:1px solid rgba(212,175,55,0.35);
-  color:var(--gold);
-  -webkit-tap-highlight-color: transparent;
-  position:relative;
-  z-index:1;
-  width:auto; /* ✅ just wrap text */
-}
-
-/* put 東南西北 inside center */
+/* 東南西北 inside center */
 .centerDirs{
-  position:relative;
-  z-index:1;
-  width:100%;
-  height:100%;
+  position:absolute;
+  inset:0;
   pointer-events:none;
 }
 .centerDir{
@@ -377,12 +368,28 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   font-size:12px;
   opacity:0.95;
 }
-.centerDir.n{ top:2px; left:50%; transform:translateX(-50%); }
-.centerDir.s{ bottom:2px; left:50%; transform:translateX(-50%); }
-.centerDir.w{ left:2px; top:50%; transform:translateY(-50%); }
-.centerDir.e{ right:2px; top:50%; transform:translateY(-50%); }
+.centerDir.n{ top:6px; left:50%; transform:translateX(-50%); }
+.centerDir.s{ bottom:6px; left:50%; transform:translateX(-50%); }
+.centerDir.w{ left:6px; top:50%; transform:translateY(-50%); }
+.centerDir.e{ right:6px; top:50%; transform:translateY(-50%); }
 
-/* seats: square, NO big outer frame */
+/* 食胡掣放喺東南西北中間 */
+.centerBtn{
+  position:relative;
+  z-index:2;
+  border:none;
+  border-radius:10px;
+  padding:8px 10px;
+  font-weight:900;
+  cursor:pointer;
+  background:rgba(212,175,55,0.22);
+  border:1px solid rgba(212,175,55,0.35);
+  color:var(--gold);
+  -webkit-tap-highlight-color: transparent;
+  width:auto;
+}
+
+/* seats: square */
 :root{ --seatSize: 23%; }
 
 .mjSeat{
@@ -390,10 +397,6 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   width:var(--seatSize);
   aspect-ratio:1 / 1;
   height:auto;
-  background:transparent;           /* ✅ remove big square background */
-  border:none;                      /* ✅ remove big square border */
-  border-radius:0;
-  padding:0;
   display:flex;
   overflow:visible;
 }
@@ -404,7 +407,7 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
 .mjSeat.w{ left:12px; top:50%; transform:translateY(-50%); }
 .mjSeat.e{ right:12px; top:50%; transform:translateY(-50%); }
 
-/* inner compact pill panel per player */
+/* inner per player, square content */
 .mjSeatInner{
   width:100%;
   height:100%;
@@ -422,12 +425,12 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   box-shadow:0 0 0 2px rgba(212,175,55,0.14) inset, 0 0 16px rgba(212,175,55,0.18);
 }
 
-/* player name smaller by 2pt */
+/* player name smaller by 2pt (vs original) */
 .mjName{
   width:100%;
   text-align:center;
   font-weight:900;
-  font-size:10px;   /* was 12 */
+  font-size:10px;
   padding:7px 8px;
   border-radius:12px;
 }
@@ -438,28 +441,29 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   font-weight:900;
   font-size:18px;
   line-height:1;
-  padding:2px 0;
   flex:1;
   display:flex;
   align-items:center;
   justify-content:center;
+  padding:0;
 }
 
-/* slim "斬" button smaller by 2pt */
-.slimBtn{
+/* ✅ 斬掣：放喺玩家 box 下面（但唔爆 box） */
+.mjSlash{
   width:100%;
   border:none;
   border-radius:12px;
-  padding:7px 8px;
+  padding:6px 8px;         /* smaller */
   font-weight:900;
   cursor:pointer;
   -webkit-tap-highlight-color: transparent;
-  font-size:10px; /* was 12 */
+  font-size:10px;          /* same as 玩家名 */
   background:rgba(0,255,136,0.10);
   border:1px solid rgba(0,255,136,0.18);
   color:var(--accent);
+  line-height:1;
 }
-.slimBtn:disabled{
+.mjSlash:disabled{
   opacity:0.35;
   cursor:not-allowed;
 }
@@ -479,15 +483,15 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   inset:0;
   background:rgba(0,0,0,0.55);
   display:none;
-  align-items:center;              /* ✅ center */
-  justify-content:center;          /* ✅ center */
+  align-items:center;
+  justify-content:center;
   z-index:50;
   padding:14px;
 }
 .modal.show{ display:flex; }
 
 .modalSheet{
-  width:min(520px, 100%);          /* centered sheet */
+  width:min(520px, 100%);
   background:var(--card);
   border-radius:18px;
   border:2px solid rgba(212,175,55,0.55);
@@ -502,7 +506,7 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   margin-bottom:10px;
 }
 
-/* settle: two columns, but players in 4 rows (one per row) */
+/* settle: two columns, 4 rows */
 .modalGrid2{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -514,9 +518,8 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
 .pickCol{
   display:flex;
   flex-direction:column;
-  gap:8px; /* one per row */
+  gap:8px;
 }
-
 .pickBtn{
   width:100%;
   border:none;
@@ -533,8 +536,6 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   border:2px solid rgba(212,175,55,0.95);
   box-shadow:0 0 0 2px rgba(212,175,55,0.18) inset;
 }
-
-/* dim column when disabled */
 .pickCol.dimmed{
   opacity:0.35;
   pointer-events:none;
@@ -547,7 +548,6 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   margin-top:12px;
   flex-wrap:wrap;
 }
-
 .modalSmall{
   font-size:12px;
   color:var(--sub);
@@ -586,7 +586,6 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   color:var(--gold);
 }
 
-/* History */
 .historyItem{
   padding:10px;
   border-radius:14px;
@@ -680,12 +679,14 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
         </div>
       </div>
 
-      <!-- ✅ 食胡資料放呢行 -->
       <div class="t2InfoLine" id="t2_info">
         <span class="dim">✔ 未有結算</span>
       </div>
 
       <div class="mjBoard" id="mjBoard">
+        <!-- ✅ no outer square frame, only inner felt square -->
+        <div class="mjTableSquare" aria-hidden="true"></div>
+
         <div class="mjSeat n" id="seatN"></div>
         <div class="mjSeat e" id="seatE"></div>
         <div class="mjSeat s" id="seatS"></div>
@@ -698,6 +699,7 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
             <div class="centerDir w">西</div>
             <div class="centerDir e">東</div>
           </div>
+          <!-- ✅ 食胡掣放喺東南西北中間 -->
           <button class="centerBtn" type="button" id="btnOpenSettle">食胡</button>
         </div>
       </div>
@@ -731,7 +733,7 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
     <button class="btn danger" type="button" id="clearBtn">重新計番</button>
   </div>
 
-  <!-- ===== Modal: 結算（左右多選 + 自摸剔） ===== -->
+  <!-- ===== Modal: 結算 ===== -->
   <div class="modal" id="modalSettle" role="dialog" aria-modal="true">
     <div class="modalSheet">
       <div class="modalTitle">食胡 / 出銃（可多選）</div>
@@ -815,6 +817,14 @@ function safeInt(v, def=0){
   return Number.isFinite(n) ? n : def;
 }
 function clampIdx(i){ return (i>=0 && i<4) ? i : 0; }
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
 
 /* ================= Tab1 data ================= */
 const catIcon = {
@@ -975,7 +985,9 @@ function renderFanList(){
         count.type = "number";
         count.min = "0";
         count.value = "1";
-        count.className = "input tiny fanCount";
+        count.className = "input num";
+        count.style.width = "110px";
+        count.style.padding = "8px 10px";
         count.dataset.target = id;
         count.addEventListener("input", ()=>{
           updateTotalFan();
@@ -1026,7 +1038,7 @@ function updateTotalFan(){
     const fan = safeInt(cb.dataset.fan, 0);
     const id = cb.dataset.id;
     let count = 1;
-    const cnt = document.querySelector(`.fanCount[data-target="${id}"]`);
+    const cnt = document.querySelector(`input[data-target="${id}"]`);
     if(cnt){
       count = safeInt(cnt.value, 0);
       if(count < 0) count = 0;
@@ -1059,7 +1071,7 @@ function checkedSet(){
   return s;
 }
 function getCountFor(id){
-  const input = document.querySelector(`.fanCount[data-target="${id}"]`);
+  const input = document.querySelector(`input[data-target="${id}"]`);
   if(!input) return 1;
   const v = safeInt(input.value, 0);
   return v < 0 ? 0 : v;
@@ -1103,7 +1115,7 @@ function saveTab1State(){
     checks[cb.dataset.id] = cb.checked ? 1 : 0;
   });
   const counts = {};
-  document.querySelectorAll(".fanCount").forEach(inp=>{
+  document.querySelectorAll('input[data-target]').forEach(inp=>{
     counts[inp.dataset.target] = inp.value;
   });
   const state = { checks, counts, dealer_times: $("dealer_times")?.value ?? "0" };
@@ -1122,7 +1134,7 @@ function loadTab1State(){
       });
     }
     if(s?.counts){
-      document.querySelectorAll(".fanCount").forEach(inp=>{
+      document.querySelectorAll('input[data-target]').forEach(inp=>{
         const v = s.counts[inp.dataset.target];
         if(v !== undefined) inp.value = String(v);
       });
@@ -1136,7 +1148,7 @@ function clearTab1All(){
     const line = cb.closest(".checkline");
     if(line) line.classList.remove("active");
   });
-  document.querySelectorAll(".fanCount").forEach(inp=>inp.value="1");
+  document.querySelectorAll('input[data-target]').forEach(inp=>inp.value="1");
   if($("dealer_times")) $("dealer_times").value = "0";
   updateTotalFan();
   saveTab1State();
@@ -1189,7 +1201,7 @@ function renderSeatBox(dir, playerIdx){
     <div class="mjSeatInner ${playerIdx===dealerIdx ? "dealer":""}">
       <input id="${nameId}" class="input mjName" value="${escapeHtml(pName(playerIdx))}" maxlength="12" />
       <div id="${scoreId}" class="mjScore">${players[playerIdx].score}</div>
-      <button id="${slashId}" class="slimBtn" type="button">斬</button>
+      <button id="${slashId}" class="mjSlash" type="button">斬</button>
     </div>
   `;
 
@@ -1394,7 +1406,7 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
   updateSlashButtonsEnabled();
 
   const parts = [];
-  parts.push(`食胡：<span class="gold">${winNames}</span>｜${typeTxt}`);
+  parts.push(`食胡：<span class="gold">${escapeHtml(winNames)}</span>｜${escapeHtml(typeTxt)}`);
   parts.push(`本局番：<span class="gold">${baseFan}</span>`);
   if(winners.length === 1){
     parts.push(isChained ? `拉後：<span class="gold">${pulledFan}</span>` : `第一舖：<span class="gold">${pulledFan}</span>`);
@@ -1403,7 +1415,7 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
     parts.push(`（多響模式：本次唔拉）`);
   }
   parts.push(`1番=$<span class="gold">${rate}</span> → 每條=$<span class="gold">${amount}</span>`);
-  if(dealerChanged) parts.push(`⚠️ 過莊：莊轉到 <span class="gold">${pName(dealerIdx)}</span>`);
+  if(dealerChanged) parts.push(`⚠️ 過莊：莊轉到 <span class="gold">${escapeHtml(pName(dealerIdx))}</span>`);
 
   updateInfoLine(parts.join("｜"));
   saveTab2State();
@@ -1517,65 +1529,24 @@ function rebuildPickRows(){
     lBox.appendChild(bl);
   }
 
-  // apply dim for losers when selfdraw checked
   applySelfDrawDim();
 }
 
 function applySelfDrawDim(){
   const isSelf = !!$("chkSelfDraw")?.checked;
-  const loserCol = $("pickLosers")?.closest(".pickCol") ? null : null; // not used
-  const losersWrap = $("pickLosers")?.parentElement?.querySelector(".pickCol") ? null : null;
-
-  // easiest: add class to RIGHT column container
-  const rightCol = $("pickLosers")?.parentElement; // div
-  if(rightCol){
-    rightCol.classList.toggle("dimmed", isSelf);
-  }
+  const rightCol = $("pickLosers")?.parentElement;
+  if(rightCol) rightCol.classList.toggle("dimmed", isSelf);
 
   if(isSelf){
     pickLosers.clear();
-    rebuildPickRows_NoRecursion();
+    // refresh active states
+    const lBox = $("pickLosers");
+    if(lBox){
+      [...lBox.querySelectorAll(".pickBtn")].forEach((btn, idx)=>{
+        btn.classList.remove("active");
+      });
+    }
   }
-}
-
-// prevent recursion loop
-function rebuildPickRows_NoRecursion(){
-  const wBox = $("pickWinners");
-  const lBox = $("pickLosers");
-  if(!wBox || !lBox) return;
-
-  // only update active states without re-binding by rebuilding once
-  wBox.innerHTML = "";
-  lBox.innerHTML = "";
-  for(let i=0;i<4;i++){
-    const bw = document.createElement("button");
-    bw.type = "button";
-    bw.className = "pickBtn";
-    bw.textContent = pName(i);
-    bw.classList.toggle("active", pickWinners.has(i));
-    bw.onclick = ()=>{
-      if(pickWinners.has(i)) pickWinners.delete(i);
-      else pickWinners.add(i);
-      rebuildPickRows();
-    };
-    wBox.appendChild(bw);
-
-    const bl = document.createElement("button");
-    bl.type = "button";
-    bl.className = "pickBtn";
-    bl.textContent = pName(i);
-    bl.classList.toggle("active", pickLosers.has(i));
-    bl.onclick = ()=>{
-      if(pickLosers.has(i)) pickLosers.delete(i);
-      else pickLosers.add(i);
-      rebuildPickRows();
-    };
-    lBox.appendChild(bl);
-  }
-
-  const isSelf = !!$("chkSelfDraw")?.checked;
-  const rightCol = $("pickLosers")?.parentElement;
-  if(rightCol) rightCol.classList.toggle("dimmed", isSelf);
 }
 
 function openSettleModal(){
@@ -1622,7 +1593,7 @@ function confirmDealerModal(){
   dealerStreak = 0;
   hideModal("modalDealer");
   renderBoard();
-  updateInfoLine(`<span class="dim">👑 已起莊：莊 = ${pName(dealerIdx)}</span>`);
+  updateInfoLine(`<span class="dim">👑 已起莊：莊 = ${escapeHtml(pName(dealerIdx))}</span>`);
   saveTab2State();
 }
 
@@ -1650,7 +1621,7 @@ function rebuildSeatSelects(){
   }
   enforceUniqueSeats(true);
 }
-function enforceUniqueSeats(silent=false){
+function enforceUniqueSeats(){
   const e = safeInt($("selEast")?.value ?? seat.E, seat.E);
   const s = safeInt($("selSouth")?.value ?? seat.S, seat.S);
   const w = safeInt($("selWest")?.value ?? seat.W, seat.W);
@@ -1700,14 +1671,6 @@ function fmtTime(ts){
   const mm = String(d.getMinutes()).padStart(2,"0");
   const ss = String(d.getSeconds()).padStart(2,"0");
   return `${hh}:${mm}:${ss}`;
-}
-function escapeHtml(str){
-  return String(str)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
 }
 
 function renderHistory(){
