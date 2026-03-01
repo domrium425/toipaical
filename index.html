@@ -359,7 +359,7 @@ details[open] summary::before{ transform:rotate(90deg); }
 
 /* 分數原大 + 顏色 */
 .seat .score{
-  font-size:20px;
+  font-size:22px;
   font-weight:900;
   line-height:1;
 }
@@ -395,17 +395,22 @@ details[open] summary::before{ transform:rotate(90deg); }
 
 /* 斬掣：紅色；同名同視覺大小 */
 .slashBtn{
-  width:100%;
+  height:20px;              /* 🔴 高度 */
+  width:70%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:10px;           
+  font-weight:900;
+
   border:none;
   border-radius:8px;
-  padding:6px 0;
-  font-size:12px;
-  font-weight:900;
   background:#cc0000;
   color:#fff;
-  line-height:1;
-  transform: scale(0.82);
-  transform-origin:center;
+
+  padding:0;                /* ⚠️ 一定要 0 */
 }
 .slashBtn:disabled{ opacity:0.35; }
 
@@ -760,7 +765,7 @@ details[open] summary::before{ transform:rotate(90deg); }
             <div class="nameWrap"><input class="name" id="n0" value="玩家1" maxlength="12"></div>
             <div class="score" id="sc0">0</div>
             <div class="pullInfo" id="pi0"></div>
-            <button class="slashBtn" id="sl0" type="button">⚔️斬⚔️</button>
+            <button class="slashBtn" id="sl0" type="button">斬拉</button>
           </div>
         </div>
         <div></div>
@@ -771,7 +776,7 @@ details[open] summary::before{ transform:rotate(90deg); }
             <div class="nameWrap"><input class="name" id="n1" value="玩家2" maxlength="12"></div>
             <div class="score" id="sc1">0</div>
             <div class="pullInfo" id="pi1"></div>
-            <button class="slashBtn" id="sl1" type="button">⚔️斬⚔️</button>
+            <button class="slashBtn" id="sl1" type="button">斬拉</button>
           </div>
         </div>
 
@@ -790,7 +795,7 @@ details[open] summary::before{ transform:rotate(90deg); }
             <div class="nameWrap"><input class="name" id="n2" value="玩家3" maxlength="12"></div>
             <div class="score" id="sc2">0</div>
             <div class="pullInfo" id="pi2"></div>
-            <button class="slashBtn" id="sl2" type="button">⚔️斬⚔️</button>
+            <button class="slashBtn" id="sl2" type="button">斬拉</button>
           </div>
         </div>
 
@@ -801,7 +806,7 @@ details[open] summary::before{ transform:rotate(90deg); }
             <div class="nameWrap"><input class="name" id="n3" value="玩家4" maxlength="12"></div>
             <div class="score" id="sc3">0</div>
             <div class="pullInfo" id="pi3"></div>
-            <button class="slashBtn" id="sl3" type="button">⚔️斬⚔️</button>
+            <button class="slashBtn" id="sl3" type="button">斬拉</button>
           </div>
         </div>
         <div></div>
