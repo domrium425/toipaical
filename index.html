@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>港式台牌計番神器</title>
+  <title>港式台牌計番神器 PRO</title>
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
@@ -28,9 +28,10 @@
   /* ===== Tab2 layout tuning (mobile one-screen) ===== */
   --boardSize: min(92vw, 350px);
   --seatSize: 30%;
-  --centerSize: 24%;
-  --centerFramePad: 6px;
-  --centerInnerPad: 8px;
+  /* ✅ 中間爆 box：縮細中心位 + 減 padding */
+  --centerSize: 22%;
+  --centerFramePad: 3px;
+  --centerInnerPad: 5px;
 }
 
 @media (max-height:760px){ :root{ --boardSize: min(92vw, 335px); } }
@@ -138,15 +139,14 @@ h2{ margin:0 0 10px 0; color:var(--gold); font-size:18px; }
 .row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
 .kv{ display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--sub); margin-top:6px; }
 
-/* ✅ iPhone 防止打字放大：所有 input/select 字體 ≥16
-   但細 UI 用 transform 縮返（唔影響 iOS 判斷） */
+/* ✅ iPhone 防止打字放大：所有 input/select 字體 ≥16 */
 .input, select{
   border:1px solid rgba(128,128,128,0.35);
   background:transparent;
   color:var(--text);
   border-radius:12px;
   padding:10px 12px;
-  font-size:16px;            /* ✅ prevent iOS zoom */
+  font-size:16px;
   outline:none;
   max-width:100%;
 }
@@ -240,7 +240,7 @@ details.fanGroup[open] > summary::before{ transform:rotate(90deg); }
   gap:10px;
   padding:7px 2px;
   border-bottom:1px dashed var(--line);
-  font-size:13px; /* Tab1 番表內容細 1pt */
+  font-size:13px;
 }
 .fanItemLine:last-child{ border-bottom:none; }
 .fanItemLine label{ flex:1; cursor:pointer; color:var(--text); }
@@ -251,18 +251,17 @@ details.fanGroup[open] > summary::before{ transform:rotate(90deg); }
   box-shadow:0 0 10px rgba(212,175,55,0.12);
 }
 
-/* ✅ Tab1 入數字位：縮短到「只見到兩位數」外觀 */
 .fanCountInp{
-  width:44px;                 /* ✅ narrow */
+  width:44px;
   padding:6px 6px;
   border-radius:12px;
   border:1px solid rgba(128,128,128,0.35);
   background:transparent;
   color:var(--text);
   outline:none;
-  font-size:16px;             /* ✅ no iOS zoom */
+  font-size:16px;
   text-align:center;
-  transform:scale(0.82);      /* ✅ look smaller, still 16 internally */
+  transform:scale(0.82);
   transform-origin:center;
 }
 body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
@@ -306,7 +305,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   margin-top:10px;
 }
 
-/* Mahjong board container (no outer frame) */
 .boardWrap{
   width:var(--boardSize);
   height:var(--boardSize);
@@ -314,7 +312,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   position:relative;
 }
 
-/* seats are square */
 .seat{
   position:absolute;
   width:var(--seatSize);
@@ -331,8 +328,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
 .seat.dealer{
   box-shadow:0 0 0 3px rgba(212,175,55,0.85), 0 0 18px rgba(212,175,55,0.18);
 }
-
-/* ✅ 玩家名可改 + 視覺再細（內部 16，外觀縮） */
 .seat .name{
   width:100%;
   text-align:center;
@@ -345,13 +340,12 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
 .seat .score{
   text-align:center;
   font-weight:900;
-  font-size:18px; /* 分數原大 */
+  font-size:18px;
   line-height:1.05;
 }
 .score.pos{ color:#3ddc84; }
 .score.neg{ color:#ff4d4d; }
 
-/* Slash button */
 .slashBtn{
   width:100%;
   padding:6px 0;
@@ -360,16 +354,15 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   font-weight:900;
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
-  font-size:16px;       /* internal 16 */
+  font-size:16px;
   line-height:1;
   background:var(--danger);
   color:#fff;
-  transform:scale(0.72); /* match name visual height */
+  transform:scale(0.72);
   transform-origin:center;
 }
 .slashBtn:disabled{ opacity:0.35; cursor:not-allowed; }
 
-/* ✅ streak badge：移遠啲，避免疊住玩家 box */
 .streakBadge{
   position:absolute;
   top:-18px;
@@ -384,7 +377,7 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   box-shadow:0 0 18px rgba(212,175,55,0.18);
 }
 
-/* seat positions */
+/* positions */
 #seatN{ top:0; left:50%; transform:translateX(-50%); }
 #seatS{ bottom:0; left:50%; transform:translateX(-50%); }
 #seatW{ left:0; top:50%; transform:translateY(-50%); }
@@ -423,7 +416,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   justify-content:center;
 }
 
-/* ✅ 中間東南西北：改用 grid，保證唔疊住食胡掣 */
 .dirBox{
   width:100%;
   height:100%;
@@ -435,10 +427,10 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   color:var(--gold);
   font-size:12px;
 }
-.dirBox .dN{ grid-column:2; grid-row:1; align-self:start; margin-top:2px; }
-.dirBox .dS{ grid-column:2; grid-row:3; align-self:end; margin-bottom:2px; }
-.dirBox .dW{ grid-column:1; grid-row:2; justify-self:start; margin-left:2px; }
-.dirBox .dE{ grid-column:3; grid-row:2; justify-self:end; margin-right:2px; }
+.dirBox .dN{ grid-column:2; grid-row:1; align-self:start; margin-top:1px; }
+.dirBox .dS{ grid-column:2; grid-row:3; align-self:end; margin-bottom:1px; }
+.dirBox .dW{ grid-column:1; grid-row:2; justify-self:start; margin-left:1px; }
+.dirBox .dE{ grid-column:3; grid-row:2; justify-self:end; margin-right:1px; }
 .dirBox .mid{ grid-column:2; grid-row:2; z-index:2; }
 
 .huBtn{
@@ -447,9 +439,9 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   background:var(--gold);
   color:#000;
   font-weight:900;
-  padding:6px 10px;
+  padding:5px 8px; /* ✅ 再細少少，避免爆 */
   cursor:pointer;
-  font-size:13px;
+  font-size:12px;
   -webkit-tap-highlight-color:transparent;
 }
 
@@ -591,7 +583,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
       </table>
     </div>
 
-    <!-- ✅ 1番=錢（Tab1：陰蟄錢同底中間） -->
     <div class="card">
       <h2>金額設定</h2>
       <div class="row">
@@ -604,7 +595,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
 
     <div class="card">
       <h2>底設定</h2>
-      <!-- ✅ 底固定一行出番數（Tab2 唔需要） -->
       <div class="row" style="justify-content:space-between;">
         <div class="row" style="gap:8px;">
           <span class="badge">底</span>
@@ -632,7 +622,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   <!-- ================= TAB 2 ================= -->
   <div id="tab2" class="container" style="display:none;">
     <div class="t2TopBox">
-
       <div class="t2FanBox">
         <span>本局番數</span>
         <span class="v" id="t2_baseFanBox">0</span>
@@ -678,7 +667,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
         <div class="center" id="centerBox">
           <div class="centerOuter">
             <div class="centerInner">
-              <!-- ✅ 改成 grid，唔會疊住 -->
               <div class="dirBox" aria-hidden="true">
                 <div class="dN">北</div>
                 <div class="dS">南</div>
@@ -718,7 +706,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
     </div>
   </div>
 
-  <!-- ===== 固定總番（只 Tab1 顯示）===== -->
   <div class="fixedTotal" id="fixedTotal">
     <div class="big">總番數：<span id="totalFan">0</span></div>
     <button class="btn danger" type="button" id="clearBtn">重新計番</button>
@@ -819,7 +806,7 @@ const catIcon = {
 const fanData = [
   { cat:"莊", items:[
     ["dealer_base","莊",1,false],
-    ["dealer_times","連莊次數",0,false], // special input only
+    ["dealer_times","連莊次數",0,false],
   ]},
   { cat:"一般", items:[
     ["flower","花",1,true],["zflower","正花",2,true],["noflower","無花",2,false],
@@ -909,7 +896,6 @@ function setTab(which){
     b1.classList.remove("active");
     $("fixedTotal").style.display = "none";
 
-    // ✅ 確保 Tab2 入去都係最新總番
     updateTotalFan();
     syncBaseFanToTab2();
 
@@ -920,6 +906,8 @@ function setTab(which){
     renderSeatNamesAndScores();
     renderHistory();
     renderStats();
+    // ✅ 若有彈窗開緊，確保顯示係最新名
+    refreshOpenModalsIfAny();
   }
 }
 
@@ -1019,7 +1007,6 @@ function makeFanLine(id, name, fan, hasCount){
     count.className = "fanCountInp fanCount";
     count.dataset.target = id;
     count.addEventListener("input", ()=>{
-      // ✅ 右邊直接出 fan*count
       const c = Math.max(0, Math.min(99, safeInt(count.value, 0)));
       count.value = String(c);
       right.textContent = `${fan * c}番`;
@@ -1027,8 +1014,6 @@ function makeFanLine(id, name, fan, hasCount){
       saveTab1State();
     });
     line.appendChild(count);
-
-    // ✅ 初始顯示 fan*count（唔用 ×幾番）
     right.textContent = `${fan * safeInt(count.value, 1)}番`;
     line.appendChild(right);
   }else{
@@ -1185,7 +1170,6 @@ function loadTab1State(){
       document.querySelectorAll(".fanCount").forEach(inp=>{
         const v = s.counts[inp.dataset.target];
         if(v !== undefined) inp.value = String(v);
-        // update right label
         const id = inp.dataset.target;
         const fan = safeInt(document.querySelector(`#cb_${id}`)?.dataset?.fan ?? "0", 0);
         const right = $("fanRight_"+id);
@@ -1199,7 +1183,7 @@ function loadTab1State(){
 }
 
 /* ================= Tab2 core state ================= */
-const SEATS = ["N","E","S","W"]; // physical positions
+const SEATS = ["N","E","S","W"];
 let seatToPlayer = { N:"p0", E:"p1", S:"p2", W:"p3" };
 let players = {
   p0:{ name:"玩家1", score:0 },
@@ -1211,7 +1195,7 @@ let players = {
 let dealerSeat = "E";
 let dealerStreak = 1;
 
-/* ✅ 針數：第一舖＝第1針 */
+/* ✅ 針數：第一舖＝1 */
 let chain_lastWinnerSeat = null;
 let chain_lastSettleFan = 0;
 let chain_pullCount = 0;
@@ -1219,7 +1203,7 @@ let chain_pullCount = 0;
 let gameHistory = [];
 let undoStack = [];
 
-/* ================= Seat UI binding ================= */
+/* ================= Seat/UI helpers ================= */
 function seatEl(seat){ return $("seat"+seat); }
 function nameEl(seat){ return $("name"+seat); }
 function scoreEl(seat){ return $("score"+seat); }
@@ -1328,6 +1312,8 @@ function restoreSnapshot(snap){
   renderHistory();
   renderStats();
   saveTab2State();
+
+  refreshOpenModalsIfAny();
 }
 
 function undoLast(){
@@ -1360,13 +1346,14 @@ function resetTab2All(){
 
   if($("t2_status")) $("t2_status").innerHTML = "✔ 已清零（可撤銷）";
   saveTab2State();
+
+  refreshOpenModalsIfAny();
 }
 
 /* ================= Modals ================= */
 function openMask(id){ const m=$(id); if(m) m.style.display="flex"; }
 function closeMask(id){ const m=$(id); if(m) m.style.display="none"; }
-
-let tempDealerSeat = null;
+function isOpen(id){ return ($(id)?.style.display === "flex"); }
 
 function seatLabel(seat){
   if(seat==="E") return "東";
@@ -1375,11 +1362,19 @@ function seatLabel(seat){
   return "北";
 }
 
-function openDealerModal(){
+function refreshOpenModalsIfAny(){
+  // ✅ 玩家名改完即時同步去 Tab2 全部彈窗/選項（就算彈窗開緊）
+  if(isOpen("huMask")) renderHuPickLists();
+  if(isOpen("dealerMask")) openDealerModal(true);
+  if(isOpen("seatMask")) openSeatModal(true);
+}
+
+let tempDealerSeat = null;
+function openDealerModal(isRefresh=false){
   const box = $("pickDealer");
   if(!box) return;
   box.innerHTML = "";
-  tempDealerSeat = dealerSeat;
+  if(!isRefresh) tempDealerSeat = dealerSeat;
 
   SEATS.forEach(seat=>{
     const b = document.createElement("button");
@@ -1395,7 +1390,7 @@ function openDealerModal(){
     box.appendChild(b);
   });
 
-  openMask("dealerMask");
+  if(!isRefresh) openMask("dealerMask");
 }
 
 function confirmDealer(){
@@ -1430,12 +1425,13 @@ function enforceUniqueSeats(){
   });
 }
 
-function openSeatModal(){
+function openSeatModal(isRefresh=false){
   const list = getAllPlayerOptions();
   const selE = $("seatSelE"), selS=$("seatSelS"), selW=$("seatSelW"), selN=$("seatSelN");
   if(!selE||!selS||!selW||!selN) return;
 
   [selE,selS,selW,selN].forEach(sel=>{
+    const current = sel.value;
     sel.innerHTML = "";
     list.forEach(o=>{
       const opt = document.createElement("option");
@@ -1443,17 +1439,21 @@ function openSeatModal(){
       opt.textContent = o.name;
       sel.appendChild(opt);
     });
+    // try keep selection
+    if([...sel.options].some(o=>o.value===current)) sel.value = current;
   });
 
-  selE.value = seatToPlayer.E;
-  selS.value = seatToPlayer.S;
-  selW.value = seatToPlayer.W;
-  selN.value = seatToPlayer.N;
+  if(!isRefresh){
+    selE.value = seatToPlayer.E;
+    selS.value = seatToPlayer.S;
+    selW.value = seatToPlayer.W;
+    selN.value = seatToPlayer.N;
+  }
 
   [selE,selS,selW,selN].forEach(sel=> sel.onchange = enforceUniqueSeats);
   enforceUniqueSeats();
 
-  openMask("seatMask");
+  if(!isRefresh) openMask("seatMask");
 }
 
 function confirmSeats(){
@@ -1568,7 +1568,7 @@ function settleRound({winners, loserSeat, selfmo}){
 
   const win0 = winners[0];
 
-  // ✅ 針數：第一舖＝1
+  // ✅ 港式台牌拉：同一贏家先拉；第一針＝1
   let pulledFan = baseFan;
   let isChained = false;
 
@@ -1582,7 +1582,7 @@ function settleRound({winners, loserSeat, selfmo}){
     pulledFan = baseFan;
   }
 
-  const settleFan = pulledFan;
+  const settleFan = pulledFan; // （你而家版本：無劈，只用拉/斬）
   const amount = settleFan * rate;
 
   if(selfmo){
@@ -1605,7 +1605,7 @@ function settleRound({winners, loserSeat, selfmo}){
     gameHistory.push({ ts:Date.now(), winnerSeat:win, loserSeat:null, selfmo:true, baseFan, pulledFan, settleFan, rate, amount,
       winnerName:getPlayerNameBySeat(win), loserName:"" });
 
-    // ✅ 實時更新分數顏色/數字
+    // ✅ 實時更新分數（你話依家固定 0：呢度確保每次結算都渲染）
     renderSeatNamesAndScores();
     renderDealerUI();
     renderStreakBadges();
@@ -1622,6 +1622,7 @@ function settleRound({winners, loserSeat, selfmo}){
     renderHistory();
     renderStats();
     saveTab2State();
+    refreshOpenModalsIfAny();
     return true;
   }
 
@@ -1655,6 +1656,7 @@ function settleRound({winners, loserSeat, selfmo}){
     renderHistory();
     renderStats();
     saveTab2State();
+    refreshOpenModalsIfAny();
     return true;
   }
 
@@ -1688,6 +1690,7 @@ function settleRound({winners, loserSeat, selfmo}){
   renderHistory();
   renderStats();
   saveTab2State();
+  refreshOpenModalsIfAny();
   return true;
 }
 
@@ -1705,6 +1708,7 @@ function doSlash(){
 
   $("t2_status") && ($("t2_status").innerHTML = "⚔️ 已斬：下一舖當第一針");
   saveTab2State();
+  refreshOpenModalsIfAny();
 }
 
 /* ================= History / Stats / Copy ================= */
@@ -1779,6 +1783,7 @@ function clearHistory(){
   renderHistory();
   renderStats();
   saveTab2State();
+  refreshOpenModalsIfAny();
 }
 
 /* ================= localStorage Tab2 ================= */
@@ -1831,11 +1836,13 @@ function bindEvents(){
 
   $("clearBtn")?.addEventListener("click", clearTab1All);
 
+  // ✅ 玩家名改完之後：同步去 Tab2 全 tab（包括彈窗開緊都即時更新）
   SEATS.forEach(seat=>{
     nameEl(seat)?.addEventListener("input", ()=>{
-      setPlayerNameBySeat(seat, nameEl(seat).value || `玩家`);
+      setPlayerNameBySeat(seat, nameEl(seat).value || "玩家");
       renderStats();
       saveTab2State();
+      refreshOpenModalsIfAny();
     });
     $("slash"+seat)?.addEventListener("click", doSlash);
   });
@@ -1867,11 +1874,11 @@ function bindEvents(){
     if(ok) closeMask("huMask");
   });
 
-  $("btnSetDealer")?.addEventListener("click", openDealerModal);
+  $("btnSetDealer")?.addEventListener("click", ()=>openDealerModal(false));
   $("dealerCancel")?.addEventListener("click", ()=>closeMask("dealerMask"));
   $("dealerConfirm")?.addEventListener("click", confirmDealer);
 
-  $("btnSeatArrange")?.addEventListener("click", openSeatModal);
+  $("btnSeatArrange")?.addEventListener("click", ()=>openSeatModal(false));
   $("seatCancel")?.addEventListener("click", ()=>closeMask("seatMask"));
   $("seatConfirm")?.addEventListener("click", confirmSeats);
 
