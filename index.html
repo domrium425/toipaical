@@ -359,7 +359,7 @@ details[open] summary::before{ transform:rotate(90deg); }
 
 /* 分數原大 + 顏色 */
 .seat .score{
-  font-size:18px;
+  font-size:20px;
   font-weight:900;
   line-height:1;
 }
@@ -399,7 +399,7 @@ details[open] summary::before{ transform:rotate(90deg); }
   border:none;
   border-radius:8px;
   padding:6px 0;
-  font-size:16px;
+  font-size:12px;
   font-weight:900;
   background:#cc0000;
   color:#fff;
@@ -760,7 +760,7 @@ details[open] summary::before{ transform:rotate(90deg); }
             <div class="nameWrap"><input class="name" id="n0" value="玩家1" maxlength="12"></div>
             <div class="score" id="sc0">0</div>
             <div class="pullInfo" id="pi0"></div>
-            <button class="slashBtn" id="sl0" type="button">斬</button>
+            <button class="slashBtn" id="sl0" type="button">⚔️斬⚔️</button>
           </div>
         </div>
         <div></div>
@@ -771,7 +771,7 @@ details[open] summary::before{ transform:rotate(90deg); }
             <div class="nameWrap"><input class="name" id="n1" value="玩家2" maxlength="12"></div>
             <div class="score" id="sc1">0</div>
             <div class="pullInfo" id="pi1"></div>
-            <button class="slashBtn" id="sl1" type="button">斬</button>
+            <button class="slashBtn" id="sl1" type="button">⚔️斬⚔️</button>
           </div>
         </div>
 
@@ -790,7 +790,7 @@ details[open] summary::before{ transform:rotate(90deg); }
             <div class="nameWrap"><input class="name" id="n2" value="玩家3" maxlength="12"></div>
             <div class="score" id="sc2">0</div>
             <div class="pullInfo" id="pi2"></div>
-            <button class="slashBtn" id="sl2" type="button">斬</button>
+            <button class="slashBtn" id="sl2" type="button">⚔️斬⚔️</button>
           </div>
         </div>
 
@@ -801,7 +801,7 @@ details[open] summary::before{ transform:rotate(90deg); }
             <div class="nameWrap"><input class="name" id="n3" value="玩家4" maxlength="12"></div>
             <div class="score" id="sc3">0</div>
             <div class="pullInfo" id="pi3"></div>
-            <button class="slashBtn" id="sl3" type="button">斬</button>
+            <button class="slashBtn" id="sl3" type="button">⚔️斬⚔️</button>
           </div>
         </div>
         <div></div>
@@ -809,8 +809,8 @@ details[open] summary::before{ transform:rotate(90deg); }
     </div>
 
     <div class="t2BottomRow">
-      <button class="btn secondary" type="button" id="undoBtn">撤銷</button>
-      <button class="btn danger" type="button" id="resetBtn">清零</button>
+      <button class="btn secondary" type="button" id="undoBtn">↩️ 撤銷</button>
+      <button class="btn danger" type="button" id="resetBtn">🔄 清除</button>
     </div>
 
     <div class="card flatCard" style="margin-top:12px;">
@@ -818,7 +818,7 @@ details[open] summary::before{ transform:rotate(90deg); }
       <div id="historyList" class="small">（未有紀錄）</div>
       <div class="row" style="justify-content:center;margin-top:10px;flex-wrap:wrap;">
         <button class="btn" type="button" id="copyHistoryBtn">📤 複製紀錄</button>
-        <button class="btn secondary" type="button" id="clearHistoryBtn">清紀錄</button>
+        <button class="btn secondary" type="button" id="clearHistoryBtn">🚮 清除紀錄</button>
       </div>
     </div>
   </div>
@@ -836,11 +836,11 @@ details[open] summary::before{ transform:rotate(90deg); }
       <div class="modalBody">
         <div class="modalCols">
           <div>
-            <div class="modalColTitle">食胡玩家</div>
+            <div class="modalColTitle">邊個食胡</div>
             <div class="pickList" id="winList"></div>
           </div>
           <div>
-            <div class="modalColTitle">出銃玩家</div>
+            <div class="modalColTitle">邊個出銃</div>
             <div class="pickList" id="loseList"></div>
           </div>
         </div>
@@ -848,14 +848,13 @@ details[open] summary::before{ transform:rotate(90deg); }
       <div class="modalFooter">
         <div class="multiRow">
           <input type="checkbox" id="multiChk">
-          <label for="multiChk">一炮多響（剔咗先可多選食胡玩家）</label>
+          <label for="multiChk">一炮多響</label>
         </div>
         <div class="modalActions">
           <button class="btn secondary" type="button" id="winCancelBtn">取消</button>
           <button class="btn" type="button" id="winOkBtn">確定</button>
         </div>
         <div class="small" style="text-align:center;margin-top:8px;color:var(--sub);" id="winHint">
-          提示：先揀食胡玩家，再揀出銃玩家；揀自摸會 dim 出銃。
         </div>
       </div>
     </div>
@@ -913,7 +912,7 @@ details[open] summary::before{ transform:rotate(90deg); }
           <button class="btn" type="button" id="yinOkBtn">確定</button>
         </div>
         <div class="small" style="text-align:center;margin-top:8px;color:var(--sub);" id="yinHint">
-          提示：左邊揀一個類型，右邊揀一個玩家。
+          左邊揀一個類型，右邊揀一個玩家。
         </div>
       </div>
     </div>
@@ -938,7 +937,7 @@ function fmtTime(ts){
 const catIcon = {
   "莊":"👑","一般":"🀄","叮":"🔔","自摸":"🤲","槓":"💥","平胡":"📏","雞胡":"🐔",
   "暗間":"🌙","般高 + 相逢":"📶","兄弟姊妹（碰牌）":"👥","步步高":"📈",
-  "歸":"🔄","一條龍":"🐉","多門齊":"🚪","么九":"9️⃣","奇牌":"✨"
+  "歸":"🔄","一條龍":"🐉","多門齊":"🚪","么九":"🐦","奇牌":"✨"
 };
 
 /* ✅ 完整番表（含一炮雙響/三響） */
@@ -1655,8 +1654,6 @@ function renderWinModal(){
 
   if(!multi && modalWin.size > 1){
     $("winHint").textContent = "⚠️ 未剔一炮多響：食胡玩家只可揀一個";
-  }else{
-    $("winHint").textContent = "提示：先揀食胡玩家，再揀出銃玩家；揀自摸會 dim 出銃。";
   }
 }
 
