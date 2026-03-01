@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>台牌神器</title>
+  <title>港式台牌計番神器</title>
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
@@ -81,6 +81,12 @@ header{
   font-size:13px;
 }
 .badge.gold{ background:rgba(212,175,55,0.18); color:var(--gold); }
+
+.bigBadge{
+  font-size:20px;
+  padding:12px 18px;
+  box-shadow:0 0 12px rgba(212,175,55,0.25);
+}
 
 .btn{
   border:none;
@@ -593,12 +599,14 @@ details[open] summary::before{ transform:rotate(90deg); }
         <span class="badge">底</span>
         <input class="input num" type="number" id="baseFan" value="5" min="0" inputmode="numeric">
         <span class="small">番</span>
-        <button class="btn secondary" type="button" id="resetBaseBtn">重置底</button>
+        <br><button class="btn secondary" type="button" id="resetBaseBtn">重置底</button>
       </div>
     </div>
 
     <div class="card">
-      <h2>番表（勾選即時計總番）</h2>
+      <h2>番表</h2>
+        <div class="small"> ✔ 勾選即時計總番</div>
+        <div class="small"> </div>
       <div id="fanListMount" class="fanGrid tab1FanBody"></div>
     </div>
 
@@ -615,7 +623,7 @@ details[open] summary::before{ transform:rotate(90deg); }
 
     <div class="t2TopBox">
       <div class="t2RowCenter">
-        <span class="badge gold" id="t2FanBadge">本局番數：0</span>
+        <span class="badge gold bigBadge" id="t2FanBadge">本局番數：0</span>
       </div>
 
       <div class="t2RowCenter" style="margin-top:10px;">
