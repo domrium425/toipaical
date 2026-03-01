@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>港式台牌計番神器</title>
+  <title>港式台牌計番神器 PRO</title>
 
-  <!-- ✅ favicon / iOS 主畫面 icon（已 encode） -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
 
@@ -36,7 +35,6 @@ body{
   padding-bottom:170px;
   -webkit-text-size-adjust:100%;
 }
-
 body.white{
   --bg:#f5f5f5;
   --card:#ffffff;
@@ -52,7 +50,6 @@ body.white{
 
 .container{ padding:0 14px; max-width:980px; margin:0 auto; }
 
-/* Header */
 header{
   padding:14px 14px 8px 14px;
   text-align:center;
@@ -60,7 +57,6 @@ header{
   font-weight:900;
   letter-spacing:0.5px;
 }
-
 .topbar{
   display:flex;
   gap:10px;
@@ -80,7 +76,6 @@ header{
   font-size:13px;
 }
 .badge.gold{ background:rgba(212,175,55,0.18); color:var(--gold); }
-.badge.green{ background:rgba(0,255,136,0.14); color:var(--accent); }
 
 .btn{
   border:none;
@@ -168,12 +163,12 @@ select{
 .tRight{ text-align:right; }
 .strong{ font-weight:900; }
 
-/* Details / Summary */
+/* details */
 details{
   background:var(--muted);
   border-radius:14px;
   padding:10px 10px;
-  margin:10px 0;
+  margin:0; /* grid already handles gaps */
 }
 details > summary{
   cursor:pointer;
@@ -183,7 +178,6 @@ details > summary{
   display:flex;
   align-items:center;
   gap:8px;
-  -webkit-tap-highlight-color: transparent;
 }
 details > summary::-webkit-details-marker{ display:none; }
 summary::before{
@@ -194,41 +188,36 @@ summary::before{
   color:var(--gold);
 }
 details[open] summary::before{ transform:rotate(90deg); }
-details[open]{ animation:fadeIn 0.18s ease; }
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(-4px);}
-  to{opacity:1; transform:translateY(0);}
-}
 .sumGold{ color:var(--gold); font-weight:900; }
 
-/* Fan list */
-.checkgrid{
+/* Tab1 fan text smaller 1pt */
+.fanTextSmall{ font-size:13px; }
+
+/* ✅ Tab1: 大項目一行兩個 */
+.detailsGrid{
   display:grid;
   grid-template-columns:repeat(2, minmax(0,1fr));
   gap:10px;
 }
-@media (max-width:420px){
-  .checkgrid{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
+@media (max-width:520px){
+  .detailsGrid{ gap:8px; }
 }
+
+/* ✅ 內容：每條一行一個 */
 .checkline{
   display:flex;
   align-items:center;
   gap:10px;
   padding:7px 8px;
-  border:1px dashed var(--line);
-  border-radius:12px;
+  border-bottom:1px dashed var(--line);
 }
+.checkline:last-child{ border-bottom:none; }
 .checkline label{ flex:1; cursor:pointer; }
 .checkline .fan{ color:var(--gold); font-weight:900; white-space:nowrap; }
 .checkline.active{
   background:rgba(212,175,55,0.12);
+  border-radius:10px;
   box-shadow:0 0 10px rgba(212,175,55,0.12);
-  border-style:solid;
-}
-
-/* Tab1 fan text: smaller 1pt */
-.fanTextSmall{
-  font-size:13px; /* 原本 14 -> 13 */
 }
 
 /* AI */
@@ -261,14 +250,14 @@ details[open]{ animation:fadeIn 0.18s ease; }
 }
 .fixedTotal .big{ font-size:20px; font-weight:900; color:var(--gold); }
 
-/* ================= TAB2 Mahjong Table (mobile-fit square) ================= */
+/* ================= TAB2 ================= */
 .t2TopControls{
   display:flex;
   flex-wrap:wrap;
   gap:10px;
   align-items:center;
   justify-content:center;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 .t2TopControls .group{
   display:flex;
@@ -277,50 +266,77 @@ details[open]{ animation:fadeIn 0.18s ease; }
   flex-wrap:wrap;
   justify-content:center;
 }
-.t2TopControls select, .t2TopControls input{ max-width:220px; }
 
-.t2ActionsRow{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-top:10px;
+/* 食胡資料：放喺起莊/執位下面一行 */
+.t2InfoLine{
+  margin:8px auto 12px auto;
+  padding:10px 12px;
+  background:var(--muted);
+  border-radius:14px;
+  border:1px solid rgba(128,128,128,0.2);
+  max-width:980px;
+  font-size:13px;
+  color:var(--text);
+  line-height:1.5;
 }
+.t2InfoLine .dim{ color:var(--sub); }
+.t2InfoLine .gold{ color:var(--gold); font-weight:900; }
 
-.tableWrap{
-  width:100%;
-  display:flex;
-  justify-content:center;
-}
-
-/* square board sizing - fit in one screen */
+/* board size force square in mobile */
 :root{
-  --boardSize: min(88vw, 420px);
+  --boardSize: min(92vw, 360px);
 }
-@media (max-width:420px){
-  :root{ --boardSize: min(92vw, 360px); }
+@media (max-height:760px){
+  :root{ --boardSize: min(92vw, 335px); }
 }
-@media (max-height:740px){
-  :root{ --boardSize: min(86vw, 330px); }
+@media (max-height:700px){
+  :root{ --boardSize: min(92vw, 315px); }
 }
 
 .mjBoard{
   width:var(--boardSize);
-  height:var(--boardSize);
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
-  border:2px solid rgba(212,175,55,0.55);
+  aspect-ratio:1 / 1;     /* ✅ perfect square */
+  height:auto;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+  border:2px solid rgba(212,175,55,0.6);
   border-radius:22px;
   position:relative;
   box-shadow:0 0 22px rgba(0,0,0,0.25);
   overflow:hidden;
+  margin:0 auto;
 }
 
+/* inner frame like real table */
+.mjBoard::after{
+  content:"";
+  position:absolute;
+  inset:10px;
+  border-radius:18px;
+  border:1px solid rgba(212,175,55,0.25);
+  pointer-events:none;
+}
+
+.mjCompass{
+  position:absolute;
+  font-weight:900;
+  color:var(--gold);
+  font-size:12px;
+  opacity:0.95;
+  pointer-events:none;
+}
+.mjCompass.n{ top:8px; left:50%; transform:translateX(-50%); }
+.mjCompass.s{ bottom:8px; left:50%; transform:translateX(-50%); }
+.mjCompass.w{ left:8px; top:50%; transform:translateY(-50%); }
+.mjCompass.e{ right:8px; top:50%; transform:translateY(-50%); }
+
+/* center square: only button + inner frame */
 .mjCenter{
   position:absolute;
   left:50%; top:50%;
   transform:translate(-50%,-50%);
-  width:44%;
-  height:44%;
+  width:42%;
+  aspect-ratio:1 / 1;    /* ✅ perfect square */
+  height:auto;
   background:rgba(0,0,0,0.18);
   border:1px solid rgba(212,175,55,0.35);
   border-radius:18px;
@@ -328,131 +344,121 @@ details[open]{ animation:fadeIn 0.18s ease; }
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  padding:8px;
+  padding:10px;
   text-align:center;
+  gap:10px;
 }
 body.white .mjCenter{ background:rgba(0,0,0,0.03); }
-
-.mjCompass{
+.mjCenter::after{
+  content:"";
   position:absolute;
+  inset:8px;
+  border-radius:14px;
+  border:1px solid rgba(212,175,55,0.20);
+  pointer-events:none;
+}
+.mjCenter .centerBtn{
+  width:100%;
+  border:none;
+  border-radius:14px;
+  padding:10px 10px;
   font-weight:900;
+  cursor:pointer;
+  background:rgba(212,175,55,0.22);
+  border:1px solid rgba(212,175,55,0.35);
   color:var(--gold);
-  font-size:14px; /* 中央/玩家list字細1pt感覺 */
-  opacity:0.95;
+  -webkit-tap-highlight-color: transparent;
+  position:relative;
+  z-index:1;
 }
-.mjCompass.n{ top:10px; left:50%; transform:translateX(-50%); }
-.mjCompass.s{ bottom:10px; left:50%; transform:translateX(-50%); }
-.mjCompass.w{ left:10px; top:50%; transform:translateY(-50%); }
-.mjCompass.e{ right:10px; top:50%; transform:translateY(-50%); }
-
-.mjCenter .statusTitle{
-  font-weight:900;
-  color:var(--gold);
-  font-size:14px;
-}
-.mjCenter .statusBody{
-  margin-top:6px;
-  font-size:13px;
-  color:var(--text);
-  line-height:1.4;
-}
-.mjCenter .statusHint{
-  margin-top:6px;
-  font-size:12px;
+.mjCenter .centerSub{
+  font-size:11px;
   color:var(--sub);
-  line-height:1.4;
+  line-height:1.35;
+  position:relative;
+  z-index:1;
 }
 
-/* Player boxes on edges */
+/* seats: square, no overflow, only name+score+slim button */
+:root{ --seatSize: 23%; }
+
 .mjSeat{
   position:absolute;
-  width:40%;
-  height:25%;
+  width:var(--seatSize);
+  aspect-ratio:1 / 1; /* ✅ player box square */
+  height:auto;
   background:var(--muted);
-  border-radius:16px;
+  border-radius:14px;
   border:1px solid rgba(128,128,128,0.28);
-  padding:8px;
+  padding:6px;
   display:flex;
   flex-direction:column;
   gap:6px;
-  justify-content:space-between;
+  overflow:hidden; /* ✅ prevent spill */
 }
-
 .mjSeat.dealer{
-  border:2px solid rgba(212,175,55,0.9);
-  box-shadow:0 0 0 2px rgba(212,175,55,0.15) inset, 0 0 16px rgba(212,175,55,0.18);
+  border:2px solid rgba(212,175,55,0.95);
+  box-shadow:0 0 0 2px rgba(212,175,55,0.14) inset, 0 0 16px rgba(212,175,55,0.18);
 }
 
-.mjSeat.top{ top:10px; left:50%; transform:translateX(-50%); }
-.mjSeat.bottom{ bottom:10px; left:50%; transform:translateX(-50%); }
-.mjSeat.left{ left:10px; top:50%; transform:translateY(-50%); width:25%; height:40%; }
-.mjSeat.right{ right:10px; top:50%; transform:translateY(-50%); width:25%; height:40%; }
+/* positions */
+.mjSeat.n{ top:12px; left:50%; transform:translateX(-50%); }
+.mjSeat.s{ bottom:12px; left:50%; transform:translateX(-50%); }
+.mjSeat.w{ left:12px; top:50%; transform:translateY(-50%); }
+.mjSeat.e{ right:12px; top:50%; transform:translateY(-50%); }
 
-.mjSeat.left, .mjSeat.right{
-  padding:8px 6px;
-}
-
-.mjNameRow{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-}
+/* player name smaller */
 .mjName{
   width:100%;
   text-align:center;
   font-weight:900;
-  font-size:15px; /* 玩家名唔減 */
-  padding:8px 10px;
-}
-.mjMeta{
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  flex-wrap:wrap;
+  font-size:12px;     /* ✅ shrink player name */
+  padding:8px 8px;
+  border-radius:12px;
 }
 
+/* score original big */
 .mjScore{
   text-align:center;
   font-weight:900;
-  font-size:18px;
+  font-size:18px;     /* ✅ keep big */
   line-height:1;
-  padding:6px 0 2px 0;
-  color:var(--text);
-}
-body.white .mjScore{ color:var(--text); }
-
-.mjBtnRow{
+  padding:2px 0;
+  flex:1;
   display:flex;
-  gap:6px;
+  align-items:center;
   justify-content:center;
-  flex-wrap:wrap;
 }
-.mjBtn{
+
+/* slim "斬" button match name font */
+.slimBtn{
+  width:100%;
   border:none;
   border-radius:12px;
-  padding:8px 10px;
+  padding:8px 8px;
   font-weight:900;
   cursor:pointer;
   -webkit-tap-highlight-color: transparent;
-  font-size:13px; /* 字細1pt feel */
+  font-size:12px; /* same as mjName */
+  background:rgba(0,255,136,0.10);
+  border:1px solid rgba(0,255,136,0.18);
+  color:var(--accent);
 }
-.mjBtn.self{ background:rgba(0,255,136,0.14); color:var(--accent); border:1px solid rgba(0,255,136,0.22); }
-.mjBtn.ron{ background:rgba(212,175,55,0.18); color:var(--gold); border:1px solid rgba(212,175,55,0.28); }
-.mjBtn.line{ background:transparent; color:var(--text); border:1px solid rgba(128,128,128,0.35); }
-
-.mjSmallLine{
-  font-size:12px;
-  color:var(--sub);
-  text-align:center;
-  line-height:1.25;
-  min-height:30px; /* 確保按鈕唔爆位 */
+.slimBtn:disabled{
+  opacity:0.35;
+  cursor:not-allowed;
 }
 
-.mjSmallLine .gold{ color:var(--gold); font-weight:900; }
-.mjSmallLine .accent{ color:var(--accent); font-weight:900; }
+/* below-board actions */
+.t2ActionsRow{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:12px;
+}
 
-/* Popup modal */
+/* Modal */
 .modal{
   position:fixed;
   inset:0;
@@ -478,6 +484,14 @@ body.white .mjScore{ color:var(--text); }
   font-size:16px;
   margin-bottom:10px;
 }
+.modalGrid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+@media (max-width:420px){
+  .modalGrid2{ grid-template-columns:1fr; }
+}
 .pickRow{
   display:flex;
   gap:8px;
@@ -500,7 +514,7 @@ body.white .mjScore{ color:var(--text); }
   -webkit-tap-highlight-color: transparent;
 }
 .pickBtn.active{
-  border:2px solid rgba(212,175,55,0.9);
+  border:2px solid rgba(212,175,55,0.95);
   box-shadow:0 0 0 2px rgba(212,175,55,0.18) inset;
 }
 .modalFooter{
@@ -510,8 +524,45 @@ body.white .mjScore{ color:var(--text); }
   margin-top:12px;
   flex-wrap:wrap;
 }
+.modalSmall{
+  font-size:12px;
+  color:var(--sub);
+  line-height:1.4;
+  margin-top:8px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.check{
+  display:flex; gap:8px; align-items:center;
+}
+.check input{ transform:scale(1.1); }
 
-/* History / stats */
+.seatSelectGrid{
+  display:grid;
+  gap:10px;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+}
+@media (max-width:520px){
+  .seatSelectGrid{ grid-template-columns:1fr; }
+}
+.seatRow{
+  background:var(--muted);
+  border:1px solid rgba(128,128,128,0.2);
+  border-radius:14px;
+  padding:10px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+}
+.seatRow .seatTag{
+  font-weight:900;
+  color:var(--gold);
+}
+
+/* History */
 .historyItem{
   padding:10px;
   border-radius:14px;
@@ -520,7 +571,7 @@ body.white .mjScore{ color:var(--text); }
 }
 .historyItem .title{ font-weight:900; }
 .historyItem .meta{ font-size:13px; color:var(--sub); margin-top:4px; }
-
+.hr{ height:1px; background:var(--line); margin:12px 0; }
   </style>
 </head>
 
@@ -537,9 +588,8 @@ body.white .mjScore{ color:var(--text); }
     <button class="tabBtn" id="tabBtn2" type="button">計分區</button>
   </div>
 
-  <!-- ================= TAB 1：計番 ================= -->
+  <!-- ================= TAB 1 ================= -->
   <div id="tab1" class="container">
-
     <div class="card">
       <h2>規則</h2>
       <div class="small">
@@ -572,31 +622,7 @@ body.white .mjScore{ color:var(--text); }
 
     <div class="card">
       <h2>番表（勾選即時計總番）</h2>
-
-      <!-- ✅ 莊：改成同其他分類一樣「兩格一行」 -->
-      <details open>
-        <summary><span class="sumGold">👑 莊</span></summary>
-
-        <div class="checkgrid fanTextSmall">
-          <div class="checkline" id="line_dealer_base">
-            <input type="checkbox" class="fanCheck" data-id="dealer_base" data-fan="1" id="dealer_base" />
-            <label for="dealer_base">莊</label>
-            <span class="fan">1番</span>
-          </div>
-
-          <div class="checkline" style="justify-content:space-between;">
-            <div style="display:flex; flex-direction:column; gap:4px;">
-              <div class="strong" style="font-size:13px; color:var(--text);">連莊次數</div>
-              <div class="small" style="margin:0;">（次數×2+1）</div>
-            </div>
-            <input class="input tiny" type="number" id="dealer_times" value="0" min="0" />
-          </div>
-        </div>
-      </details>
-
-      <!-- ✅ 完整番表 render 落呢度 -->
-      <div id="fanListMount"></div>
-
+      <div class="detailsGrid" id="fanDetailsGrid"></div>
       <div class="small" style="margin-top:8px;">
         ✅ Tab2 會用下面固定「總番數」做本局番
       </div>
@@ -610,13 +636,11 @@ body.white .mjScore{ color:var(--text); }
     </div>
   </div>
 
-  <!-- ================= TAB 2：計分 ================= -->
+  <!-- ================= TAB 2 ================= -->
   <div id="tab2" class="container" style="display:none;">
-
     <div class="card">
-      <h2>🀄 麻雀枱（手機一頁版）</h2>
+      <h2>🀄 麻雀枱</h2>
 
-      <!-- Top controls -->
       <div class="t2TopControls">
         <div class="group">
           <span class="badge">1番 = $</span>
@@ -628,101 +652,38 @@ body.white .mjScore{ color:var(--text); }
         </div>
         <div class="group">
           <button class="btn secondary" type="button" id="btnSetDealer">起莊</button>
-          <button class="btn secondary" type="button" id="btnSwapSeats">調位</button>
+          <button class="btn secondary" type="button" id="btnSeatAssign">執位</button>
         </div>
       </div>
 
-      <!-- Mahjong Board -->
-      <div class="tableWrap">
-        <div class="mjBoard" id="mjBoard">
+      <!-- ✅ 食胡資料放呢行 -->
+      <div class="t2InfoLine" id="t2_info">
+        <span class="dim">✔ 未有結算</span>
+      </div>
 
-          <div class="mjCompass n">北</div>
-          <div class="mjCompass s">南</div>
-          <div class="mjCompass w">西</div>
-          <div class="mjCompass e">東</div>
+      <div class="mjBoard" id="mjBoard">
+        <div class="mjCompass n">北</div>
+        <div class="mjCompass s">南</div>
+        <div class="mjCompass w">西</div>
+        <div class="mjCompass e">東</div>
 
-          <!-- Seats (mapped by seat index 0:E,1:S,2:W,3:N) -->
-          <div class="mjSeat right" id="seat0">
-            <div class="mjNameRow">
-              <input class="input mjName" id="name_seat0" value="玩家1" maxlength="12" />
-            </div>
-            <div class="mjMeta">
-              <span class="badge gold" id="dealerBadge0" style="display:none;">莊</span>
-              <span class="badge" id="streakBadge0" style="display:none;">連莊 0</span>
-            </div>
-            <div class="mjScore" id="score_seat0">0</div>
-            <div class="mjBtnRow">
-              <button class="mjBtn self" type="button" id="btnSelf0">自摸</button>
-              <button class="mjBtn ron" type="button" id="btnRon0">出銃</button>
-            </div>
-            <div class="mjSmallLine" id="pullLine0"></div>
-          </div>
+        <div class="mjSeat n" id="seatN"></div>
+        <div class="mjSeat e" id="seatE"></div>
+        <div class="mjSeat s" id="seatS"></div>
+        <div class="mjSeat w" id="seatW"></div>
 
-          <div class="mjSeat bottom" id="seat1">
-            <div class="mjNameRow">
-              <input class="input mjName" id="name_seat1" value="玩家2" maxlength="12" />
-            </div>
-            <div class="mjMeta">
-              <span class="badge gold" id="dealerBadge1" style="display:none;">莊</span>
-              <span class="badge" id="streakBadge1" style="display:none;">連莊 0</span>
-            </div>
-            <div class="mjScore" id="score_seat1">0</div>
-            <div class="mjBtnRow">
-              <button class="mjBtn self" type="button" id="btnSelf1">自摸</button>
-              <button class="mjBtn ron" type="button" id="btnRon1">出銃</button>
-            </div>
-            <div class="mjSmallLine" id="pullLine1"></div>
-          </div>
-
-          <div class="mjSeat left" id="seat2">
-            <div class="mjNameRow">
-              <input class="input mjName" id="name_seat2" value="玩家3" maxlength="12" />
-            </div>
-            <div class="mjMeta">
-              <span class="badge gold" id="dealerBadge2" style="display:none;">莊</span>
-              <span class="badge" id="streakBadge2" style="display:none;">連莊 0</span>
-            </div>
-            <div class="mjScore" id="score_seat2">0</div>
-            <div class="mjBtnRow">
-              <button class="mjBtn self" type="button" id="btnSelf2">自摸</button>
-              <button class="mjBtn ron" type="button" id="btnRon2">出銃</button>
-            </div>
-            <div class="mjSmallLine" id="pullLine2"></div>
-          </div>
-
-          <div class="mjSeat top" id="seat3">
-            <div class="mjNameRow">
-              <input class="input mjName" id="name_seat3" value="玩家4" maxlength="12" />
-            </div>
-            <div class="mjMeta">
-              <span class="badge gold" id="dealerBadge3" style="display:none;">莊</span>
-              <span class="badge" id="streakBadge3" style="display:none;">連莊 0</span>
-            </div>
-            <div class="mjScore" id="score_seat3">0</div>
-            <div class="mjBtnRow">
-              <button class="mjBtn self" type="button" id="btnSelf3">自摸</button>
-              <button class="mjBtn ron" type="button" id="btnRon3">出銃</button>
-            </div>
-            <div class="mjSmallLine" id="pullLine3"></div>
-          </div>
-
-          <!-- Center: ONLY compass + win info -->
-          <div class="mjCenter" id="mjCenter">
-            <div class="statusTitle" id="t2_statusTitle">食胡資料</div>
-            <div class="statusBody" id="t2_statusBody">✔ 等你撳「自摸 / 出銃」</div>
-            <div class="statusHint" id="t2_statusHint">提示：Tab1「總番數」= 本局番</div>
-          </div>
-
+        <div class="mjCenter" id="mjCenter">
+          <button class="centerBtn" type="button" id="btnOpenSettle">食胡</button>
+          <div class="centerSub">（彈窗揀：左=食胡｜右=出銃｜可多選）</div>
         </div>
       </div>
 
       <div class="t2ActionsRow">
-        <button class="btn danger" type="button" id="btnReset">清零</button>
-        <button class="btn secondary" type="button" id="btnRestore" style="display:none;">恢復（清零前）</button>
-        <button class="btn secondary" type="button" id="btnUndo">撤銷</button>
+        <button class="btn secondary" type="button" id="btnUndo">撤銷/恢復</button>
+        <button class="btn danger" type="button" id="btnClear">清零</button>
       </div>
 
-      <div class="hr"></div>
+      <div class="hr" style="margin-top:14px;"></div>
 
       <div class="card flatCard">
         <h2>📜 每局紀錄</h2>
@@ -737,82 +698,99 @@ body.white .mjScore{ color:var(--text); }
         <h2>🏆 統計</h2>
         <div id="statsBox" class="small">（未有統計）</div>
       </div>
-
     </div>
   </div>
 
-  <!-- ================= 固定總番（兩個 Tab 都見到） ================= -->
+  <!-- ===== 固定總番 ===== -->
   <div class="fixedTotal">
     <div class="big">總番數：<span id="totalFan">0</span></div>
     <button class="btn danger" type="button" id="clearBtn">重新計番</button>
   </div>
 
-  <!-- ================= MODALS ================= -->
-  <!-- Ron multi-select -->
-  <div class="modal" id="modalRon">
+  <!-- ===== Modal: 結算（左右多選 + 自摸剔） ===== -->
+  <div class="modal" id="modalSettle" role="dialog" aria-modal="true">
     <div class="modalSheet">
-      <div class="modalTitle" id="ronTitle">出銃：揀邊啲玩家出銃（可多選）</div>
-      <div class="pickRow" id="ronPickRow"></div>
-      <div class="small" style="margin-top:8px;color:var(--sub);">
-        ✅ 揀咗嘅玩家會用邊框顯示（代表一炮多響）。再撳「確定」即刻計數。
+      <div class="modalTitle">食胡 / 出銃（可多選：一炮多響）</div>
+
+      <div class="modalGrid2">
+        <div>
+          <div class="small" style="margin-bottom:6px;color:var(--sub);">左：食胡玩家</div>
+          <div class="pickRow" id="pickWinners"></div>
+        </div>
+        <div>
+          <div class="small" style="margin-bottom:6px;color:var(--sub);">右：出銃玩家</div>
+          <div class="pickRow" id="pickLosers"></div>
+        </div>
       </div>
+
+      <div class="modalSmall">
+        <div class="check">
+          <input type="checkbox" id="chkSelfDraw">
+          <label for="chkSelfDraw">自摸（剔咗就用自摸方式計數）</label>
+        </div>
+        <div class="dim">提示：自摸時「出銃」會自動唔理。</div>
+      </div>
+
       <div class="modalFooter">
-        <button class="btn secondary" type="button" id="ronCancel">取消</button>
-        <button class="btn" type="button" id="ronConfirm">確定並計數</button>
+        <button class="btn secondary" type="button" id="btnCancelSettle">取消</button>
+        <button class="btn" type="button" id="btnConfirmSettle">確定計數</button>
       </div>
     </div>
   </div>
 
-  <!-- Set dealer -->
-  <div class="modal" id="modalDealer">
+  <!-- ===== Modal: 起莊（揀玩家名） ===== -->
+  <div class="modal" id="modalDealer" role="dialog" aria-modal="true">
     <div class="modalSheet">
       <div class="modalTitle">起莊：揀邊個做莊</div>
-      <div class="pickRow" id="dealerPickRow"></div>
+      <div class="pickRow" id="pickDealer"></div>
       <div class="modalFooter">
-        <button class="btn secondary" type="button" id="dealerCancel">取消</button>
-        <button class="btn" type="button" id="dealerConfirm">確定</button>
+        <button class="btn secondary" type="button" id="btnCancelDealer">取消</button>
+        <button class="btn" type="button" id="btnConfirmDealer">確定</button>
       </div>
     </div>
   </div>
 
-  <!-- Swap seats -->
-  <div class="modal" id="modalSwap">
+  <!-- ===== Modal: 執位（東南西北選單） ===== -->
+  <div class="modal" id="modalSeats" role="dialog" aria-modal="true">
     <div class="modalSheet">
-      <div class="modalTitle">調位：揀兩個玩家交換位置</div>
-      <div class="small" style="margin-bottom:8px;color:var(--sub);">（似真實執位：揀 A 同 B，按確定就交換佢哋座位）</div>
-      <div class="row" style="justify-content:center;">
-        <select id="swapA" class="input"></select>
-        <select id="swapB" class="input"></select>
+      <div class="modalTitle">執位：揀玩家坐東南西北</div>
+      <div class="seatSelectGrid">
+        <div class="seatRow">
+          <div class="seatTag">東</div>
+          <select class="input" id="selEast"></select>
+        </div>
+        <div class="seatRow">
+          <div class="seatTag">南</div>
+          <select class="input" id="selSouth"></select>
+        </div>
+        <div class="seatRow">
+          <div class="seatTag">西</div>
+          <select class="input" id="selWest"></select>
+        </div>
+        <div class="seatRow">
+          <div class="seatTag">北</div>
+          <select class="input" id="selNorth"></select>
+        </div>
+      </div>
+      <div class="small" style="margin-top:10px;color:var(--sub);">
+        ✅ 會自動避免重複；如果你揀到重複，系統會即刻幫你換返可用嘅人。
       </div>
       <div class="modalFooter">
-        <button class="btn secondary" type="button" id="swapCancel">取消</button>
-        <button class="btn" type="button" id="swapConfirm">確定交換</button>
+        <button class="btn secondary" type="button" id="btnCancelSeats">取消</button>
+        <button class="btn" type="button" id="btnConfirmSeats">確定</button>
       </div>
     </div>
   </div>
 
-<script>
-/* ================= Helpers ================= */
+  <script>
+/* ================= helpers ================= */
 const $ = (id) => document.getElementById(id);
 const ceilUp = (n)=>Math.ceil(n);
-const floorDown = (n)=>Math.floor(n);
-
 function safeInt(v, def=0){
   const n = parseInt(v, 10);
   return Number.isFinite(n) ? n : def;
 }
-function safeFloat(v, def=0){
-  const n = parseFloat(v);
-  return Number.isFinite(n) ? n : def;
-}
-
-function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-
-function showModal(id, on=true){
-  const m = $(id);
-  if(!m) return;
-  m.classList.toggle("show", !!on);
-}
+function clampIdx(i){ return (i>=0 && i<4) ? i : 0; }
 
 /* ================= Tab1 data ================= */
 const catIcon = {
@@ -821,8 +799,10 @@ const catIcon = {
   "歸":"🔄","一條龍":"🐉","多門齊":"🚪","么九":"9️⃣","奇牌":"✨"
 };
 
-/* ✅ 完整番表（含 一炮雙響/三響 加入「一般」） */
 const fanData = [
+  { cat:"莊", items:[
+    ["dealer_base","莊",1,false],
+  ]},
   { cat:"一般", items:[
     ["flower","花",1,true],
     ["zflower","正花",2,true],
@@ -830,6 +810,8 @@ const fanData = [
     ["zi","字",2,true],
     ["nozi","無字",2,false],
     ["noziflower","無字花",5,false],
+    ["one2","一炮雙響",5,false],
+    ["one3","一炮三響",10,false],
     ["jeung","將眼",2,false],
     ["pongpong","對碰",2,false],
     ["dukduk","獨獨",2,false],
@@ -842,119 +824,54 @@ const fanData = [
     ["bupyun","不求人",10,false],
     ["banpyun","半求人",20,false],
     ["chunpyun","全求人",40,false],
-    ["oneShot2","一炮雙響",5,false],
-    ["oneShot3","一炮三響",10,false],
   ]},
   { cat:"叮", items:[
-    ["ding","叮",5,false],
-    ["jiksek","即食",5,false],
-    ["tinding","天叮",40,false],
-    ["diding","地叮",20,false],
+    ["ding","叮",5,false],["jiksek","即食",5,false],["tinding","天叮",40,false],["diding","地叮",20,false],
   ]},
   { cat:"自摸", items:[
-    ["zimo","自摸",1,false],
-    ["munchingzimo","門清自摸",8,false],
-    ["flowermo","花摸",1,false],
-    ["gongmo","槓摸",5,false],
-    ["gonggongmo","槓上槓摸",30,false],
+    ["zimo","自摸",1,false],["munchingzimo","門清自摸",8,false],["flowermo","花摸",1,false],
+    ["gongmo","槓摸",5,false],["gonggongmo","槓上槓摸",30,false],
   ]},
   { cat:"槓", items:[
-    ["gong","槓",1,false],
-    ["amgong","暗槓",2,false],
-    ["twogong","兩槓",10,false],
-    ["threegong","三槓",30,false],
-    ["fourgong","四槓",100,false],
-    ["fivegong","五槓",240,false],
-    ["cheungong","搶槓",5,false],
-    ["cheungonggong","搶槓上槓",30,false],
+    ["gong","槓",1,false],["amgong","暗槓",2,false],["twogong","兩槓",10,false],["threegong","三槓",30,false],
+    ["fourgong","四槓",100,false],["fivegong","五槓",240,false],["cheungong","搶槓",5,false],["cheungonggong","搶槓上槓",30,false],
   ]},
-  { cat:"平胡", items:[
-    ["pingwu","平胡",10,false],
-    ["nozifl_big","無字花大平胡",20,false],
-  ]},
-  { cat:"雞胡", items:[
-    ["smallkai","細雞",10,false],
-    ["bigkai","大雞",20,false],
-  ]},
+  { cat:"平胡", items:[ ["pingwu","平胡",10,false], ["nozifl_big","無字花大平胡",20,false] ]},
+  { cat:"雞胡", items:[ ["smallkai","細雞",10,false], ["bigkai","大雞",20,false] ]},
   { cat:"暗間", items:[
-    ["twoam","兩暗",5,false],
-    ["threeam","三暗",15,false],
-    ["fouram","四暗",30,false],
-    ["fiveam","五暗",60,false],
-    ["ganwu","間間胡",100,false],
+    ["twoam","兩暗",5,false],["threeam","三暗",15,false],["fouram","四暗",30,false],["fiveam","五暗",60,false],["ganwu","間間胡",100,false],
   ]},
   { cat:"般高 + 相逢", items:[
-    ["bangao","般高",5,false],
-    ["threebangao","三般高",15,false],
-    ["fourbangao","四般高",30,false],
-    ["seungfung","相逢",3,false],
-    ["threeseungfung","三相逢",10,false],
-    ["fourseungfung","四相逢",30,false],
-    ["fiveseungfung","五相逢",60,false],
-    ["halfji","半姊妹",20,false],
-    ["fullji","全姊妹",40,false],
+    ["bangao","般高",5,false],["threebangao","三般高",15,false],["fourbangao","四般高",30,false],
+    ["seungfung","相逢",3,false],["threeseungfung","三相逢",10,false],["fourseungfung","四相逢",30,false],["fiveseungfung","五相逢",60,false],
+    ["halfji","半姊妹",20,false],["fullji","全姊妹",40,false],
   ]},
   { cat:"兄弟姊妹（碰牌）", items:[
-    ["hingdai","兄弟",5,false],
-    ["small3hing","小三兄弟",15,false],
-    ["big3hing","大三兄弟",30,false],
-    ["jimai","姊妹",3,false],
-    ["small3ji","小三姊妹",10,false],
-    ["big3ji","大三姊妹",15,false],
+    ["hingdai","兄弟",5,false],["small3hing","小三兄弟",15,false],["big3hing","大三兄弟",30,false],
+    ["jimai","姊妹",3,false],["small3ji","小三姊妹",10,false],["big3ji","大三姊妹",15,false],
   ]},
   { cat:"步步高", items:[
-    ["ming3color","明三色步步高",5,false],
-    ["am3color","暗三色步步高",10,false],
-    ["ming1color","明單色步步高",15,false],
-    ["am1color","暗單色步步高",20,false],
+    ["ming3color","明三色步步高",5,false],["am3color","暗三色步步高",10,false],
+    ["ming1color","明單色步步高",15,false],["am1color","暗單色步步高",20,false],
   ]},
   { cat:"歸", items:[
-    ["ming4_1","明四歸一",5,false],
-    ["ming4_2","明四歸二",15,false],
-    ["ming4_4","明四歸四",60,false],
-    ["am4_1","暗四歸一",10,false],
-    ["am4_2","暗四歸二",30,false],
-    ["am4_4","暗四歸四",100,false],
+    ["ming4_1","明四歸一",5,false],["ming4_2","明四歸二",15,false],["ming4_4","明四歸四",60,false],
+    ["am4_1","暗四歸一",10,false],["am4_2","暗四歸二",30,false],["am4_4","暗四歸四",100,false],
   ]},
   { cat:"一條龍", items:[
-    ["ming杂龙","明雜龍",8,false],
-    ["am杂龙","暗雜龍",15,false],
-    ["ming清龙","明清龍",15,false],
-    ["am清龙","暗清龍",20,false],
+    ["ming杂龙","明雜龍",8,false],["am杂龙","暗雜龍",15,false],["ming清龙","明清龍",15,false],["am清龙","暗清龍",20,false],
   ]},
-  { cat:"多門齊", items:[
-    ["small5","小五門齊",10,false],
-    ["big5","大五門齊",15,false],
-    ["small7","小七門齊",15,false],
-    ["big7","大七門齊",20,false],
-  ]},
-  { cat:"么九", items:[
-    ["hunband1","混帶么",15,false],
-    ["chunband1","全帶么",30,false],
-    ["hun19","混么九",40,false],
-    ["chun19","清么九",120,false],
-  ]},
+  { cat:"多門齊", items:[ ["small5","小五門齊",10,false],["big5","大五門齊",15,false],["small7","小七門齊",15,false],["big7","大七門齊",20,false] ]},
+  { cat:"么九", items:[ ["hunband1","混帶么",15,false],["chunband1","全帶么",30,false],["hun19","混么九",40,false],["chun19","清么九",120,false] ]},
   { cat:"奇牌", items:[
-    ["hun1color","混一色",40,false],
-    ["chun1color","清一色",100,false],
-    ["duidui","對對胡",40,false],
-    ["small3yuen","小三元",40,false],
-    ["big3yuen","大三元",80,false],
-    ["small3fung","小三風",40,false],
-    ["big3fung","大三風",80,false],
-    ["small4hei","小四喜",60,false],
-    ["big4hei","大四喜",120,false],
-    ["zi1color","字一色",150,false],
-    ["sixteen","十六不搭",60,false],
-    ["thirteen1","十三么",150,false],
-    ["liku","嚦咕嚦咕",40,false],
-    ["bigliku","大嚦咕嚦咕",60,false],
-    ["tinwu","天胡",100,false],
-    ["diwu","地胡",100,false],
-    ["yanwu","人胡",80,false],
-    ["7cheung1","七搶一",30,false],
-    ["1cheung7","一搶七",30,false],
-    ["8sin","八仙過海",40,false],
+    ["hun1color","混一色",40,false],["chun1color","清一色",100,false],["duidui","對對胡",40,false],
+    ["small3yuen","小三元",40,false],["big3yuen","大三元",80,false],
+    ["small3fung","小三風",40,false],["big3fung","大三風",80,false],
+    ["small4hei","小四喜",60,false],["big4hei","大四喜",120,false],
+    ["zi1color","字一色",150,false],["sixteen","十六不搭",60,false],["thirteen1","十三么",150,false],
+    ["liku","嚦咕嚦咕",40,false],["bigliku","大嚦咕嚉嚉",60,false],
+    ["tinwu","天胡",100,false],["diwu","地胡",100,false],["yanwu","人胡",80,false],
+    ["7cheung1","七搶一",30,false],["1cheung7","一搶七",30,false],["8sin","八仙過海",40,false],
   ]},
 ];
 
@@ -968,12 +885,9 @@ function loadTheme(){
   const t = localStorage.getItem("theme");
   setTheme(t === "white");
 }
-
 function setTab(which){
   const t1 = $("tab1"), t2 = $("tab2");
   const b1 = $("tabBtn1"), b2 = $("tabBtn2");
-  if(!t1 || !t2 || !b1 || !b2) return;
-
   if(which === 1){
     t1.style.display = "";
     t2.style.display = "none";
@@ -984,32 +898,33 @@ function setTab(which){
     t2.style.display = "";
     b2.classList.add("active");
     b1.classList.remove("active");
-
     syncBaseFanToTab2();
-    t2RenderAll();
+    renderBoard();
+    renderHistory();
+    renderStats();
+    updateInfoLine();
+    updatePiButtonsEnabled();
   }
 }
 
-/* ================= Tab1 render (two-per-row) ================= */
+/* ================= Tab1 render ================= */
 function renderFanList(){
-  const mount = $("fanListMount");
-  if(!mount) return;
-  mount.innerHTML = "";
+  const grid = $("fanDetailsGrid");
+  if(!grid) return;
+  grid.innerHTML = "";
 
   fanData.forEach((group, gi)=>{
     const d = document.createElement("details");
-    if(gi === 0) d.open = true;
+    d.open = (gi === 0); // 預設開第一個
     const s = document.createElement("summary");
     const icon = catIcon[group.cat] || "📂";
     s.innerHTML = `<span class="sumGold">${icon} ${group.cat}</span>`;
     d.appendChild(s);
 
-    const grid = document.createElement("div");
-    grid.className = "checkgrid fanTextSmall";
-
+    // group items: 內容每行一個
     group.items.forEach(([id, name, fan, hasCount])=>{
       const line = document.createElement("div");
-      line.className = "checkline";
+      line.className = "checkline fanTextSmall";
       line.id = "line_" + id;
 
       const cb = document.createElement("input");
@@ -1056,26 +971,33 @@ function renderFanList(){
         line.appendChild(span);
       }
 
-      grid.appendChild(line);
+      d.appendChild(line);
     });
 
-    d.appendChild(grid);
-    mount.appendChild(d);
+    // 莊分類加連莊輸入（仍然一行一個）
+    if(group.cat === "莊"){
+      const wrap = document.createElement("div");
+      wrap.style.marginTop = "10px";
+      wrap.innerHTML = `
+        <div class="row">
+          <span class="badge">連莊次數</span>
+          <input class="input num" type="number" id="dealer_times" value="0" min="0" />
+          <span class="small">（連莊番數 = 次數×2+1）</span>
+        </div>
+      `;
+      d.appendChild(wrap);
+    }
+
+    grid.appendChild(d);
   });
 }
 
-/* ================= Tab1 total fan ================= */
 function getBaseFan(){
   const el = $("baseFan");
-  if(!el) return 0;
-  const base = safeInt(el.value, 0);
+  const base = safeInt(el?.value ?? "0", 0);
   return base < 0 ? 0 : base;
 }
-function syncBaseFanToTab2(){
-  if($("t2_baseFan") && $("totalFan")){
-    $("t2_baseFan").innerText = $("totalFan").innerText;
-  }
-}
+
 function updateTotalFan(){
   let total = 0;
 
@@ -1083,10 +1005,9 @@ function updateTotalFan(){
     const fan = safeInt(cb.dataset.fan, 0);
     const id = cb.dataset.id;
     let count = 1;
-
-    const cntInput = document.querySelector(`.fanCount[data-target="${id}"]`);
-    if(cntInput){
-      count = safeInt(cntInput.value, 0);
+    const cnt = document.querySelector(`.fanCount[data-target="${id}"]`);
+    if(cnt){
+      count = safeInt(cnt.value, 0);
       if(count < 0) count = 0;
     }
     total += fan * count;
@@ -1100,22 +1021,17 @@ function updateTotalFan(){
   if($("totalFan")) $("totalFan").innerText = String(total);
   syncBaseFanToTab2();
   aiSuggest();
+
   localStorage.setItem("baseFan", String(getBaseFan()));
 }
 
-function clearTab1All(){
-  document.querySelectorAll(".fanCheck").forEach(cb=>{
-    cb.checked = false;
-    const line = cb.closest(".checkline");
-    if(line) line.classList.remove("active");
-  });
-  if($("dealer_times")) $("dealer_times").value = "0";
-  document.querySelectorAll(".fanCount").forEach(inp=>inp.value="1");
-  updateTotalFan();
-  saveTab1State();
+function syncBaseFanToTab2(){
+  if($("t2_baseFan") && $("totalFan")){
+    $("t2_baseFan").innerText = $("totalFan").innerText;
+  }
 }
 
-/* ================= Tab1 AI ================= */
+/* Tab1 AI */
 function checkedSet(){
   const s = new Set();
   document.querySelectorAll(".fanCheck:checked").forEach(cb=>s.add(cb.dataset.id));
@@ -1140,16 +1056,10 @@ function aiSuggest(){
   if(ids.has("chunpyun") && ids.has("banpyun")) msgs.push(`<span class="warn">⚠️「全求人」通常涵蓋「半求人」，建議只留全求人</span>`);
 
   const am = ["twoam","threeam","fouram","fiveam"].filter(x=>ids.has(x));
-  if(am.length >= 2) msgs.push(`<span class="tip">👉 暗間有多個級別，建議只計最高嗰個（兩/三/四/五暗）</span>`);
+  if(am.length >= 2) msgs.push(`<span class="tip">👉 暗間有多個級別，建議只計最高嗰個</span>`);
 
   const gongTier = ["twogong","threegong","fourgong","fivegong"].filter(x=>ids.has(x));
-  if(gongTier.length >= 2) msgs.push(`<span class="tip">👉 槓數有多個級別，建議只計最高嗰個（兩/三/四/五槓）</span>`);
-
-  const bg = ["bangao","threebangao","fourbangao"].filter(x=>ids.has(x));
-  if(bg.length >= 2) msgs.push(`<span class="tip">👉 般高有多個級別，建議只計最高嗰個（般高/三/四般高）</span>`);
-
-  const xf = ["seungfung","threeseungfung","fourseungfung","fiveseungfung"].filter(x=>ids.has(x));
-  if(xf.length >= 2) msgs.push(`<span class="tip">👉 相逢有多個級別，建議只計最高嗰個（相逢/三/四/五相逢）</span>`);
+  if(gongTier.length >= 2) msgs.push(`<span class="tip">👉 槓數有多個級別，建議只計最高嗰個</span>`);
 
   if(ids.has("munching") && ids.has("zimo") && !ids.has("munchingzimo"))
     msgs.push(`<span class="tip">👉 你勾咗「門清」+「自摸」，可以考慮用「門清自摸 8番」</span>`);
@@ -1165,23 +1075,19 @@ function aiSuggest(){
   box.innerHTML = msgs.length ? msgs.join("<br>") : `<div class="ok">✔ 暫時無衝突／建議</div>`;
 }
 
-/* ================= localStorage Tab1 ================= */
+/* Tab1 localStorage */
 function saveTab1State(){
   const checks = {};
   document.querySelectorAll(".fanCheck").forEach(cb=>{
     checks[cb.dataset.id] = cb.checked ? 1 : 0;
   });
-
   const counts = {};
   document.querySelectorAll(".fanCount").forEach(inp=>{
     counts[inp.dataset.target] = inp.value;
   });
-
   const state = {
-    checks,
-    counts,
-    dealer_base: $("dealer_base")?.checked ? 1 : 0,
-    dealer_times: $("dealer_times")?.value ?? "0",
+    checks, counts,
+    dealer_times: $("dealer_times")?.value ?? "0"
   };
   localStorage.setItem("tab1_state", JSON.stringify(state));
 }
@@ -1190,7 +1096,6 @@ function loadTab1State(){
   if(!raw) return;
   try{
     const s = JSON.parse(raw);
-
     if(s?.checks){
       document.querySelectorAll(".fanCheck").forEach(cb=>{
         cb.checked = !!s.checks[cb.dataset.id];
@@ -1198,513 +1103,570 @@ function loadTab1State(){
         if(line) line.classList.toggle("active", cb.checked);
       });
     }
-
     if(s?.counts){
       document.querySelectorAll(".fanCount").forEach(inp=>{
         const v = s.counts[inp.dataset.target];
         if(v !== undefined) inp.value = String(v);
       });
     }
-
-    if(s?.dealer_base !== undefined && $("dealer_base")){
-      $("dealer_base").checked = !!s.dealer_base;
-      $("line_dealer_base")?.classList.toggle("active", $("dealer_base").checked);
-    }
     if(s?.dealer_times !== undefined && $("dealer_times")) $("dealer_times").value = String(s.dealer_times);
   }catch(e){}
 }
+function clearTab1All(){
+  document.querySelectorAll(".fanCheck").forEach(cb=>{
+    cb.checked = false;
+    const line = cb.closest(".checkline");
+    if(line) line.classList.remove("active");
+  });
+  document.querySelectorAll(".fanCount").forEach(inp=>inp.value="1");
+  if($("dealer_times")) $("dealer_times").value = "0";
+  updateTotalFan();
+  saveTab1State();
+}
 
-/* ================= TAB2 Model =================
-Seat index: 0=東(右), 1=南(下), 2=西(左), 3=北(上)
-We store players by seat (simple), but provide "swap seats" and "set dealer".
+/* ================= Tab2 state + rules =================
+   - 玩家4個（可改名，分數不可手打）
+   - 麻雀枱：四邊玩家盒 + 中間食胡掣
+   - 起莊：彈窗揀
+   - 執位：東南西北選單揀玩家坐邊
+   - 食胡：彈窗 左食胡(可多選) / 右出銃(可多選) + 自摸剔
+   - 拉/斬：同一個贏家連續先拉（pullCount++），到 3 的倍數先可以按「斬」；按斬會 reset 拉狀態
+   - 撤銷/恢復：清零之後都可以 undo 返清零前
 */
-let t2 = {
-  dealerSeat: 0,
-  dealerStreak: 0,
-  chain_lastWinnerSeat: null,
-  chain_lastSettleFan: 0,
-  chain_pullCount: 0,
-  scores: [0,0,0,0],
-  history: [],
-  undoStack: [],
-  lastResetSnapshot: null, // for restore after reset
-  ronPick: { winSeat:null, selected: new Set() },
-};
+const players = [
+  { name:"玩家1", score:0 },
+  { name:"玩家2", score:0 },
+  { name:"玩家3", score:0 },
+  { name:"玩家4", score:0 },
+];
 
-/* 港式台牌連拉/斬拉提示：每逢 3 針問你斬唔斬（彈窗 confirm） */
-function maybeAskSlash(){
-  if(t2.chain_pullCount > 0 && t2.chain_pullCount % 3 === 0){
-    const ok = confirm(`⚔️ 已經拉咗 ${t2.chain_pullCount} 針。\n你斬唔斬？\n「確定」= 斬（重開）\n「取消」= 唔斬（繼續）`);
-    if(ok){
-      t2.chain_lastWinnerSeat = null;
-      t2.chain_lastSettleFan = 0;
-      t2.chain_pullCount = 0;
-      setCenterStatus("⚔️ 已斬拉：下一舖當第一舖", "（已重置連拉狀態）", "");
-      saveTab2State();
-      renderPullLines();
-      return true;
-    }
-  }
-  return false;
+// seat mapping: each direction holds player index 0..3
+let seat = { E:0, S:1, W:2, N:3 };
+
+// dealer + streak
+let dealerIdx = 0;
+let dealerStreak = 0;
+
+// pull/chain
+let chain_lastWinner = null;
+let chain_lastSettleFan = 0;
+let chain_pullCount = 0;
+
+// history & undo
+let gameHistory = [];
+let undoStack = [];
+
+// modal selections
+let pickWinners = new Set();
+let pickLosers = new Set();
+let pickDealerIdx = null;
+
+// ===== Tab2 helpers =====
+function pName(i){ return players[clampIdx(i)].name || ("玩家"+(i+1)); }
+function rateVal(){ return Math.max(safeInt($("t2_rate")?.value ?? "1", 1), 0); }
+function baseFanVal(){ return safeInt($("totalFan")?.innerText ?? "0", 0); }
+
+// ===== Board render =====
+function seatDirToDom(dir){
+  if(dir==="N") return $("seatN");
+  if(dir==="E") return $("seatE");
+  if(dir==="S") return $("seatS");
+  return $("seatW");
 }
 
-function getSeatName(seat){
-  return $("name_seat"+seat)?.value || `玩家${seat+1}`;
+function renderSeatBox(dir, playerIdx){
+  const box = seatDirToDom(dir);
+  if(!box) return;
+
+  box.classList.toggle("dealer", playerIdx === dealerIdx);
+
+  const nameId = `pname_${dir}`;
+  const scoreId = `pscore_${dir}`;
+  const slashId = `pslash_${dir}`;
+
+  box.innerHTML = `
+    <input id="${nameId}" class="input mjName" value="${escapeHtml(pName(playerIdx))}" maxlength="12" />
+    <div id="${scoreId}" class="mjScore">${players[playerIdx].score}</div>
+    <button id="${slashId}" class="slimBtn" type="button">斬</button>
+  `;
+
+  // name change (allow multi chars; fix "打一個字就唔得" by NOT blocking input)
+  const nameEl = $(nameId);
+  nameEl?.addEventListener("input", ()=>{
+    players[playerIdx].name = nameEl.value;     // keep as typed
+    saveTab2State();
+    // update modals lists / info line / history rendering
+    rebuildPickRows();
+    rebuildDealerPick();
+    rebuildSeatSelects();
+    updateInfoLine();
+    renderHistory();
+    renderStats();
+  });
+
+  // slash button
+  const slashBtn = $(slashId);
+  slashBtn?.addEventListener("click", ()=>{
+    // only allow when enabled
+    if(slashBtn.disabled) return;
+    doSlash();
+  });
 }
 
-function setCenterStatus(title, body, hint){
-  if($("t2_statusTitle")) $("t2_statusTitle").innerText = title || "食胡資料";
-  if($("t2_statusBody")) $("t2_statusBody").innerHTML = body || "✔ 等你撳「自摸 / 出銃」";
-  if($("t2_statusHint")) $("t2_statusHint").innerText = hint || "";
+function renderBoard(){
+  renderSeatBox("N", seat.N);
+  renderSeatBox("E", seat.E);
+  renderSeatBox("S", seat.S);
+  renderSeatBox("W", seat.W);
+  updatePiButtonsEnabled();
 }
 
-function applyScore(seat, delta){
-  t2.scores[seat] = safeInt(t2.scores[seat],0) + delta;
-  renderScores();
+// enable "斬" when chain_pullCount is multiple of 3 and >0
+function updatePiButtonsEnabled(){
+  const canSlash = (chain_pullCount > 0 && chain_pullCount % 3 === 0);
+  ["N","E","S","W"].forEach(dir=>{
+    const btn = $(`pslash_${dir}`);
+    if(btn) btn.disabled = !canSlash;
+  });
 }
 
-function renderScores(){
-  for(let i=0;i<4;i++){
-    const el = $("score_seat"+i);
-    if(el) el.innerText = String(safeInt(t2.scores[i],0));
-  }
+// ===== info line =====
+function updateInfoLine(extraHtml=""){
+  const el = $("t2_info");
+  if(!el) return;
+
+  const dealerName = pName(dealerIdx);
+  const streakTxt = dealerStreak > 0 ? `（連莊 <span class="gold">${dealerStreak}</span>）` : `（連莊 <span class="gold">0</span>）`;
+  const pullTxt = (chain_lastWinner === null)
+    ? `拉：<span class="gold">0</span>`
+    : `拉：<span class="gold">${chain_pullCount}</span>（上次贏家：${pName(chain_lastWinner)}｜上次找數番：${chain_lastSettleFan}）`;
+
+  const base = baseFanVal();
+  const rate = rateVal();
+  const head = `
+    <span>莊：<span class="gold">${dealerName}</span>${streakTxt}</span>
+    <span class="dim">｜</span>
+    <span>本局番：<span class="gold">${base}</span></span>
+    <span class="dim">｜</span>
+    <span>1番=$<span class="gold">${rate}</span></span>
+    <span class="dim">｜</span>
+    <span>${pullTxt}</span>
+  `;
+
+  el.innerHTML = extraHtml ? `${head}<br>${extraHtml}` : head;
 }
 
-function syncBaseFanToTab2(){
-  if($("t2_baseFan") && $("totalFan")){
-    $("t2_baseFan").innerText = $("totalFan").innerText;
-  }
+/* ===== settlement core ===== */
+function applyMoneyChange(idx, delta){
+  players[idx].score += delta;
 }
 
-function getRoundBaseFan(){
-  return safeInt($("totalFan")?.innerText ?? "0", 0);
-}
-
-function getRate(){
-  return Math.max(safeInt($("t2_rate")?.value ?? "1", 1), 0);
-}
-
-/* Dealer rules:
-- If dealer wins: streak++
-- If not dealer wins: dealer passes to next seat (走莊) and streak=0
-*/
-function applyDealerProgress(winSeat){
-  if(winSeat === t2.dealerSeat){
-    t2.dealerStreak += 1;
-  }else{
-    t2.dealerSeat = (t2.dealerSeat + 1) % 4;
-    t2.dealerStreak = 0;
-  }
-}
-
-function renderDealerUI(){
-  for(let i=0;i<4;i++){
-    $("seat"+i)?.classList.toggle("dealer", i === t2.dealerSeat);
-
-    const db = $("dealerBadge"+i);
-    if(db) db.style.display = (i===t2.dealerSeat) ? "" : "none";
-
-    const sb = $("streakBadge"+i);
-    if(sb){
-      if(i===t2.dealerSeat){
-        sb.style.display = "";
-        sb.innerText = `連莊 ${t2.dealerStreak}`;
-      }else{
-        sb.style.display = "none";
-      }
-    }
-  }
-}
-
-function renderPullLines(){
-  // 「拉緊」只顯示狀態，不計入總分
-  for(let i=0;i<4;i++){
-    const line = $("pullLine"+i);
-    if(!line) continue;
-
-    // show if someone is being pulled by same winner chain
-    if(t2.chain_lastWinnerSeat === null){
-      line.innerHTML = "";
-      continue;
-    }
-
-    if(i === t2.chain_lastWinnerSeat){
-      // winner shows chain info
-      const p = t2.chain_pullCount;
-      const last = t2.chain_lastSettleFan;
-      line.innerHTML = `<span class="accent">拉緊</span>：${p} 針｜上舖找數 <span class="gold">${last}</span> 番`;
-    }else{
-      // losers show they are being pulled (informational)
-      if(t2.chain_pullCount > 0){
-        line.innerHTML = `被拉：<span class="gold">${t2.chain_pullCount}</span> 針`;
-      }else{
-        line.innerHTML = "";
-      }
-    }
-  }
-}
-
-function pushUndoSnapshot(){
-  const snap = {
-    dealerSeat: t2.dealerSeat,
-    dealerStreak: t2.dealerStreak,
-    chain_lastWinnerSeat: t2.chain_lastWinnerSeat,
-    chain_lastSettleFan: t2.chain_lastSettleFan,
-    chain_pullCount: t2.chain_pullCount,
-    scores: JSON.parse(JSON.stringify(t2.scores)),
-    names: [0,1,2,3].map(i=>$("name_seat"+i)?.value || ""),
-    history: JSON.parse(JSON.stringify(t2.history)),
-    rate: $("t2_rate")?.value ?? "1"
-  };
-  t2.undoStack.push(snap);
-}
-
-function undoLast(){
-  if(t2.undoStack.length === 0){
-    alert("無得撤銷");
-    return;
-  }
-  const snap = t2.undoStack.pop();
-  t2.dealerSeat = snap.dealerSeat;
-  t2.dealerStreak = snap.dealerStreak;
-  t2.chain_lastWinnerSeat = snap.chain_lastWinnerSeat;
-  t2.chain_lastSettleFan = snap.chain_lastSettleFan;
-  t2.chain_pullCount = snap.chain_pullCount;
-  t2.scores = snap.scores || [0,0,0,0];
-  t2.history = snap.history || [];
-  if($("t2_rate")) $("t2_rate").value = snap.rate || "1";
-  if(snap.names){
-    snap.names.forEach((v,i)=>{
-      const el = $("name_seat"+i);
-      if(el && typeof v==="string") el.value = v || `玩家${i+1}`;
-    });
-  }
-  t2.lastResetSnapshot = null;
-  if($("btnRestore")) $("btnRestore").style.display = "none";
-
-  renderAllTab2();
-  saveTab2State();
-}
-
-function resetTab2All(){
-  // Save snapshot for restore
-  t2.lastResetSnapshot = {
-    dealerSeat: t2.dealerSeat,
-    dealerStreak: t2.dealerStreak,
-    chain_lastWinnerSeat: t2.chain_lastWinnerSeat,
-    chain_lastSettleFan: t2.chain_lastSettleFan,
-    chain_pullCount: t2.chain_pullCount,
-    scores: JSON.parse(JSON.stringify(t2.scores)),
-    names: [0,1,2,3].map(i=>$("name_seat"+i)?.value || ""),
-    history: JSON.parse(JSON.stringify(t2.history)),
-    rate: $("t2_rate")?.value ?? "1",
-    undoStack: JSON.parse(JSON.stringify(t2.undoStack))
-  };
-  if($("btnRestore")) $("btnRestore").style.display = "";
-
-  // Reset
-  t2.dealerSeat = 0;
-  t2.dealerStreak = 0;
-  t2.chain_lastWinnerSeat = null;
-  t2.chain_lastSettleFan = 0;
-  t2.chain_pullCount = 0;
-  t2.scores = [0,0,0,0];
-  t2.history = [];
-  t2.undoStack = [];
-
-  setCenterStatus("已清零", "✔ 分數/紀錄/連拉 已清", "可用「恢復」返清零前狀態");
-  renderAllTab2();
-  saveTab2State();
-}
-
-function restoreAfterReset(){
-  if(!t2.lastResetSnapshot){
-    alert("無可恢復資料");
-    return;
-  }
-  const s = t2.lastResetSnapshot;
-  t2.dealerSeat = s.dealerSeat;
-  t2.dealerStreak = s.dealerStreak;
-  t2.chain_lastWinnerSeat = s.chain_lastWinnerSeat;
-  t2.chain_lastSettleFan = s.chain_lastSettleFan;
-  t2.chain_pullCount = s.chain_pullCount;
-  t2.scores = s.scores || [0,0,0,0];
-  t2.history = s.history || [];
-  t2.undoStack = s.undoStack || [];
-  if($("t2_rate")) $("t2_rate").value = s.rate || "1";
-  if(s.names){
-    s.names.forEach((v,i)=>{
-      const el = $("name_seat"+i);
-      if(el) el.value = v || `玩家${i+1}`;
-    });
-  }
-  t2.lastResetSnapshot = null;
-  if($("btnRestore")) $("btnRestore").style.display = "none";
-
-  setCenterStatus("已恢復", "✅ 已恢復清零前資料", "");
-  renderAllTab2();
-  saveTab2State();
-}
-
-/* ===== core settle with params =====
-type: "self" or "ron"
-ronLosers: array seats (can be 1..3 seats)
-*/
-function settle(winSeat, type, ronLosers=[]){
-  const baseFan = getRoundBaseFan();
-  if(baseFan <= 0){
-    alert("Tab1 總番數係 0，先去 Tab1 勾番再返嚟");
-    return;
-  }
-
-  // Validate
-  if(type === "ron"){
-    ronLosers = Array.from(new Set(ronLosers)).filter(x=>Number.isFinite(x) && x>=0 && x<=3 && x!==winSeat);
-    if(ronLosers.length === 0){
-      alert("出銃：你未揀任何出銃者");
-      return;
-    }
-  }
-
-  pushUndoSnapshot();
-
-  // chain / pull logic (同一贏家先拉)
+function computePulledFan(winIdx, baseFan){
+  // chain only for single winner
   let pulledFan = baseFan;
   let isChained = false;
 
-  if(t2.chain_lastWinnerSeat === winSeat){
-    t2.chain_pullCount += 1;
+  if(chain_lastWinner === winIdx){
+    chain_pullCount += 1;
     isChained = true;
-    pulledFan = ceilUp(t2.chain_lastSettleFan * 1.5 + baseFan);
+    pulledFan = ceilUp(chain_lastSettleFan * 1.5 + baseFan);
   }else{
-    t2.chain_pullCount = 0;
+    chain_pullCount = 0;
     isChained = false;
     pulledFan = baseFan;
   }
 
-  // 港式台牌：拉上劈下（劈下 = 向下取整 /2）
-  // 此版本：劈功能已移除（你要求中央唔要其他功能）；所以固定唔劈。
-  let settleFan = pulledFan;
+  return { pulledFan, isChained };
+}
 
-  // amount
-  const rate = getRate();
-  const amount = settleFan * rate;
-
-  // apply scores
-  if(type === "self"){
-    // 自摸：三家各賠 amount，贏家收 3 份
-    for(let i=0;i<4;i++){
-      if(i !== winSeat){
-        applyScore(i, -amount);
-        applyScore(winSeat, amount);
-      }
-    }
-  }else{
-    // 出銃：每個出銃者各賠 amount
-    ronLosers.forEach(ls=>{
-      applyScore(ls, -amount);
-      applyScore(winSeat, amount);
-    });
+function settleNow(winnersArr, losersArr, isSelfDraw){
+  const baseFan = baseFanVal();
+  if(baseFan <= 0){
+    updateInfoLine(`<span class="dim">⚠️ Tab1 總番數係 0，先去 Tab1 勾番再返嚟</span>`);
+    return;
   }
 
-  // update chain
-  t2.chain_lastWinnerSeat = winSeat;
-  t2.chain_lastSettleFan = settleFan;
+  // validations
+  const winners = [...new Set(winnersArr)].filter(i=>i>=0 && i<4);
+  const losers  = [...new Set(losersArr)].filter(i=>i>=0 && i<4);
 
-  // dealer progress
-  applyDealerProgress(winSeat);
+  if(winners.length === 0){
+    alert("請揀至少 1 個食胡玩家");
+    return;
+  }
 
-  // status
-  const winnerName = getSeatName(winSeat);
-  const typeTxt = (type==="self")
-    ? "自摸"
-    : `出銃（${ronLosers.map(i=>getSeatName(i)).join("、")}）`;
+  if(isSelfDraw){
+    if(winners.length !== 1){
+      alert("自摸只可以揀 1 個食胡玩家");
+      return;
+    }
+  }else{
+    if(losers.length === 0){
+      alert("請揀至少 1 個出銃玩家");
+      return;
+    }
+    // no overlap
+    for(const w of winners){
+      if(losers.includes(w)){
+        alert("食胡/出銃唔可以係同一個人");
+        return;
+      }
+    }
+  }
 
-  const parts = [];
-  parts.push(`贏家：<b>${winnerName}</b>｜${typeTxt}`);
-  parts.push(`本局番：${baseFan}`);
-  parts.push(isChained ? `拉後：${pulledFan}` : `第一舖：${pulledFan}`);
-  parts.push(`找數番：${settleFan}`);
-  parts.push(`1番=$${rate} → 金額=$${amount}` + (type==="ron" ? ` ×${ronLosers.length}` : ``));
-  parts.push(`莊：${getSeatName(t2.dealerSeat)}（連莊 ${t2.dealerStreak}）`);
+  // push undo snapshot
+  pushUndoSnapshot();
 
-  setCenterStatus("食胡資料", parts.join("<br>"), "");
+  const rate = rateVal();
 
-  // history
-  t2.history.push({
+  // 拉規則：只支援「單一贏家」先拉；多贏家就當新一舖（唔拉）
+  let pulledFan = baseFan;
+  let isChained = false;
+  let settleFan = baseFan;
+
+  if(winners.length === 1){
+    const r = computePulledFan(winners[0], baseFan);
+    pulledFan = r.pulledFan;
+    isChained = r.isChained;
+    settleFan = pulledFan; // 本版冇劈功能，保持
+  }else{
+    // reset chain because multi-winner ambiguous
+    chain_lastWinner = null;
+    chain_lastSettleFan = 0;
+    chain_pullCount = 0;
+    pulledFan = baseFan;
+    isChained = false;
+    settleFan = baseFan;
+  }
+
+  const amount = settleFan * rate;
+
+  // apply payments
+  if(isSelfDraw){
+    const w = winners[0];
+    // 自摸：三家各賠 amount
+    for(let i=0;i<4;i++){
+      if(i === w) continue;
+      applyMoneyChange(i, -amount);
+      applyMoneyChange(w, amount);
+    }
+  }else{
+    // 一炮多響：每個出銃者 -> 每個食胡者
+    for(const l of losers){
+      for(const w of winners){
+        applyMoneyChange(l, -amount);
+        applyMoneyChange(w, amount);
+      }
+    }
+  }
+
+  // dealer rule: if winners do not include dealer => dealer becomes (only if single winner) else keep
+  let dealerChanged = false;
+  if(!winners.includes(dealerIdx)){
+    if(winners.length === 1){
+      dealerIdx = winners[0];
+      dealerStreak = 0;
+      dealerChanged = true;
+    }else{
+      // 多贏家：唔自動過莊
+      dealerStreak = 0;
+    }
+  }else{
+    // dealer won (only meaningful if dealer is among winners)
+    dealerStreak += 1;
+  }
+
+  // update chain: only for single winner
+  if(winners.length === 1){
+    chain_lastWinner = winners[0];
+    chain_lastSettleFan = settleFan;
+  }else{
+    chain_lastWinner = null;
+    chain_lastSettleFan = 0;
+  }
+
+  // record history
+  const winNames = winners.map(pName).join("、");
+  const loseNames = isSelfDraw ? "" : losers.map(pName).join("、");
+  const typeTxt = isSelfDraw ? "自摸" : `食胡（出銃：${loseNames}）`;
+
+  gameHistory.push({
     ts: Date.now(),
-    winnerSeat: winSeat,
-    winnerName,
-    type,
-    losers: (type==="ron") ? ronLosers.slice() : [],
+    winners: winners.slice(),
+    losers: isSelfDraw ? [] : losers.slice(),
+    isSelfDraw,
     baseFan,
     pulledFan,
     settleFan,
-    rate,
     amount,
-    chainPullCount: t2.chain_pullCount,
-    dealerSeat: t2.dealerSeat,
-    dealerStreak: t2.dealerStreak
+    typeTxt,
+    winNames,
+    dealerChanged
   });
 
-  renderAllTab2();
-  saveTab2State();
+  renderBoard();
+  renderHistory();
+  renderStats();
+  updatePiButtonsEnabled();
 
-  // After settle, ask slash if needed (every multiple of 3)
-  // Note: do after render, so user sees result first.
-  if(maybeAskSlash()){
-    renderAllTab2();
+  const parts = [];
+  parts.push(`食胡：<span class="gold">${winNames}</span>｜${typeTxt}`);
+  parts.push(`本局番：<span class="gold">${baseFan}</span>`);
+  if(winners.length === 1){
+    parts.push(isChained ? `拉後：<span class="gold">${pulledFan}</span>` : `第一舖：<span class="gold">${pulledFan}</span>`);
+    parts.push(`找數番：<span class="gold">${settleFan}</span>`);
+  }else{
+    parts.push(`（多響模式：本次唔拉）`);
+  }
+  parts.push(`1番=$<span class="gold">${rate}</span> → 每條=$<span class="gold">${amount}</span>`);
+  if(dealerChanged) parts.push(`⚠️ 過莊：莊轉到 <span class="gold">${pName(dealerIdx)}</span>`);
+
+  updateInfoLine(parts.join("｜"));
+  saveTab2State();
+}
+
+/* ===== slash (斬) ===== */
+function doSlash(){
+  // manual slash, only allowed when pullCount multiple of 3
+  chain_lastWinner = null;
+  chain_lastSettleFan = 0;
+  chain_pullCount = 0;
+  updatePiButtonsEnabled();
+  updateInfoLine(`<span class="dim">⚔️ 已斬：下一舖當第一舖</span>`);
+  saveTab2State();
+}
+
+/* ===== Undo stack (incl. after clear) ===== */
+function pushUndoSnapshot(){
+  const snap = {
+    players: JSON.parse(JSON.stringify(players)),
+    seat: JSON.parse(JSON.stringify(seat)),
+    dealerIdx,
+    dealerStreak,
+    chain_lastWinner,
+    chain_lastSettleFan,
+    chain_pullCount,
+    history: JSON.parse(JSON.stringify(gameHistory)),
+    rate: $("t2_rate")?.value ?? "1",
+    baseFan: $("totalFan")?.innerText ?? "0",
+  };
+  undoStack.push(snap);
+}
+
+function undoLast(){
+  if(undoStack.length === 0){
+    alert("無得撤銷/恢復");
+    return;
+  }
+  const snap = undoStack.pop();
+  // restore
+  snap.players.forEach((p,i)=>{
+    players[i].name = p.name;
+    players[i].score = p.score;
+  });
+  seat = snap.seat;
+  dealerIdx = snap.dealerIdx;
+  dealerStreak = snap.dealerStreak;
+  chain_lastWinner = snap.chain_lastWinner;
+  chain_lastSettleFan = snap.chain_lastSettleFan;
+  chain_pullCount = snap.chain_pullCount;
+  gameHistory = snap.history || [];
+  if($("t2_rate")) $("t2_rate").value = snap.rate ?? "1";
+
+  renderBoard();
+  rebuildPickRows();
+  rebuildDealerPick();
+  rebuildSeatSelects();
+  renderHistory();
+  renderStats();
+  updatePiButtonsEnabled();
+  updateInfoLine(`<span class="dim">↩️ 已撤銷/恢復</span>`);
+  saveTab2State();
+}
+
+/* ===== Clear (but can undo back) ===== */
+function clearTab2All(){
+  pushUndoSnapshot(); // allow undo after clear
+  players.forEach(p=>p.score = 0);
+  chain_lastWinner = null;
+  chain_lastSettleFan = 0;
+  chain_pullCount = 0;
+  dealerStreak = 0;
+  // keep dealer + seats + names
+  renderBoard();
+  renderHistory();
+  renderStats();
+  updatePiButtonsEnabled();
+  updateInfoLine(`<span class="dim">🧹 已清零（可用「撤銷/恢復」返上一步）</span>`);
+  saveTab2State();
+}
+
+/* ================= Modals ================= */
+function showModal(id){ $(id)?.classList.add("show"); }
+function hideModal(id){ $(id)?.classList.remove("show"); }
+
+function rebuildPickRows(){
+  // winners/losers pick buttons (always 4 players)
+  const wBox = $("pickWinners");
+  const lBox = $("pickLosers");
+  if(!wBox || !lBox) return;
+
+  wBox.innerHTML = "";
+  lBox.innerHTML = "";
+
+  for(let i=0;i<4;i++){
+    const bw = document.createElement("button");
+    bw.type = "button";
+    bw.className = "pickBtn";
+    bw.textContent = pName(i);
+    bw.classList.toggle("active", pickWinners.has(i));
+    bw.onclick = ()=>{
+      if(pickWinners.has(i)) pickWinners.delete(i);
+      else pickWinners.add(i);
+      rebuildPickRows();
+    };
+    wBox.appendChild(bw);
+
+    const bl = document.createElement("button");
+    bl.type = "button";
+    bl.className = "pickBtn";
+    bl.textContent = pName(i);
+    bl.classList.toggle("active", pickLosers.has(i));
+    bl.onclick = ()=>{
+      if(pickLosers.has(i)) pickLosers.delete(i);
+      else pickLosers.add(i);
+      rebuildPickRows();
+    };
+    lBox.appendChild(bl);
   }
 }
 
-/* ================= Ron popup ================= */
-function openRonPicker(winSeat){
-  t2.ronPick.winSeat = winSeat;
-  t2.ronPick.selected = new Set();
+function openSettleModal(){
+  pickWinners = new Set();
+  pickLosers = new Set();
+  if($("chkSelfDraw")) $("chkSelfDraw").checked = false;
+  rebuildPickRows();
+  showModal("modalSettle");
+}
 
-  const title = $("ronTitle");
-  if(title) title.innerText = `出銃：${getSeatName(winSeat)} 食邊啲玩家？（可多選）`;
+function confirmSettleModal(){
+  const isSelfDraw = !!$("chkSelfDraw")?.checked;
+  const winners = [...pickWinners];
+  const losers = [...pickLosers];
+  hideModal("modalSettle");
+  settleNow(winners, losers, isSelfDraw);
+}
 
-  const row = $("ronPickRow");
-  if(!row) return;
-  row.innerHTML = "";
-
+function rebuildDealerPick(){
+  const box = $("pickDealer");
+  if(!box) return;
+  box.innerHTML = "";
   for(let i=0;i<4;i++){
-    if(i === winSeat) continue;
-
     const b = document.createElement("button");
-    b.className = "pickBtn";
     b.type = "button";
-    b.textContent = getSeatName(i);
-
-    b.addEventListener("click", ()=>{
-      if(t2.ronPick.selected.has(i)) t2.ronPick.selected.delete(i);
-      else t2.ronPick.selected.add(i);
-      b.classList.toggle("active", t2.ronPick.selected.has(i));
-    });
-
-    row.appendChild(b);
-  }
-
-  showModal("modalRon", true);
-}
-
-function ronConfirm(){
-  const winSeat = t2.ronPick.winSeat;
-  const losers = Array.from(t2.ronPick.selected || []);
-  showModal("modalRon", false);
-  if(typeof winSeat !== "number") return;
-  settle(winSeat, "ron", losers);
-}
-function ronCancel(){
-  showModal("modalRon", false);
-}
-
-/* ================= Dealer modal ================= */
-let dealerPickSeat = null;
-function openDealerPicker(){
-  dealerPickSeat = null;
-  const row = $("dealerPickRow");
-  if(!row) return;
-  row.innerHTML = "";
-
-  for(let i=0;i<4;i++){
-    const b = document.createElement("button");
     b.className = "pickBtn";
-    b.type = "button";
-    b.textContent = getSeatName(i);
-    b.addEventListener("click", ()=>{
-      dealerPickSeat = i;
-      [...row.children].forEach(x=>x.classList.remove("active"));
-      b.classList.add("active");
-    });
-    row.appendChild(b);
+    b.textContent = pName(i);
+    b.classList.toggle("active", (pickDealerIdx ?? dealerIdx) === i);
+    b.onclick = ()=>{
+      pickDealerIdx = i;
+      rebuildDealerPick();
+    };
+    box.appendChild(b);
   }
-
-  showModal("modalDealer", true);
 }
-function dealerConfirm(){
-  if(typeof dealerPickSeat !== "number"){
-    alert("請揀一個玩家做莊");
-    return;
-  }
-  pushUndoSnapshot();
-  t2.dealerSeat = dealerPickSeat;
-  t2.dealerStreak = 0;
-  showModal("modalDealer", false);
-  setCenterStatus("已起莊", `✅ 莊：${getSeatName(t2.dealerSeat)}（連莊 0）`, "");
-  renderAllTab2();
+
+function openDealerModal(){
+  pickDealerIdx = dealerIdx;
+  rebuildDealerPick();
+  showModal("modalDealer");
+}
+function confirmDealerModal(){
+  dealerIdx = clampIdx(pickDealerIdx ?? dealerIdx);
+  dealerStreak = 0;
+  hideModal("modalDealer");
+  renderBoard();
+  updateInfoLine(`<span class="dim">👑 已起莊：莊 = ${pName(dealerIdx)}</span>`);
   saveTab2State();
 }
-function dealerCancel(){ showModal("modalDealer", false); }
 
-/* ================= Swap modal ================= */
-function openSwapModal(){
-  // fill selects with player names (seat-based)
-  const a = $("swapA"), b = $("swapB");
-  if(!a || !b) return;
+function rebuildSeatSelects(){
+  const sels = [
+    { id:"selEast",  dir:"E" },
+    { id:"selSouth", dir:"S" },
+    { id:"selWest",  dir:"W" },
+    { id:"selNorth", dir:"N" },
+  ];
+  const all = [0,1,2,3];
 
-  a.innerHTML = "";
-  b.innerHTML = "";
-
-  for(let i=0;i<4;i++){
-    const o1 = document.createElement("option");
-    o1.value = String(i);
-    o1.textContent = `${seatLabel(i)}：${getSeatName(i)}`;
-    a.appendChild(o1);
-
-    const o2 = document.createElement("option");
-    o2.value = String(i);
-    o2.textContent = `${seatLabel(i)}：${getSeatName(i)}`;
-    b.appendChild(o2);
+  // build options
+  for(const it of sels){
+    const sel = $(it.id);
+    if(!sel) continue;
+    const current = seat[it.dir];
+    sel.innerHTML = "";
+    all.forEach(i=>{
+      const o = document.createElement("option");
+      o.value = String(i);
+      o.textContent = pName(i);
+      sel.appendChild(o);
+    });
+    sel.value = String(current);
+    sel.onchange = ()=>{ enforceUniqueSeats(); };
   }
-
-  a.value = "0";
-  b.value = "1";
-
-  showModal("modalSwap", true);
+  enforceUniqueSeats(true);
 }
-function seatLabel(i){
-  if(i===0) return "東";
-  if(i===1) return "南";
-  if(i===2) return "西";
-  return "北";
+
+function enforceUniqueSeats(silent=false){
+  const e = safeInt($("selEast")?.value ?? seat.E, seat.E);
+  const s = safeInt($("selSouth")?.value ?? seat.S, seat.S);
+  const w = safeInt($("selWest")?.value ?? seat.W, seat.W);
+  const n = safeInt($("selNorth")?.value ?? seat.N, seat.N);
+
+  const picks = { E:e, S:s, W:w, N:n };
+  const used = new Set();
+  const dirs = ["E","S","W","N"];
+  const all = [0,1,2,3];
+
+  for(const dir of dirs){
+    let v = clampIdx(picks[dir]);
+    if(!used.has(v)){
+      used.add(v);
+      picks[dir] = v;
+      continue;
+    }
+    // conflict -> pick first unused
+    const alt = all.find(x=>!used.has(x));
+    picks[dir] = alt ?? v;
+    used.add(picks[dir]);
+  }
+
+  // write back to selects to reflect correction
+  if($("selEast")) $("selEast").value = String(picks.E);
+  if($("selSouth")) $("selSouth").value = String(picks.S);
+  if($("selWest")) $("selWest").value = String(picks.W);
+  if($("selNorth")) $("selNorth").value = String(picks.N);
+
+  if(!silent){
+    // nothing else
+  }
 }
-function swapConfirm(){
-  const a = safeInt($("swapA")?.value ?? "-1", -1);
-  const b = safeInt($("swapB")?.value ?? "-1", -1);
-  if(a<0 || a>3 || b<0 || b>3){
-    alert("調位：無效選擇");
-    return;
-  }
-  if(a === b){
-    alert("調位：請揀兩個唔同玩家");
-    return;
-  }
 
-  pushUndoSnapshot();
-
-  // swap names + scores (真正執位：玩家同分數一齊去另一個座位)
-  const nameA = $("name_seat"+a)?.value ?? "";
-  const nameB = $("name_seat"+b)?.value ?? "";
-  if($("name_seat"+a)) $("name_seat"+a).value = nameB || `玩家${a+1}`;
-  if($("name_seat"+b)) $("name_seat"+b).value = nameA || `玩家${b+1}`;
-
-  const scoreA = t2.scores[a];
-  const scoreB = t2.scores[b];
-  t2.scores[a] = scoreB;
-  t2.scores[b] = scoreA;
-
-  // chain winner seat / dealer seat are SEAT roles -> keep seat roles as-is (符合「座位」概念)
-  showModal("modalSwap", false);
-
-  setCenterStatus("已調位", `✅ 已交換 ${seatLabel(a)}（${getSeatName(a)}） ↔ ${seatLabel(b)}（${getSeatName(b)}）`, "");
-  renderAllTab2();
+function openSeatModal(){
+  rebuildSeatSelects();
+  showModal("modalSeats");
+}
+function confirmSeatModal(){
+  seat.E = safeInt($("selEast")?.value ?? seat.E, seat.E);
+  seat.S = safeInt($("selSouth")?.value ?? seat.S, seat.S);
+  seat.W = safeInt($("selWest")?.value ?? seat.W, seat.W);
+  seat.N = safeInt($("selNorth")?.value ?? seat.N, seat.N);
+  hideModal("modalSeats");
+  renderBoard();
+  updateInfoLine(`<span class="dim">🪑 已執位</span>`);
   saveTab2State();
 }
-function swapCancel(){ showModal("modalSwap", false); }
 
-/* ================= Render history / stats ================= */
+/* ================= History / Stats / Copy ================= */
 function fmtTime(ts){
   const d = new Date(ts);
   const hh = String(d.getHours()).padStart(2,"0");
@@ -1716,66 +1678,53 @@ function fmtTime(ts){
 function renderHistory(){
   const box = $("historyList");
   if(!box) return;
-  if(!t2.history.length){ box.innerHTML = "（未有紀錄）"; return; }
+  if(!gameHistory.length){ box.innerHTML = "（未有紀錄）"; return; }
 
-  box.innerHTML = t2.history.slice().reverse().map((r,idxFromEnd)=>{
-    const roundNo = t2.history.length - idxFromEnd;
-    const typeTxt = (r.type === "self")
-      ? "自摸"
-      : `出銃（${(r.losers||[]).map(i=>rSeatName(i)).join("、")}）`;
-
+  box.innerHTML = gameHistory.slice().reverse().map((r,idxFromEnd)=>{
+    const roundNo = gameHistory.length - idxFromEnd;
     const extra = [
       `本局番${r.baseFan}`,
       (r.pulledFan !== r.baseFan ? `拉後${r.pulledFan}` : "第一舖"),
       `找數番${r.settleFan}`,
-      `金額$${r.amount}` + (r.type==="ron" ? `×${(r.losers||[]).length}` : ""),
-      `莊${rSeatName(r.dealerSeat)}(連${r.dealerStreak})`
+      `每條$${r.amount}`,
+      r.dealerChanged ? "過莊" : ""
     ].filter(Boolean).join("｜");
 
     return `
       <div class="historyItem">
-        <div class="title">第 ${roundNo} 局：${r.winnerName} ${typeTxt}</div>
+        <div class="title">第 ${roundNo} 局：${escapeHtml(r.winNames)} ${escapeHtml(r.typeTxt)}</div>
         <div class="meta">${fmtTime(r.ts)}｜${extra}</div>
       </div>
     `;
   }).join("");
-
-  function rSeatName(seat){
-    // history stores names at time, but we can map by current UI safely for display.
-    return getSeatName(seat);
-  }
 }
 
 function renderStats(){
   const box = $("statsBox");
   if(!box) return;
 
-  const names = [0,1,2,3].map(i=>getSeatName(i));
-  const scores = [0,1,2,3].map(i=>safeInt(t2.scores[i],0));
-
+  const scores = players.map(p=>p.score);
   const winCount = [0,0,0,0];
-  t2.history.forEach(r=>{ if(typeof r.winnerSeat==="number") winCount[r.winnerSeat]++; });
+  gameHistory.forEach(r=>{
+    (r.winners || []).forEach(w=>{ if(typeof w === "number") winCount[w]++; });
+  });
 
   const order = [0,1,2,3].slice().sort((a,b)=>scores[b]-scores[a]);
-  const lines = order.map((i,rank)=> `#${rank+1} ${seatLabel(i)} ${names[i]}：分數 ${scores[i]}｜胡 ${winCount[i]} 次`);
+  const lines = order.map((i,rank)=> `#${rank+1} ${escapeHtml(pName(i))}：分數 ${scores[i]}｜胡 ${winCount[i]} 次`);
   box.innerHTML = lines.join("<br>");
 }
 
 async function copyHistory(){
-  if(!t2.history.length){ alert("無紀錄可以複製"); return; }
-  const lines = t2.history.map((r,idx)=>{
+  if(!gameHistory.length){ alert("無紀錄可以複製"); return; }
+  const lines = gameHistory.map((r,idx)=>{
     const no = idx+1;
-    const typeTxt = (r.type === "self")
-      ? "自摸"
-      : `出銃（${(r.losers||[]).map(i=>getSeatName(i)).join("、")}）`;
     const extra = [
       `本局番${r.baseFan}`,
       (r.pulledFan !== r.baseFan ? `拉後${r.pulledFan}` : "第一舖"),
       `找數番${r.settleFan}`,
-      `金額$${r.amount}` + (r.type==="ron" ? `×${(r.losers||[]).length}` : ""),
-      `莊${getSeatName(r.dealerSeat)}(連${r.dealerStreak})`
+      `每條$${r.amount}`,
     ].filter(Boolean).join("｜");
-    return `第${no}局：${r.winnerName} ${typeTxt}｜${extra}`;
+    return `第${no}局：${r.winNames} ${r.typeTxt}｜${extra}`;
   }).join("\n");
 
   try{
@@ -1788,27 +1737,27 @@ async function copyHistory(){
 
 function clearHistory(){
   if(!confirm("確定清晒紀錄？")) return;
-  pushUndoSnapshot();
-  t2.history = [];
+  pushUndoSnapshot(); // allow undo
+  gameHistory = [];
   renderHistory();
   renderStats();
+  updateInfoLine(`<span class="dim">🗑️ 已清紀錄（可撤銷）</span>`);
   saveTab2State();
 }
 
-/* ================= Tab2 localStorage ================= */
+/* ================= localStorage Tab2 ================= */
 function saveTab2State(){
   const state = {
-    dealerSeat: t2.dealerSeat,
-    dealerStreak: t2.dealerStreak,
-    chain_lastWinnerSeat: t2.chain_lastWinnerSeat,
-    chain_lastSettleFan: t2.chain_lastSettleFan,
-    chain_pullCount: t2.chain_pullCount,
-    scores: t2.scores,
-    names: [0,1,2,3].map(i=>$("name_seat"+i)?.value || ""),
-    history: t2.history,
+    players,
+    seat,
+    dealerIdx,
+    dealerStreak,
+    chain_lastWinner,
+    chain_lastSettleFan,
+    chain_pullCount,
+    history: gameHistory,
+    undo: undoStack, // keep undo so clear can still restore after reload
     rate: $("t2_rate")?.value ?? "1",
-    undoStack: t2.undoStack,
-    lastResetSnapshot: t2.lastResetSnapshot
   };
   localStorage.setItem("tab2_state", JSON.stringify(state));
 }
@@ -1818,59 +1767,42 @@ function loadTab2State(){
   if(!raw) return;
   try{
     const s = JSON.parse(raw);
-
-    if(Array.isArray(s?.names)){
-      s.names.forEach((v,i)=>{
-        const el = $("name_seat"+i);
-        if(el && typeof v==="string") el.value = v || `玩家${i+1}`;
+    if(Array.isArray(s?.players) && s.players.length === 4){
+      s.players.forEach((p,i)=>{
+        players[i].name = (typeof p.name === "string") ? p.name : players[i].name;
+        players[i].score = safeInt(p.score ?? 0, 0);
       });
     }
+    if(s?.seat) seat = { E:clampIdx(s.seat.E), S:clampIdx(s.seat.S), W:clampIdx(s.seat.W), N:clampIdx(s.seat.N) };
+    if(s?.dealerIdx !== undefined) dealerIdx = clampIdx(s.dealerIdx);
+    if(s?.dealerStreak !== undefined) dealerStreak = safeInt(s.dealerStreak, 0);
 
-    if(Array.isArray(s?.scores)) t2.scores = s.scores.map(x=>safeInt(x,0));
-    if(typeof s?.dealerSeat === "number") t2.dealerSeat = clamp(s.dealerSeat,0,3);
-    if(typeof s?.dealerStreak === "number") t2.dealerStreak = Math.max(0, safeInt(s.dealerStreak,0));
+    chain_lastWinner = (s.chain_lastWinner === null || s.chain_lastWinner === undefined) ? null : clampIdx(s.chain_lastWinner);
+    chain_lastSettleFan = safeInt(s.chain_lastSettleFan, 0);
+    chain_pullCount = safeInt(s.chain_pullCount, 0);
 
-    t2.chain_lastWinnerSeat = (s.chain_lastWinnerSeat === null || s.chain_lastWinnerSeat === undefined) ? null : clamp(s.chain_lastWinnerSeat,0,3);
-    t2.chain_lastSettleFan = safeInt(s.chain_lastSettleFan,0);
-    t2.chain_pullCount = safeInt(s.chain_pullCount,0);
+    if(Array.isArray(s?.history)) gameHistory = s.history;
+    if(Array.isArray(s?.undo)) undoStack = s.undo;
 
-    if(Array.isArray(s?.history)) t2.history = s.history;
     if($("t2_rate") && s?.rate !== undefined) $("t2_rate").value = String(s.rate);
-
-    if(Array.isArray(s?.undoStack)) t2.undoStack = s.undoStack;
-    t2.lastResetSnapshot = s?.lastResetSnapshot || null;
-
-    if($("btnRestore")) $("btnRestore").style.display = t2.lastResetSnapshot ? "" : "none";
   }catch(e){}
 }
 
-/* ================= Tab2 render all ================= */
-function renderAllTab2(){
-  syncBaseFanToTab2();
-  renderScores();
-  renderDealerUI();
-  renderPullLines();
-  renderHistory();
-  renderStats();
+/* ================= Utils ================= */
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
-function t2RenderAll(){ renderAllTab2(); }
 
-/* ================= Bind events ================= */
+/* ================= bind events ================= */
 function bindEvents(){
-  // Theme
   $("themeBtn")?.addEventListener("click", ()=>setTheme(!document.body.classList.contains("white")));
-
-  // Tabs
   $("tabBtn1")?.addEventListener("click", ()=>setTab(1));
   $("tabBtn2")?.addEventListener("click", ()=>setTab(2));
-
-  // Tab1: dealer checkbox + dealer times + base
-  $("dealer_base")?.addEventListener("change", (e)=>{
-    $("line_dealer_base")?.classList.toggle("active", e.target.checked);
-    updateTotalFan();
-    saveTab1State();
-  });
-  $("dealer_times")?.addEventListener("input", ()=>{ updateTotalFan(); saveTab1State(); });
 
   $("baseFan")?.addEventListener("input", ()=>{ updateTotalFan(); });
   $("resetBaseBtn")?.addEventListener("click", ()=>{
@@ -1879,62 +1811,52 @@ function bindEvents(){
     updateTotalFan();
   });
 
-  // Tab1 clear
   $("clearBtn")?.addEventListener("click", clearTab1All);
 
-  // Tab2: settle buttons
-  for(let i=0;i<4;i++){
-    $("btnSelf"+i)?.addEventListener("click", ()=>{
-      settle(i, "self", []);
-    });
-    $("btnRon"+i)?.addEventListener("click", ()=>{
-      openRonPicker(i);
-    });
-    // Names save
-    $("name_seat"+i)?.addEventListener("input", ()=>{
-      // allow more than 1 char: (maxLength already handled)
-      saveTab2State();
-      // Refresh modal lists if open later
-      renderDealerUI();
-      renderHistory();
-      renderStats();
-    });
-  }
+  // dealer_times input exists only after renderFanList
+  document.addEventListener("input", (e)=>{
+    if(e.target && e.target.id === "dealer_times"){
+      updateTotalFan();
+      saveTab1State();
+    }
+  });
 
-  // Ron modal
-  $("ronCancel")?.addEventListener("click", ronCancel);
-  $("ronConfirm")?.addEventListener("click", ronConfirm);
-  $("modalRon")?.addEventListener("click", (e)=>{ if(e.target?.id==="modalRon") ronCancel(); });
+  // Tab2
+  $("t2_rate")?.addEventListener("input", ()=>{
+    updateInfoLine();
+    saveTab2State();
+  });
 
-  // Dealer modal
-  $("btnSetDealer")?.addEventListener("click", openDealerPicker);
-  $("dealerCancel")?.addEventListener("click", dealerCancel);
-  $("dealerConfirm")?.addEventListener("click", dealerConfirm);
-  $("modalDealer")?.addEventListener("click", (e)=>{ if(e.target?.id==="modalDealer") dealerCancel(); });
+  $("btnOpenSettle")?.addEventListener("click", openSettleModal);
+  $("btnCancelSettle")?.addEventListener("click", ()=>hideModal("modalSettle"));
+  $("btnConfirmSettle")?.addEventListener("click", confirmSettleModal);
 
-  // Swap modal
-  $("btnSwapSeats")?.addEventListener("click", openSwapModal);
-  $("swapCancel")?.addEventListener("click", swapCancel);
-  $("swapConfirm")?.addEventListener("click", swapConfirm);
-  $("modalSwap")?.addEventListener("click", (e)=>{ if(e.target?.id==="modalSwap") swapCancel(); });
+  $("btnSetDealer")?.addEventListener("click", openDealerModal);
+  $("btnCancelDealer")?.addEventListener("click", ()=>hideModal("modalDealer"));
+  $("btnConfirmDealer")?.addEventListener("click", confirmDealerModal);
 
-  // Tab2 actions
+  $("btnSeatAssign")?.addEventListener("click", openSeatModal);
+  $("btnCancelSeats")?.addEventListener("click", ()=>hideModal("modalSeats"));
+  $("btnConfirmSeats")?.addEventListener("click", confirmSeatModal);
+
   $("btnUndo")?.addEventListener("click", undoLast);
-  $("btnReset")?.addEventListener("click", resetTab2All);
-  $("btnRestore")?.addEventListener("click", restoreAfterReset);
+  $("btnClear")?.addEventListener("click", ()=>{
+    if(!confirm("確定清零？（可以用撤銷/恢復返上一步）")) return;
+    clearTab2All();
+  });
 
-  // History
   $("copyHistoryBtn")?.addEventListener("click", copyHistory);
   $("clearHistoryBtn")?.addEventListener("click", clearHistory);
 
-  // Rate
-  $("t2_rate")?.addEventListener("input", ()=>{ saveTab2State(); });
-
-  // Prevent iOS double tap zoom on buttons
-  document.addEventListener("touchend", (e)=>{ /* noop */ }, {passive:true});
+  // tap background to close modals
+  ["modalSettle","modalDealer","modalSeats"].forEach(mid=>{
+    $(mid)?.addEventListener("click", (ev)=>{
+      if(ev.target && ev.target.id === mid) hideModal(mid);
+    });
+  });
 }
 
-/* ================= Init ================= */
+/* ================= init ================= */
 document.addEventListener("DOMContentLoaded", ()=>{
   loadTheme();
 
@@ -1948,10 +1870,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
   updateTotalFan();
 
   loadTab2State();
-  renderAllTab2();
+  rebuildPickRows();
+  rebuildDealerPick();
+  rebuildSeatSelects();
+  renderBoard();
+  renderHistory();
+  renderStats();
+  updateInfoLine();
 
   setTab(1);
 });
-</script>
+  </script>
 </body>
 </html>
