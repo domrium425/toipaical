@@ -551,7 +551,6 @@ details[open] summary::before{ transform:rotate(90deg); }
 
   <div class="topbar">
     <button class="btn secondary" id="themeBtn" type="button">切換主題（黑金/白）</button>
-    <span class="badge gold">iPhone Safari OK</span>
   </div>
 
   <div class="tabs">
@@ -585,20 +584,17 @@ details[open] summary::before{ transform:rotate(90deg); }
       <div class="row">
         <span class="badge">1番 = $</span>
         <input class="input num" id="rate" type="number" value="1" min="0" inputmode="numeric">
-        <span class="small">（Tab2 會用呢個）</span>
       </div>
-      <div class="small" style="margin-top:6px;">提示：會自動存檔。</div>
     </div>
 
     <div class="card">
-      <h2>底設定（自動加落總番）</h2>
+      <h2>底設定</h2>
       <div class="row">
         <span class="badge">底</span>
         <input class="input num" type="number" id="baseFan" value="5" min="0" inputmode="numeric">
-        <span class="small">番（預設 5）</span>
-        <button class="btn secondary" type="button" id="resetBaseBtn">重置底=5</button>
+        <span class="small">番</span>
+        <button class="btn secondary" type="button" id="resetBaseBtn">重置底</button>
       </div>
-      <div class="small" style="margin-top:6px;">提示：底會記住你上次設定（自動存檔）。</div>
     </div>
 
     <div class="card">
@@ -619,7 +615,6 @@ details[open] summary::before{ transform:rotate(90deg); }
 
     <div class="t2TopBox">
       <div class="t2RowCenter">
-        <!-- ✅ 本局番數：用 badge 顯示（好似 iPhone Safari OK） -->
         <span class="badge gold" id="t2FanBadge">本局番數：0</span>
       </div>
 
@@ -908,18 +903,15 @@ function setTab(which){
     t2.style.display = "none";
     b1.classList.add("active");
     b2.classList.remove("active");
-    if(fixed) fixed.style.display = "flex";     // ✅ Tab1 先顯示
+    if(fixed) fixed.style.display = "flex";
   }else{
     t1.style.display = "none";
     t2.style.display = "";
     b2.classList.add("active");
     b1.classList.remove("active");
-    if(fixed) fixed.style.display = "none";     // ✅ Tab2 唔顯示
+    if(fixed) fixed.style.display = "none";
     syncFanBadgeToTab2();
-    renderScores();
-    renderDealerUI();
-    updatePullInfoUI();
-    updateSlashButtons();
+    renderAllTab2();
     renderHistory();
   }
 }
@@ -1151,88 +1143,110 @@ function clearTab1All(){
   saveTab1State();
 }
 
-/* ================= Tab2：核心狀態 ================= */
-let scores = [0,0,0,0];
-let dealerPlayer = 0;
-let dealerStreak = [0,0,0,0];
+/* ================= Tab2：座位映射（✅ 真執位） ================= */
+/*
+  UI 座位 index：
+    seat0 (上) = 東 (E)
+    seat2 (右) = 南 (S)
+    seat3 (下) = 西 (W)
+    seat1 (左) = 北 (N)
+*/
+const seatIndexToWind = ["E","N","S","W"]; // seat0->E, seat1->N, seat2->S, seat3->W
+function getPidAtSeatIndex(seatIdx){
+  const w = seatIndexToWind[seatIdx];
+  return seatMap[w];
+}
 
-let chain_lastWinner = null;
+/* ================= Tab2：核心狀態 ================= */
+let scores = [0,0,0,0];               // per player
+let dealerPlayer = 0;                 // playerId
+let dealerStreak = [0,0,0,0];         // per player
+let playerNames = ["玩家1","玩家2","玩家3","玩家4"]; // ✅ per player
+let pulledNeedle = [0,0,0,0];         // ✅ per player（輸家先有）
+
+let chain_lastWinner = null;          // playerId
 let chain_lastSettleFan = 0;
-let chain_pullCount = 0; // 第一針=1
 
 let undoStack = [];
 let gameHistory = [];
 
-function getPlayerName(p){
-  const v = ($("n"+p)?.value ?? "").trim();
-  return v ? v : `玩家${p+1}`;
+/* seatMap: wind -> playerId */
+let seatMap = loadSeatMap(); // {E,S,W,N}
+
+function getPlayerName(pid){
+  const v = (playerNames[pid] ?? "").trim();
+  return v ? v : `玩家${pid+1}`;
 }
+
 function syncFanBadgeToTab2(){
   const total = safeInt($("totalFan")?.innerText ?? "0", 0);
   const badge = $("t2FanBadge");
   if(badge) badge.textContent = `本局番數：${total}`;
 }
 
-function renderScores(){
-  for(let p=0;p<4;p++){
-    const el = $("sc"+p);
-    if(!el) continue;
-    const v = safeInt(scores[p], 0);
-    el.textContent = String(v);
-    el.classList.remove("pos","neg");
-    if(v > 0) el.classList.add("pos");
-    else if(v < 0) el.classList.add("neg");
-  }
-}
+/* ===== render: seats reflect player data ===== */
+function renderAllTab2(){
+  // seats (name / score / pull / dealer / streak / slash)
+  for(let seatIdx=0; seatIdx<4; seatIdx++){
+    const pid = getPidAtSeatIndex(seatIdx);
 
-function renderDealerUI(){
-  for(let p=0;p<4;p++){
-    $("seat"+p)?.classList.toggle("dealer", p === dealerPlayer);
-  }
-  for(let p=0;p<4;p++){
-    const b = $("st"+p);
-    if(!b) continue;
-    if(p === dealerPlayer && (dealerStreak[p]||0) > 0){
-      b.textContent = `👑x${dealerStreak[p]}`;
-      b.style.display = "";
-    }else{
-      b.style.display = "none";
+    // name input on that seat shows player's name
+    const nameEl = $("n"+seatIdx);
+    if(nameEl){
+      // avoid cursor jump: only set if different and not focused
+      if(document.activeElement !== nameEl){
+        nameEl.value = getPlayerName(pid);
+      }
     }
-  }
-}
 
-function updatePullInfoUI(){
-  // 只顯示被拉玩家（= chain_lastWinner）嘅第幾針
-  for(let p=0;p<4;p++){
-    const el = $("pi"+p);
-    if(!el) continue;
-    if(chain_lastWinner === p && chain_pullCount > 0){
-      el.textContent = `被拉緊第 ${chain_pullCount} 針`;
-    }else{
-      el.textContent = "";
+    // score
+    const scEl = $("sc"+seatIdx);
+    if(scEl){
+      const v = safeInt(scores[pid], 0);
+      scEl.textContent = String(v);
+      scEl.classList.remove("pos","neg");
+      if(v > 0) scEl.classList.add("pos");
+      else if(v < 0) scEl.classList.add("neg");
     }
-  }
-}
 
-/* ✅ 斬：只係被拉玩家、而且 3/6/9…先可撳 */
-function updateSlashButtons(){
-  const canSlash = (chain_pullCount >= 3 && chain_pullCount % 3 === 0);
-  for(let p=0;p<4;p++){
-    const btn = $("sl"+p);
-    if(!btn) continue;
-    btn.disabled = !(canSlash && chain_lastWinner === p);
+    // pull info: ✅ show on LOSERS (pulledNeedle[pid])
+    const piEl = $("pi"+seatIdx);
+    if(piEl){
+      const n = safeInt(pulledNeedle[pid], 0);
+      piEl.textContent = n > 0 ? `被拉緊第 ${n} 針` : "";
+    }
+
+    // dealer border highlight: seat hosting dealerPlayer
+    const seatEl = $("seat"+seatIdx);
+    if(seatEl) seatEl.classList.toggle("dealer", pid === dealerPlayer);
+
+    // streak badge
+    const st = $("st"+seatIdx);
+    if(st){
+      if(pid === dealerPlayer && (dealerStreak[dealerPlayer]||0) > 0){
+        st.textContent = `👑x${dealerStreak[dealerPlayer]}`;
+        st.style.display = "";
+      }else{
+        st.style.display = "none";
+      }
+    }
+
+    // slash button: ✅ only if this player is pulledNeedle multiple of 3
+    const sl = $("sl"+seatIdx);
+    if(sl){
+      const n = safeInt(pulledNeedle[pid], 0);
+      sl.disabled = !(n > 0 && n % 3 === 0);
+    }
   }
 }
 
 function pushUndoSnapshot(){
   undoStack.push(JSON.parse(JSON.stringify({
     scores, dealerPlayer, dealerStreak,
-    chain_lastWinner, chain_lastSettleFan, chain_pullCount,
+    playerNames, pulledNeedle,
+    chain_lastWinner, chain_lastSettleFan,
     history: gameHistory,
-    tab1: localStorage.getItem("tab1_state") || "",
-    tab2: localStorage.getItem("tab2_state") || "",
-    seatMap: localStorage.getItem("seatMap") || "",
-    names: [0,1,2,3].map(i=>$("n"+i)?.value || "")
+    seatMap
   })));
   if(undoStack.length > 80) undoStack.shift();
 }
@@ -1241,26 +1255,15 @@ function restoreSnapshot(snap){
   scores = snap.scores || [0,0,0,0];
   dealerPlayer = snap.dealerPlayer ?? 0;
   dealerStreak = snap.dealerStreak || [0,0,0,0];
+  playerNames = snap.playerNames || ["玩家1","玩家2","玩家3","玩家4"];
+  pulledNeedle = snap.pulledNeedle || [0,0,0,0];
   chain_lastWinner = (snap.chain_lastWinner === undefined) ? null : snap.chain_lastWinner;
   chain_lastSettleFan = snap.chain_lastSettleFan || 0;
-  chain_pullCount = snap.chain_pullCount || 0;
   gameHistory = snap.history || [];
+  seatMap = snap.seatMap || {E:0,S:2,W:3,N:1};
 
-  if(Array.isArray(snap.names)){
-    snap.names.forEach((v,i)=>{ const el=$("n"+i); if(el) el.value = v || `玩家${i+1}`; });
-  }
-
-  if(typeof snap.tab1 === "string") localStorage.setItem("tab1_state", snap.tab1);
-  if(typeof snap.tab2 === "string") localStorage.setItem("tab2_state", snap.tab2);
-  if(typeof snap.seatMap === "string") localStorage.setItem("seatMap", snap.seatMap);
-
-  loadTab1State();
-  updateTotalFan();
-
-  renderScores();
-  renderDealerUI();
-  updatePullInfoUI();
-  updateSlashButtons();
+  saveSeatMap(seatMap);
+  renderAllTab2();
   renderHistory();
   syncFanBadgeToTab2();
   saveTab2State();
@@ -1271,24 +1274,36 @@ function undoLast(){
   restoreSnapshot(snap);
 }
 
-/* ✅ 斬自己：只斬斷自己拉針鏈（唔影響全場） */
-function slashSelf(p){
-  const canSlash = (chain_pullCount >= 3 && chain_pullCount % 3 === 0);
-  if(!(canSlash && chain_lastWinner === p)) return;
+/* ✅ 斬自己：只斬自己嘅被拉針（唔影響 chain / 全場） */
+function slashSeat(seatIdx){
+  const pid = getPidAtSeatIndex(seatIdx);
+  const n = safeInt(pulledNeedle[pid], 0);
+  if(!(n > 0 && n % 3 === 0)) return;
 
   pushUndoSnapshot();
+  pulledNeedle[pid] = 0;
 
-  chain_lastWinner = null;
-  chain_lastSettleFan = 0;
-  chain_pullCount = 0;
-
-  $("t2_info").textContent = `⚔️ ${getPlayerName(p)} 已斬：下一舖當第 1 針`;
-  updatePullInfoUI();
-  updateSlashButtons();
+  $("t2_info").textContent = `⚔️ ${getPlayerName(pid)} 已斬（只斬自己被拉針）`;
+  renderAllTab2();
   saveTab2State();
 }
 
-function settleRound(winnerP, loserP, isSelf){
+/* ===== ✅ 更新「被拉針」：落喺輸家（扣分方） ===== */
+function updatePulledNeedlesAfterHand(winPid, losePids){
+  const chained = (chain_lastWinner === winPid);
+
+  if(!chained){
+    // 新贏家：全場 reset，再對今局輸家設第 1 針
+    pulledNeedle = [0,0,0,0];
+    losePids.forEach(lp => { pulledNeedle[lp] = 1; });
+  }else{
+    // 同一贏家連續：只有今局輸家 +1（其他唔郁）
+    losePids.forEach(lp => { pulledNeedle[lp] = safeInt(pulledNeedle[lp], 0) + 1; });
+  }
+}
+
+/* ===== 結算核心 ===== */
+function settleRound(winnerPid, loserPid, isSelf){
   const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
   if(baseFan <= 0){
     alert("Tab1 總番數係 0，先去 Tab1 勾番");
@@ -1296,15 +1311,14 @@ function settleRound(winnerP, loserP, isSelf){
   }
   const rate = getRate();
 
+  // ✅ 連拉（以 winnerPid 判斷）
   let pulledFan = baseFan;
   let isChained = false;
 
-  if(chain_lastWinner === winnerP){
-    chain_pullCount += 1;
+  if(chain_lastWinner === winnerPid){
     isChained = true;
     pulledFan = ceilUp(chain_lastSettleFan * 1.5 + baseFan);
   }else{
-    chain_pullCount = 1; // 第一針=1
     isChained = false;
     pulledFan = baseFan;
   }
@@ -1312,55 +1326,59 @@ function settleRound(winnerP, loserP, isSelf){
   const settleFan = pulledFan;
   const amount = settleFan * rate;
 
+  // losers list（用於被拉針顯示）
+  const losePids = isSelf ? [0,1,2,3].filter(p => p !== winnerPid) : [loserPid];
+
+  // ✅ 分數：自摸 = winner 拉三家；食出 = loser 單賠
   if(isSelf){
     for(let p=0;p<4;p++){
-      if(p !== winnerP){
+      if(p !== winnerPid){
         scores[p] -= amount;
-        scores[winnerP] += amount;
+        scores[winnerPid] += amount;
       }
     }
   }else{
-    scores[loserP] -= amount;
-    scores[winnerP] += amount;
+    scores[loserPid] -= amount;
+    scores[winnerPid] += amount;
   }
 
-  chain_lastWinner = winnerP;
+  // ✅ 更新被拉針（輸家）
+  updatePulledNeedlesAfterHand(winnerPid, losePids);
+
+  // ✅ 更新 chain（winner）
+  chain_lastWinner = winnerPid;
   chain_lastSettleFan = settleFan;
 
-  // 過莊 / 連莊
-  if(winnerP === dealerPlayer){
+  // 過莊 / 連莊（以 winnerPid 做新莊）
+  if(winnerPid === dealerPlayer){
     dealerStreak[dealerPlayer] = (dealerStreak[dealerPlayer]||0) + 1;
   }else{
     dealerStreak[dealerPlayer] = 0;
-    dealerPlayer = winnerP;
+    dealerPlayer = winnerPid;
     dealerStreak[dealerPlayer] = 1;
   }
 
-  const winName = getPlayerName(winnerP);
-  const typeTxt = isSelf ? "自摸" : `食胡（食 ${getPlayerName(loserP)}）`;
+  const winName = getPlayerName(winnerPid);
+  const typeTxt = isSelf ? "自摸" : `食胡（食 ${getPlayerName(loserPid)}）`;
 
   $("t2_info").innerHTML =
     `✅ ${winName} ${typeTxt}<br>`+
-    `本局番：${baseFan}｜${isChained ? `第${chain_pullCount}針 拉後：${pulledFan}` : `第1針：${pulledFan}`}｜`+
+    `本局番：${baseFan}｜${isChained ? `拉後：${pulledFan}` : `第1針：${pulledFan}`}｜`+
     `1番=$${rate} → 金額=$${amount}`;
 
   gameHistory.push({
     kind:"win",
     ts: Date.now(),
-    winner: winnerP,
-    loser: isSelf ? null : loserP,
+    winner: winnerPid,
+    loser: isSelf ? null : loserPid,
     isSelf,
     baseFan,
     pulledFan,
     settleFan,
-    amount,
-    chainNo: chain_pullCount
+    amount
   });
 
-  renderScores();
-  renderDealerUI();
-  updatePullInfoUI();
-  updateSlashButtons();
+  renderAllTab2();
   renderHistory();
   saveTab2State();
 }
@@ -1413,7 +1431,7 @@ async function copyHistory(){
     const typeTxt = r.isSelf ? "自摸" : `食胡（食 ${getPlayerName(r.loser)}）`;
     const extra = [
       `本局番${r.baseFan}`,
-      (r.pulledFan !== r.baseFan ? `拉後${r.pulledFan}` : "第1針"),
+      (r.pulledFan !== r.baseFan ? `拉後${r.pulledFan}` : `第1針`),
       `找數番${r.settleFan}`,
       `金額$${r.amount}`,
     ].join("｜");
@@ -1531,6 +1549,7 @@ function confirmWinModal(){
       return;
     }
     const w = [...modalWin][0];
+    // ✅ 自摸輸家 = 其他三家（已在 settleRound 處理）
     settleRound(w, null, true);
     closeWinModal();
     return;
@@ -1545,7 +1564,7 @@ function confirmWinModal(){
     const w = [...modalWin][0];
     settleRound(w, modalLose, false);
   }else{
-    // 多響：leader 用第一個 winner 當拉針判斷
+    // 多響（保持你原本）
     const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
     const rate = getRate();
     const winners = [...modalWin];
@@ -1555,11 +1574,9 @@ function confirmWinModal(){
     let isChained = false;
 
     if(chain_lastWinner === leader){
-      chain_pullCount += 1;
       isChained = true;
       pulledFan = ceilUp(chain_lastSettleFan * 1.5 + baseFan);
     }else{
-      chain_pullCount = 1;
       isChained = false;
       pulledFan = baseFan;
     }
@@ -1569,6 +1586,9 @@ function confirmWinModal(){
 
     scores[modalLose] -= amount * winners.length;
     winners.forEach(w=> scores[w] += amount);
+
+    // ✅ 被拉針落輸家：多響輸家只有 modalLose
+    updatePulledNeedlesAfterHand(leader, [modalLose]);
 
     chain_lastWinner = leader;
     chain_lastSettleFan = settleFan;
@@ -1584,7 +1604,7 @@ function confirmWinModal(){
     const winNames = winners.map(getPlayerName).join("、");
     $("t2_info").innerHTML =
       `✅ ${winNames} 一炮多響（食 ${getPlayerName(modalLose)}）<br>`+
-      `本局番：${baseFan}｜${isChained ? `第${chain_pullCount}針 拉後：${pulledFan}` : `第1針：${pulledFan}`}｜`+
+      `本局番：${baseFan}｜${isChained ? `拉後：${pulledFan}` : `第1針：${pulledFan}`}｜`+
       `1番=$${rate} → 單份=$${amount}｜出銃總賠=$${amount*winners.length}`;
 
     gameHistory.push({
@@ -1597,14 +1617,10 @@ function confirmWinModal(){
       pulledFan,
       settleFan,
       amount: amount*winners.length,
-      chainNo: chain_pullCount,
       multiWinners: winners
     });
 
-    renderScores();
-    renderDealerUI();
-    updatePullInfoUI();
-    updateSlashButtons();
+    renderAllTab2();
     renderHistory();
     saveTab2State();
   }
@@ -1641,20 +1657,20 @@ function confirmDealerModal(){
   dealerStreak = [0,0,0,0];
   dealerStreak[dealerPlayer] = 1;
   $("t2_info").textContent = `👑 起莊：${getPlayerName(dealerPlayer)}（連莊 1）`;
-  renderDealerUI();
+  renderAllTab2();
   saveTab2State();
   closeDealerModal();
 }
 
-/* 執位 modal */
+/* 執位（✅ 真執位：seatMap 影響整個 Tab2 顯示，分數自動同步） */
 function loadSeatMap(){
   const raw = localStorage.getItem("seatMap");
-  if(!raw) return {E:0,S:1,W:2,N:3};
+  if(!raw) return {E:0,S:2,W:3,N:1};
   try{
     const s = JSON.parse(raw);
-    return {E:s.E??0,S:s.S??1,W:s.W??2,N:s.N??3};
+    return {E:s.E??0,S:s.S??2,W:s.W??3,N:s.N??1};
   }catch(e){
-    return {E:0,S:1,W:2,N:3};
+    return {E:0,S:2,W:3,N:1};
   }
 }
 function saveSeatMap(m){ localStorage.setItem("seatMap", JSON.stringify(m)); }
@@ -1668,7 +1684,7 @@ function openSeatModal(){
     {k:"W", label:"西"},
     {k:"N", label:"北"},
   ];
-  const cur = loadSeatMap();
+  const cur = {...seatMap};
 
   winds.forEach(w=>{
     const row = document.createElement("div");
@@ -1690,6 +1706,7 @@ function openSeatModal(){
     }
     sel.value = String(cur[w.k] ?? 0);
 
+    // 保證唔會重複：如果撞咗，swap 返
     sel.addEventListener("change", ()=>{
       const want = safeInt(sel.value, 0);
       for(const other of winds){
@@ -1705,8 +1722,6 @@ function openSeatModal(){
         const s = body.querySelector(`select[data-wind="${xx.k}"]`);
         cur[xx.k] = safeInt(s.value, 0);
       });
-      saveSeatMap(cur);
-      saveTab2State();
     });
 
     row.appendChild(tag);
@@ -1715,10 +1730,20 @@ function openSeatModal(){
   });
 
   $("seatMask").style.display = "flex";
+
+  // 暫存到 window（confirm 用）
+  window.__seatDraft = cur;
 }
-function closeSeatModal(){ $("seatMask").style.display = "none"; }
+function closeSeatModal(){ $("seatMask").style.display = "none"; window.__seatDraft = null; }
 function confirmSeatModal(){
-  $("t2_info").textContent = "🪑 已執位";
+  pushUndoSnapshot();
+  const draft = window.__seatDraft;
+  if(draft){
+    seatMap = {E:draft.E, S:draft.S, W:draft.W, N:draft.N};
+    saveSeatMap(seatMap);
+  }
+  $("t2_info").textContent = "🪑 已執位（真換位，分數同步）";
+  renderAllTab2();
   saveTab2State();
   closeSeatModal();
 }
@@ -1770,12 +1795,6 @@ function renderYinModal(){
 }
 
 function applyYinMoney(type, player){
-  // 規則：
-  // 追殺：其他 +5，選中 -15
-  // 詐胡：其他 +30，選中 -90
-  // 花/暗槓：其他 -5，選中 +15
-  // 草：其他 -3，選中 +9
-
   const applyAll = (selDelta, otherDelta)=>{
     for(let p=0;p<4;p++){
       if(p === player) scores[p] += selDelta;
@@ -1806,7 +1825,7 @@ function confirmYinModal(){
     player: yinPlayerSel
   });
 
-  renderScores();
+  renderAllTab2();
   renderHistory();
   saveTab2State();
   closeYinModal();
@@ -1816,9 +1835,10 @@ function confirmYinModal(){
 function saveTab2State(){
   const state = {
     scores, dealerPlayer, dealerStreak,
-    chain_lastWinner, chain_lastSettleFan, chain_pullCount,
+    playerNames, pulledNeedle,
+    chain_lastWinner, chain_lastSettleFan,
     history: gameHistory,
-    names: [0,1,2,3].map(i=>$("n"+i)?.value || "")
+    seatMap
   };
   localStorage.setItem("tab2_state", JSON.stringify(state));
 }
@@ -1827,14 +1847,18 @@ function loadTab2State(){
   if(!raw) return;
   try{
     const s = JSON.parse(raw);
-    if(Array.isArray(s?.names)) s.names.forEach((v,i)=>{ const el=$("n"+i); if(el) el.value = v || `玩家${i+1}`; });
     if(Array.isArray(s?.scores)) scores = s.scores.map(x=>safeInt(x,0));
     dealerPlayer = s.dealerPlayer ?? 0;
     if(Array.isArray(s?.dealerStreak)) dealerStreak = s.dealerStreak.map(x=>safeInt(x,0));
+    if(Array.isArray(s?.playerNames)) playerNames = s.playerNames.map((x,i)=> (String(x||"").trim() || `玩家${i+1}`));
+    if(Array.isArray(s?.pulledNeedle)) pulledNeedle = s.pulledNeedle.map(x=>safeInt(x,0));
     chain_lastWinner = (s.chain_lastWinner === undefined) ? null : s.chain_lastWinner;
     chain_lastSettleFan = safeInt(s.chain_lastSettleFan, 0);
-    chain_pullCount = safeInt(s.chain_pullCount, 0);
     if(Array.isArray(s?.history)) gameHistory = s.history;
+    if(s?.seatMap){
+      seatMap = {E:s.seatMap.E??seatMap.E, S:s.seatMap.S??seatMap.S, W:s.seatMap.W??seatMap.W, N:s.seatMap.N??seatMap.N};
+      saveSeatMap(seatMap);
+    }
   }catch(e){}
 }
 
@@ -1853,16 +1877,22 @@ function bindEvents(){
   });
   $("clearBtn").addEventListener("click", clearTab1All);
 
-  ["n0","n1","n2","n3"].forEach(id=>{
-    $(id).addEventListener("input", ()=>{
+  // ✅ 名字：輸入係「座位 input」但更新係「playerNames[pid]」
+  for(let seatIdx=0; seatIdx<4; seatIdx++){
+    const el = $("n"+seatIdx);
+    el.addEventListener("input", ()=>{
+      const pid = getPidAtSeatIndex(seatIdx);
+      playerNames[pid] = (el.value ?? "").slice(0,12);
       saveTab2State();
+
+      // 如果開緊 modal，即時刷新名
       if($("winMask").style.display === "flex") renderWinModal();
       if($("dealerMask").style.display === "flex") openDealerModal();
       if($("seatMask").style.display === "flex") openSeatModal();
       if($("yinMask").style.display === "flex") renderYinModal();
       renderHistory();
     });
-  });
+  }
 
   $("winBtn").addEventListener("click", openWinModal);
   $("multiChk").addEventListener("change", ()=>{
@@ -1887,24 +1917,21 @@ function bindEvents(){
   $("yinCancelBtn").addEventListener("click", closeYinModal);
   $("yinOkBtn").addEventListener("click", confirmYinModal);
 
-  // ✅ 斬掣：只斬自己
-  for(let p=0;p<4;p++){
-    $("sl"+p).addEventListener("click", ()=>slashSelf(p));
+  // ✅ 斬掣：按「座位」斬該座位玩家（只斬自己 pulledNeedle）
+  for(let seatIdx=0; seatIdx<4; seatIdx++){
+    $("sl"+seatIdx).addEventListener("click", ()=>slashSeat(seatIdx));
   }
 
   $("undoBtn").addEventListener("click", undoLast);
   $("resetBtn").addEventListener("click", ()=>{
     pushUndoSnapshot();
     scores = [0,0,0,0];
+    pulledNeedle = [0,0,0,0];
     chain_lastWinner = null;
     chain_lastSettleFan = 0;
-    chain_pullCount = 0;
     dealerStreak = [0,0,0,0];
     $("t2_info").textContent = "🧹 已清零（可按撤銷復原）";
-    renderScores();
-    renderDealerUI();
-    updatePullInfoUI();
-    updateSlashButtons();
+    renderAllTab2();
     saveTab2State();
   });
 
@@ -1921,11 +1948,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
   loadTab1State();
   updateTotalFan();
 
+  // seatMap first, then tab2 state (may override seatMap)
+  seatMap = loadSeatMap();
+
   loadTab2State();
-  renderScores();
-  renderDealerUI();
-  updatePullInfoUI();
-  updateSlashButtons();
+  renderAllTab2();
   renderHistory();
   syncFanBadgeToTab2();
 
