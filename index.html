@@ -168,7 +168,7 @@ details{
   background:var(--muted);
   border-radius:14px;
   padding:10px 10px;
-  margin:0; /* grid already handles gaps */
+  margin:0;
 }
 details > summary{
   cursor:pointer;
@@ -284,18 +284,18 @@ details[open] summary::before{ transform:rotate(90deg); }
 
 /* board size force square in mobile */
 :root{
-  --boardSize: min(92vw, 360px);
+  --boardSize: min(92vw, 350px);
 }
 @media (max-height:760px){
-  :root{ --boardSize: min(92vw, 335px); }
+  :root{ --boardSize: min(92vw, 330px); }
 }
 @media (max-height:700px){
-  :root{ --boardSize: min(92vw, 315px); }
+  :root{ --boardSize: min(92vw, 310px); }
 }
 
 .mjBoard{
   width:var(--boardSize);
-  aspect-ratio:1 / 1;     /* ✅ perfect square */
+  aspect-ratio:1 / 1;
   height:auto;
   background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
   border:2px solid rgba(212,175,55,0.6);
@@ -316,26 +316,13 @@ details[open] summary::before{ transform:rotate(90deg); }
   pointer-events:none;
 }
 
-.mjCompass{
-  position:absolute;
-  font-weight:900;
-  color:var(--gold);
-  font-size:12px;
-  opacity:0.95;
-  pointer-events:none;
-}
-.mjCompass.n{ top:8px; left:50%; transform:translateX(-50%); }
-.mjCompass.s{ bottom:8px; left:50%; transform:translateX(-50%); }
-.mjCompass.w{ left:8px; top:50%; transform:translateY(-50%); }
-.mjCompass.e{ right:8px; top:50%; transform:translateY(-50%); }
-
-/* center square: only button + inner frame */
+/* center square */
 .mjCenter{
   position:absolute;
   left:50%; top:50%;
   transform:translate(-50%,-50%);
   width:42%;
-  aspect-ratio:1 / 1;    /* ✅ perfect square */
+  aspect-ratio:1 / 1;
   height:auto;
   background:rgba(0,0,0,0.18);
   border:1px solid rgba(212,175,55,0.35);
@@ -346,9 +333,11 @@ details[open] summary::before{ transform:rotate(90deg); }
   align-items:center;
   padding:10px;
   text-align:center;
-  gap:10px;
+  gap:8px;
 }
 body.white .mjCenter{ background:rgba(0,0,0,0.03); }
+
+/* inner inner */
 .mjCenter::after{
   content:"";
   position:absolute;
@@ -357,11 +346,11 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   border:1px solid rgba(212,175,55,0.20);
   pointer-events:none;
 }
+
 .mjCenter .centerBtn{
-  width:100%;
   border:none;
-  border-radius:14px;
-  padding:10px 10px;
+  border-radius:10px;
+  padding:8px 10px;
   font-weight:900;
   cursor:pointer;
   background:rgba(212,175,55,0.22);
@@ -370,35 +359,43 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   -webkit-tap-highlight-color: transparent;
   position:relative;
   z-index:1;
-}
-.mjCenter .centerSub{
-  font-size:11px;
-  color:var(--sub);
-  line-height:1.35;
-  position:relative;
-  z-index:1;
+  width:auto; /* ✅ just wrap text */
 }
 
-/* seats: square, no overflow, only name+score+slim button */
+/* put 東南西北 inside center */
+.centerDirs{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+.centerDir{
+  position:absolute;
+  font-weight:900;
+  color:var(--gold);
+  font-size:12px;
+  opacity:0.95;
+}
+.centerDir.n{ top:2px; left:50%; transform:translateX(-50%); }
+.centerDir.s{ bottom:2px; left:50%; transform:translateX(-50%); }
+.centerDir.w{ left:2px; top:50%; transform:translateY(-50%); }
+.centerDir.e{ right:2px; top:50%; transform:translateY(-50%); }
+
+/* seats: square, NO big outer frame */
 :root{ --seatSize: 23%; }
 
 .mjSeat{
   position:absolute;
   width:var(--seatSize);
-  aspect-ratio:1 / 1; /* ✅ player box square */
+  aspect-ratio:1 / 1;
   height:auto;
-  background:var(--muted);
-  border-radius:14px;
-  border:1px solid rgba(128,128,128,0.28);
-  padding:6px;
+  background:transparent;           /* ✅ remove big square background */
+  border:none;                      /* ✅ remove big square border */
+  border-radius:0;
+  padding:0;
   display:flex;
-  flex-direction:column;
-  gap:6px;
-  overflow:hidden; /* ✅ prevent spill */
-}
-.mjSeat.dealer{
-  border:2px solid rgba(212,175,55,0.95);
-  box-shadow:0 0 0 2px rgba(212,175,55,0.14) inset, 0 0 16px rgba(212,175,55,0.18);
+  overflow:visible;
 }
 
 /* positions */
@@ -407,21 +404,39 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
 .mjSeat.w{ left:12px; top:50%; transform:translateY(-50%); }
 .mjSeat.e{ right:12px; top:50%; transform:translateY(-50%); }
 
-/* player name smaller */
+/* inner compact pill panel per player */
+.mjSeatInner{
+  width:100%;
+  height:100%;
+  background:var(--muted);
+  border-radius:14px;
+  border:1px solid rgba(128,128,128,0.28);
+  padding:6px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  overflow:hidden;
+}
+.mjSeatInner.dealer{
+  border:2px solid rgba(212,175,55,0.95);
+  box-shadow:0 0 0 2px rgba(212,175,55,0.14) inset, 0 0 16px rgba(212,175,55,0.18);
+}
+
+/* player name smaller by 2pt */
 .mjName{
   width:100%;
   text-align:center;
   font-weight:900;
-  font-size:12px;     /* ✅ shrink player name */
-  padding:8px 8px;
+  font-size:10px;   /* was 12 */
+  padding:7px 8px;
   border-radius:12px;
 }
 
-/* score original big */
+/* score keep big */
 .mjScore{
   text-align:center;
   font-weight:900;
-  font-size:18px;     /* ✅ keep big */
+  font-size:18px;
   line-height:1;
   padding:2px 0;
   flex:1;
@@ -430,16 +445,16 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   justify-content:center;
 }
 
-/* slim "斬" button match name font */
+/* slim "斬" button smaller by 2pt */
 .slimBtn{
   width:100%;
   border:none;
   border-radius:12px;
-  padding:8px 8px;
+  padding:7px 8px;
   font-weight:900;
   cursor:pointer;
   -webkit-tap-highlight-color: transparent;
-  font-size:12px; /* same as mjName */
+  font-size:10px; /* was 12 */
   background:rgba(0,255,136,0.10);
   border:1px solid rgba(0,255,136,0.18);
   color:var(--accent);
@@ -458,32 +473,36 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   margin-top:12px;
 }
 
-/* Modal */
+/* Modal centered */
 .modal{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,0.55);
   display:none;
-  align-items:flex-end;
-  justify-content:center;
+  align-items:center;              /* ✅ center */
+  justify-content:center;          /* ✅ center */
   z-index:50;
+  padding:14px;
 }
 .modal.show{ display:flex; }
+
 .modalSheet{
-  width:min(980px, 100%);
+  width:min(520px, 100%);          /* centered sheet */
   background:var(--card);
-  border-top-left-radius:18px;
-  border-top-right-radius:18px;
-  border-top:2px solid rgba(212,175,55,0.7);
+  border-radius:18px;
+  border:2px solid rgba(212,175,55,0.55);
   padding:14px;
-  box-shadow:0 -14px 40px rgba(0,0,0,0.35);
+  box-shadow:0 14px 50px rgba(0,0,0,0.45);
 }
+
 .modalTitle{
   font-weight:900;
   color:var(--gold);
   font-size:16px;
   margin-bottom:10px;
 }
+
+/* settle: two columns, but players in 4 rows (one per row) */
 .modalGrid2{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -492,16 +511,14 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
 @media (max-width:420px){
   .modalGrid2{ grid-template-columns:1fr; }
 }
-.pickRow{
+.pickCol{
   display:flex;
-  gap:8px;
-  flex-wrap:nowrap;
-  overflow-x:auto;
-  padding-bottom:6px;
-  -webkit-overflow-scrolling: touch;
+  flex-direction:column;
+  gap:8px; /* one per row */
 }
+
 .pickBtn{
-  flex:0 0 auto;
+  width:100%;
   border:none;
   border-radius:14px;
   padding:10px 12px;
@@ -510,13 +527,19 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   color:var(--text);
   cursor:pointer;
   border:1px solid rgba(128,128,128,0.25);
-  white-space:nowrap;
   -webkit-tap-highlight-color: transparent;
 }
 .pickBtn.active{
   border:2px solid rgba(212,175,55,0.95);
   box-shadow:0 0 0 2px rgba(212,175,55,0.18) inset;
 }
+
+/* dim column when disabled */
+.pickCol.dimmed{
+  opacity:0.35;
+  pointer-events:none;
+}
+
 .modalFooter{
   display:flex;
   gap:10px;
@@ -524,11 +547,12 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   margin-top:12px;
   flex-wrap:wrap;
 }
+
 .modalSmall{
   font-size:12px;
   color:var(--sub);
   line-height:1.4;
-  margin-top:8px;
+  margin-top:10px;
   display:flex;
   gap:8px;
   align-items:center;
@@ -662,19 +686,19 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
       </div>
 
       <div class="mjBoard" id="mjBoard">
-        <div class="mjCompass n">北</div>
-        <div class="mjCompass s">南</div>
-        <div class="mjCompass w">西</div>
-        <div class="mjCompass e">東</div>
-
         <div class="mjSeat n" id="seatN"></div>
         <div class="mjSeat e" id="seatE"></div>
         <div class="mjSeat s" id="seatS"></div>
         <div class="mjSeat w" id="seatW"></div>
 
         <div class="mjCenter" id="mjCenter">
+          <div class="centerDirs" aria-hidden="true">
+            <div class="centerDir n">北</div>
+            <div class="centerDir s">南</div>
+            <div class="centerDir w">西</div>
+            <div class="centerDir e">東</div>
+          </div>
           <button class="centerBtn" type="button" id="btnOpenSettle">食胡</button>
-          <div class="centerSub">（彈窗揀：左=食胡｜右=出銃｜可多選）</div>
         </div>
       </div>
 
@@ -710,25 +734,25 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
   <!-- ===== Modal: 結算（左右多選 + 自摸剔） ===== -->
   <div class="modal" id="modalSettle" role="dialog" aria-modal="true">
     <div class="modalSheet">
-      <div class="modalTitle">食胡 / 出銃（可多選：一炮多響）</div>
+      <div class="modalTitle">食胡 / 出銃（可多選）</div>
 
       <div class="modalGrid2">
         <div>
           <div class="small" style="margin-bottom:6px;color:var(--sub);">左：食胡玩家</div>
-          <div class="pickRow" id="pickWinners"></div>
+          <div class="pickCol" id="pickWinners"></div>
         </div>
         <div>
           <div class="small" style="margin-bottom:6px;color:var(--sub);">右：出銃玩家</div>
-          <div class="pickRow" id="pickLosers"></div>
+          <div class="pickCol" id="pickLosers"></div>
         </div>
       </div>
 
       <div class="modalSmall">
         <div class="check">
           <input type="checkbox" id="chkSelfDraw">
-          <label for="chkSelfDraw">自摸（剔咗就用自摸方式計數）</label>
+          <label for="chkSelfDraw">自摸</label>
         </div>
-        <div class="dim">提示：自摸時「出銃」會自動唔理。</div>
+        <div class="dim">剔「自摸」會自動 dim 出銃玩家。</div>
       </div>
 
       <div class="modalFooter">
@@ -738,11 +762,11 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
     </div>
   </div>
 
-  <!-- ===== Modal: 起莊（揀玩家名） ===== -->
+  <!-- ===== Modal: 起莊 ===== -->
   <div class="modal" id="modalDealer" role="dialog" aria-modal="true">
     <div class="modalSheet">
       <div class="modalTitle">起莊：揀邊個做莊</div>
-      <div class="pickRow" id="pickDealer"></div>
+      <div class="pickCol" id="pickDealer"></div>
       <div class="modalFooter">
         <button class="btn secondary" type="button" id="btnCancelDealer">取消</button>
         <button class="btn" type="button" id="btnConfirmDealer">確定</button>
@@ -750,7 +774,7 @@ body.white .mjCenter{ background:rgba(0,0,0,0.03); }
     </div>
   </div>
 
-  <!-- ===== Modal: 執位（東南西北選單） ===== -->
+  <!-- ===== Modal: 執位 ===== -->
   <div class="modal" id="modalSeats" role="dialog" aria-modal="true">
     <div class="modalSheet">
       <div class="modalTitle">執位：揀玩家坐東南西北</div>
@@ -903,7 +927,7 @@ function setTab(which){
     renderHistory();
     renderStats();
     updateInfoLine();
-    updatePiButtonsEnabled();
+    updateSlashButtonsEnabled();
   }
 }
 
@@ -915,13 +939,12 @@ function renderFanList(){
 
   fanData.forEach((group, gi)=>{
     const d = document.createElement("details");
-    d.open = (gi === 0); // 預設開第一個
+    d.open = (gi === 0);
     const s = document.createElement("summary");
     const icon = catIcon[group.cat] || "📂";
     s.innerHTML = `<span class="sumGold">${icon} ${group.cat}</span>`;
     d.appendChild(s);
 
-    // group items: 內容每行一個
     group.items.forEach(([id, name, fan, hasCount])=>{
       const line = document.createElement("div");
       line.className = "checkline fanTextSmall";
@@ -974,7 +997,6 @@ function renderFanList(){
       d.appendChild(line);
     });
 
-    // 莊分類加連莊輸入（仍然一行一個）
     if(group.cat === "莊"){
       const wrap = document.createElement("div");
       wrap.style.marginTop = "10px";
@@ -993,8 +1015,7 @@ function renderFanList(){
 }
 
 function getBaseFan(){
-  const el = $("baseFan");
-  const base = safeInt(el?.value ?? "0", 0);
+  const base = safeInt($("baseFan")?.value ?? "0", 0);
   return base < 0 ? 0 : base;
 }
 
@@ -1085,10 +1106,7 @@ function saveTab1State(){
   document.querySelectorAll(".fanCount").forEach(inp=>{
     counts[inp.dataset.target] = inp.value;
   });
-  const state = {
-    checks, counts,
-    dealer_times: $("dealer_times")?.value ?? "0"
-  };
+  const state = { checks, counts, dealer_times: $("dealer_times")?.value ?? "0" };
   localStorage.setItem("tab1_state", JSON.stringify(state));
 }
 function loadTab1State(){
@@ -1124,15 +1142,7 @@ function clearTab1All(){
   saveTab1State();
 }
 
-/* ================= Tab2 state + rules =================
-   - 玩家4個（可改名，分數不可手打）
-   - 麻雀枱：四邊玩家盒 + 中間食胡掣
-   - 起莊：彈窗揀
-   - 執位：東南西北選單揀玩家坐邊
-   - 食胡：彈窗 左食胡(可多選) / 右出銃(可多選) + 自摸剔
-   - 拉/斬：同一個贏家連續先拉（pullCount++），到 3 的倍數先可以按「斬」；按斬會 reset 拉狀態
-   - 撤銷/恢復：清零之後都可以 undo 返清零前
-*/
+/* ================= Tab2 state + rules ================= */
 const players = [
   { name:"玩家1", score:0 },
   { name:"玩家2", score:0 },
@@ -1140,33 +1150,26 @@ const players = [
   { name:"玩家4", score:0 },
 ];
 
-// seat mapping: each direction holds player index 0..3
 let seat = { E:0, S:1, W:2, N:3 };
-
-// dealer + streak
 let dealerIdx = 0;
 let dealerStreak = 0;
 
-// pull/chain
 let chain_lastWinner = null;
 let chain_lastSettleFan = 0;
 let chain_pullCount = 0;
 
-// history & undo
 let gameHistory = [];
 let undoStack = [];
 
-// modal selections
 let pickWinners = new Set();
 let pickLosers = new Set();
 let pickDealerIdx = null;
 
-// ===== Tab2 helpers =====
 function pName(i){ return players[clampIdx(i)].name || ("玩家"+(i+1)); }
 function rateVal(){ return Math.max(safeInt($("t2_rate")?.value ?? "1", 1), 0); }
 function baseFanVal(){ return safeInt($("totalFan")?.innerText ?? "0", 0); }
 
-// ===== Board render =====
+/* ===== Board render ===== */
 function seatDirToDom(dir){
   if(dir==="N") return $("seatN");
   if(dir==="E") return $("seatE");
@@ -1178,24 +1181,22 @@ function renderSeatBox(dir, playerIdx){
   const box = seatDirToDom(dir);
   if(!box) return;
 
-  box.classList.toggle("dealer", playerIdx === dealerIdx);
-
   const nameId = `pname_${dir}`;
   const scoreId = `pscore_${dir}`;
   const slashId = `pslash_${dir}`;
 
   box.innerHTML = `
-    <input id="${nameId}" class="input mjName" value="${escapeHtml(pName(playerIdx))}" maxlength="12" />
-    <div id="${scoreId}" class="mjScore">${players[playerIdx].score}</div>
-    <button id="${slashId}" class="slimBtn" type="button">斬</button>
+    <div class="mjSeatInner ${playerIdx===dealerIdx ? "dealer":""}">
+      <input id="${nameId}" class="input mjName" value="${escapeHtml(pName(playerIdx))}" maxlength="12" />
+      <div id="${scoreId}" class="mjScore">${players[playerIdx].score}</div>
+      <button id="${slashId}" class="slimBtn" type="button">斬</button>
+    </div>
   `;
 
-  // name change (allow multi chars; fix "打一個字就唔得" by NOT blocking input)
   const nameEl = $(nameId);
   nameEl?.addEventListener("input", ()=>{
-    players[playerIdx].name = nameEl.value;     // keep as typed
+    players[playerIdx].name = nameEl.value;
     saveTab2State();
-    // update modals lists / info line / history rendering
     rebuildPickRows();
     rebuildDealerPick();
     rebuildSeatSelects();
@@ -1204,10 +1205,8 @@ function renderSeatBox(dir, playerIdx){
     renderStats();
   });
 
-  // slash button
   const slashBtn = $(slashId);
   slashBtn?.addEventListener("click", ()=>{
-    // only allow when enabled
     if(slashBtn.disabled) return;
     doSlash();
   });
@@ -1218,11 +1217,11 @@ function renderBoard(){
   renderSeatBox("E", seat.E);
   renderSeatBox("S", seat.S);
   renderSeatBox("W", seat.W);
-  updatePiButtonsEnabled();
+  updateSlashButtonsEnabled();
 }
 
-// enable "斬" when chain_pullCount is multiple of 3 and >0
-function updatePiButtonsEnabled(){
+/* enable "斬" when chain_pullCount is multiple of 3 and >0 */
+function updateSlashButtonsEnabled(){
   const canSlash = (chain_pullCount > 0 && chain_pullCount % 3 === 0);
   ["N","E","S","W"].forEach(dir=>{
     const btn = $(`pslash_${dir}`);
@@ -1230,13 +1229,13 @@ function updatePiButtonsEnabled(){
   });
 }
 
-// ===== info line =====
+/* ===== info line ===== */
 function updateInfoLine(extraHtml=""){
   const el = $("t2_info");
   if(!el) return;
 
   const dealerName = pName(dealerIdx);
-  const streakTxt = dealerStreak > 0 ? `（連莊 <span class="gold">${dealerStreak}</span>）` : `（連莊 <span class="gold">0</span>）`;
+  const streakTxt = `（連莊 <span class="gold">${dealerStreak}</span>）`;
   const pullTxt = (chain_lastWinner === null)
     ? `拉：<span class="gold">0</span>`
     : `拉：<span class="gold">${chain_pullCount}</span>（上次贏家：${pName(chain_lastWinner)}｜上次找數番：${chain_lastSettleFan}）`;
@@ -1262,7 +1261,6 @@ function applyMoneyChange(idx, delta){
 }
 
 function computePulledFan(winIdx, baseFan){
-  // chain only for single winner
   let pulledFan = baseFan;
   let isChained = false;
 
@@ -1275,7 +1273,6 @@ function computePulledFan(winIdx, baseFan){
     isChained = false;
     pulledFan = baseFan;
   }
-
   return { pulledFan, isChained };
 }
 
@@ -1286,7 +1283,6 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
     return;
   }
 
-  // validations
   const winners = [...new Set(winnersArr)].filter(i=>i>=0 && i<4);
   const losers  = [...new Set(losersArr)].filter(i=>i>=0 && i<4);
 
@@ -1305,7 +1301,6 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
       alert("請揀至少 1 個出銃玩家");
       return;
     }
-    // no overlap
     for(const w of winners){
       if(losers.includes(w)){
         alert("食胡/出銃唔可以係同一個人");
@@ -1314,12 +1309,10 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
     }
   }
 
-  // push undo snapshot
   pushUndoSnapshot();
 
   const rate = rateVal();
 
-  // 拉規則：只支援「單一贏家」先拉；多贏家就當新一舖（唔拉）
   let pulledFan = baseFan;
   let isChained = false;
   let settleFan = baseFan;
@@ -1328,9 +1321,8 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
     const r = computePulledFan(winners[0], baseFan);
     pulledFan = r.pulledFan;
     isChained = r.isChained;
-    settleFan = pulledFan; // 本版冇劈功能，保持
+    settleFan = pulledFan;
   }else{
-    // reset chain because multi-winner ambiguous
     chain_lastWinner = null;
     chain_lastSettleFan = 0;
     chain_pullCount = 0;
@@ -1341,17 +1333,14 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
 
   const amount = settleFan * rate;
 
-  // apply payments
   if(isSelfDraw){
     const w = winners[0];
-    // 自摸：三家各賠 amount
     for(let i=0;i<4;i++){
       if(i === w) continue;
       applyMoneyChange(i, -amount);
       applyMoneyChange(w, amount);
     }
   }else{
-    // 一炮多響：每個出銃者 -> 每個食胡者
     for(const l of losers){
       for(const w of winners){
         applyMoneyChange(l, -amount);
@@ -1360,7 +1349,6 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
     }
   }
 
-  // dealer rule: if winners do not include dealer => dealer becomes (only if single winner) else keep
   let dealerChanged = false;
   if(!winners.includes(dealerIdx)){
     if(winners.length === 1){
@@ -1368,15 +1356,12 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
       dealerStreak = 0;
       dealerChanged = true;
     }else{
-      // 多贏家：唔自動過莊
       dealerStreak = 0;
     }
   }else{
-    // dealer won (only meaningful if dealer is among winners)
     dealerStreak += 1;
   }
 
-  // update chain: only for single winner
   if(winners.length === 1){
     chain_lastWinner = winners[0];
     chain_lastSettleFan = settleFan;
@@ -1385,7 +1370,6 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
     chain_lastSettleFan = 0;
   }
 
-  // record history
   const winNames = winners.map(pName).join("、");
   const loseNames = isSelfDraw ? "" : losers.map(pName).join("、");
   const typeTxt = isSelfDraw ? "自摸" : `食胡（出銃：${loseNames}）`;
@@ -1407,7 +1391,7 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
   renderBoard();
   renderHistory();
   renderStats();
-  updatePiButtonsEnabled();
+  updateSlashButtonsEnabled();
 
   const parts = [];
   parts.push(`食胡：<span class="gold">${winNames}</span>｜${typeTxt}`);
@@ -1427,16 +1411,15 @@ function settleNow(winnersArr, losersArr, isSelfDraw){
 
 /* ===== slash (斬) ===== */
 function doSlash(){
-  // manual slash, only allowed when pullCount multiple of 3
   chain_lastWinner = null;
   chain_lastSettleFan = 0;
   chain_pullCount = 0;
-  updatePiButtonsEnabled();
+  updateSlashButtonsEnabled();
   updateInfoLine(`<span class="dim">⚔️ 已斬：下一舖當第一舖</span>`);
   saveTab2State();
 }
 
-/* ===== Undo stack (incl. after clear) ===== */
+/* ===== Undo (incl. after clear) ===== */
 function pushUndoSnapshot(){
   const snap = {
     players: JSON.parse(JSON.stringify(players)),
@@ -1448,18 +1431,15 @@ function pushUndoSnapshot(){
     chain_pullCount,
     history: JSON.parse(JSON.stringify(gameHistory)),
     rate: $("t2_rate")?.value ?? "1",
-    baseFan: $("totalFan")?.innerText ?? "0",
   };
   undoStack.push(snap);
 }
-
 function undoLast(){
   if(undoStack.length === 0){
     alert("無得撤銷/恢復");
     return;
   }
   const snap = undoStack.pop();
-  // restore
   snap.players.forEach((p,i)=>{
     players[i].name = p.name;
     players[i].score = p.score;
@@ -1479,24 +1459,22 @@ function undoLast(){
   rebuildSeatSelects();
   renderHistory();
   renderStats();
-  updatePiButtonsEnabled();
+  updateSlashButtonsEnabled();
   updateInfoLine(`<span class="dim">↩️ 已撤銷/恢復</span>`);
   saveTab2State();
 }
 
-/* ===== Clear (but can undo back) ===== */
 function clearTab2All(){
-  pushUndoSnapshot(); // allow undo after clear
+  pushUndoSnapshot();
   players.forEach(p=>p.score = 0);
   chain_lastWinner = null;
   chain_lastSettleFan = 0;
   chain_pullCount = 0;
   dealerStreak = 0;
-  // keep dealer + seats + names
   renderBoard();
   renderHistory();
   renderStats();
-  updatePiButtonsEnabled();
+  updateSlashButtonsEnabled();
   updateInfoLine(`<span class="dim">🧹 已清零（可用「撤銷/恢復」返上一步）</span>`);
   saveTab2State();
 }
@@ -1506,7 +1484,6 @@ function showModal(id){ $(id)?.classList.add("show"); }
 function hideModal(id){ $(id)?.classList.remove("show"); }
 
 function rebuildPickRows(){
-  // winners/losers pick buttons (always 4 players)
   const wBox = $("pickWinners");
   const lBox = $("pickLosers");
   if(!wBox || !lBox) return;
@@ -1539,6 +1516,66 @@ function rebuildPickRows(){
     };
     lBox.appendChild(bl);
   }
+
+  // apply dim for losers when selfdraw checked
+  applySelfDrawDim();
+}
+
+function applySelfDrawDim(){
+  const isSelf = !!$("chkSelfDraw")?.checked;
+  const loserCol = $("pickLosers")?.closest(".pickCol") ? null : null; // not used
+  const losersWrap = $("pickLosers")?.parentElement?.querySelector(".pickCol") ? null : null;
+
+  // easiest: add class to RIGHT column container
+  const rightCol = $("pickLosers")?.parentElement; // div
+  if(rightCol){
+    rightCol.classList.toggle("dimmed", isSelf);
+  }
+
+  if(isSelf){
+    pickLosers.clear();
+    rebuildPickRows_NoRecursion();
+  }
+}
+
+// prevent recursion loop
+function rebuildPickRows_NoRecursion(){
+  const wBox = $("pickWinners");
+  const lBox = $("pickLosers");
+  if(!wBox || !lBox) return;
+
+  // only update active states without re-binding by rebuilding once
+  wBox.innerHTML = "";
+  lBox.innerHTML = "";
+  for(let i=0;i<4;i++){
+    const bw = document.createElement("button");
+    bw.type = "button";
+    bw.className = "pickBtn";
+    bw.textContent = pName(i);
+    bw.classList.toggle("active", pickWinners.has(i));
+    bw.onclick = ()=>{
+      if(pickWinners.has(i)) pickWinners.delete(i);
+      else pickWinners.add(i);
+      rebuildPickRows();
+    };
+    wBox.appendChild(bw);
+
+    const bl = document.createElement("button");
+    bl.type = "button";
+    bl.className = "pickBtn";
+    bl.textContent = pName(i);
+    bl.classList.toggle("active", pickLosers.has(i));
+    bl.onclick = ()=>{
+      if(pickLosers.has(i)) pickLosers.delete(i);
+      else pickLosers.add(i);
+      rebuildPickRows();
+    };
+    lBox.appendChild(bl);
+  }
+
+  const isSelf = !!$("chkSelfDraw")?.checked;
+  const rightCol = $("pickLosers")?.parentElement;
+  if(rightCol) rightCol.classList.toggle("dimmed", isSelf);
 }
 
 function openSettleModal(){
@@ -1598,11 +1635,9 @@ function rebuildSeatSelects(){
   ];
   const all = [0,1,2,3];
 
-  // build options
   for(const it of sels){
     const sel = $(it.id);
     if(!sel) continue;
-    const current = seat[it.dir];
     sel.innerHTML = "";
     all.forEach(i=>{
       const o = document.createElement("option");
@@ -1610,12 +1645,11 @@ function rebuildSeatSelects(){
       o.textContent = pName(i);
       sel.appendChild(o);
     });
-    sel.value = String(current);
+    sel.value = String(seat[it.dir]);
     sel.onchange = ()=>{ enforceUniqueSeats(); };
   }
   enforceUniqueSeats(true);
 }
-
 function enforceUniqueSeats(silent=false){
   const e = safeInt($("selEast")?.value ?? seat.E, seat.E);
   const s = safeInt($("selSouth")?.value ?? seat.S, seat.S);
@@ -1634,23 +1668,16 @@ function enforceUniqueSeats(silent=false){
       picks[dir] = v;
       continue;
     }
-    // conflict -> pick first unused
     const alt = all.find(x=>!used.has(x));
     picks[dir] = alt ?? v;
     used.add(picks[dir]);
   }
 
-  // write back to selects to reflect correction
   if($("selEast")) $("selEast").value = String(picks.E);
   if($("selSouth")) $("selSouth").value = String(picks.S);
   if($("selWest")) $("selWest").value = String(picks.W);
   if($("selNorth")) $("selNorth").value = String(picks.N);
-
-  if(!silent){
-    // nothing else
-  }
 }
-
 function openSeatModal(){
   rebuildSeatSelects();
   showModal("modalSeats");
@@ -1673,6 +1700,14 @@ function fmtTime(ts){
   const mm = String(d.getMinutes()).padStart(2,"0");
   const ss = String(d.getSeconds()).padStart(2,"0");
   return `${hh}:${mm}:${ss}`;
+}
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
 function renderHistory(){
@@ -1737,7 +1772,7 @@ async function copyHistory(){
 
 function clearHistory(){
   if(!confirm("確定清晒紀錄？")) return;
-  pushUndoSnapshot(); // allow undo
+  pushUndoSnapshot();
   gameHistory = [];
   renderHistory();
   renderStats();
@@ -1756,7 +1791,7 @@ function saveTab2State(){
     chain_lastSettleFan,
     chain_pullCount,
     history: gameHistory,
-    undo: undoStack, // keep undo so clear can still restore after reload
+    undo: undoStack,
     rate: $("t2_rate")?.value ?? "1",
   };
   localStorage.setItem("tab2_state", JSON.stringify(state));
@@ -1788,16 +1823,6 @@ function loadTab2State(){
   }catch(e){}
 }
 
-/* ================= Utils ================= */
-function escapeHtml(str){
-  return String(str)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
 /* ================= bind events ================= */
 function bindEvents(){
   $("themeBtn")?.addEventListener("click", ()=>setTheme(!document.body.classList.contains("white")));
@@ -1813,7 +1838,6 @@ function bindEvents(){
 
   $("clearBtn")?.addEventListener("click", clearTab1All);
 
-  // dealer_times input exists only after renderFanList
   document.addEventListener("input", (e)=>{
     if(e.target && e.target.id === "dealer_times"){
       updateTotalFan();
@@ -1821,7 +1845,6 @@ function bindEvents(){
     }
   });
 
-  // Tab2
   $("t2_rate")?.addEventListener("input", ()=>{
     updateInfoLine();
     saveTab2State();
@@ -1830,6 +1853,10 @@ function bindEvents(){
   $("btnOpenSettle")?.addEventListener("click", openSettleModal);
   $("btnCancelSettle")?.addEventListener("click", ()=>hideModal("modalSettle"));
   $("btnConfirmSettle")?.addEventListener("click", confirmSettleModal);
+
+  $("chkSelfDraw")?.addEventListener("change", ()=>{
+    applySelfDrawDim();
+  });
 
   $("btnSetDealer")?.addEventListener("click", openDealerModal);
   $("btnCancelDealer")?.addEventListener("click", ()=>hideModal("modalDealer"));
@@ -1848,7 +1875,6 @@ function bindEvents(){
   $("copyHistoryBtn")?.addEventListener("click", copyHistory);
   $("clearHistoryBtn")?.addEventListener("click", clearHistory);
 
-  // tap background to close modals
   ["modalSettle","modalDealer","modalSeats"].forEach(mid=>{
     $(mid)?.addEventListener("click", (ev)=>{
       if(ev.target && ev.target.id === mid) hideModal(mid);
