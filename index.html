@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>港式台牌計番神器 PRO</title>
+  <title>港式台牌計番神器</title>
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
@@ -29,9 +29,8 @@
   --boardSize: min(92vw, 350px);
   --seatSize: 30%;
   --centerSize: 24%;
-  --seatGap: 1.0%;
-  --centerFramePad: 5px;
-  --centerInnerPad: 6px;
+  --centerFramePad: 6px;
+  --centerInnerPad: 8px;
 }
 
 @media (max-height:760px){ :root{ --boardSize: min(92vw, 335px); } }
@@ -139,13 +138,15 @@ h2{ margin:0 0 10px 0; color:var(--gold); font-size:18px; }
 .row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
 .kv{ display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--sub); margin-top:6px; }
 
+/* ✅ iPhone 防止打字放大：所有 input/select 字體 ≥16
+   但細 UI 用 transform 縮返（唔影響 iOS 判斷） */
 .input, select{
   border:1px solid rgba(128,128,128,0.35);
   background:transparent;
   color:var(--text);
   border-radius:12px;
   padding:10px 12px;
-  font-size:14px;
+  font-size:16px;            /* ✅ prevent iOS zoom */
   outline:none;
   max-width:100%;
 }
@@ -232,36 +233,37 @@ details.fanGroup > summary::before{
 }
 details.fanGroup[open] > summary::before{ transform:rotate(90deg); }
 
-.fanGroupBody{
-  padding:8px 10px 10px 10px;
-}
+.fanGroupBody{ padding:8px 10px 10px 10px; }
 .fanItemLine{
   display:flex;
   align-items:center;
   gap:10px;
   padding:7px 2px;
   border-bottom:1px dashed var(--line);
-  font-size:13px; /* ✅ Tab1 番表內容細 1pt */
+  font-size:13px; /* Tab1 番表內容細 1pt */
 }
 .fanItemLine:last-child{ border-bottom:none; }
 .fanItemLine label{ flex:1; cursor:pointer; color:var(--text); }
-.fanItemLine .fan{ color:var(--gold); font-weight:900; white-space:nowrap; }
+.fanItemLine .fanRight{ color:var(--gold); font-weight:900; white-space:nowrap; }
 .fanItemLine.active{
   background:rgba(212,175,55,0.12);
   border-radius:10px;
   box-shadow:0 0 10px rgba(212,175,55,0.12);
 }
 
-/* ✅ Tab1 入數字位更短 */
+/* ✅ Tab1 入數字位：縮短到「只見到兩位數」外觀 */
 .fanCountInp{
-  width:58px;
-  padding:7px 8px;
+  width:44px;                 /* ✅ narrow */
+  padding:6px 6px;
   border-radius:12px;
   border:1px solid rgba(128,128,128,0.35);
   background:transparent;
   color:var(--text);
   outline:none;
-  font-size:13px;
+  font-size:16px;             /* ✅ no iOS zoom */
+  text-align:center;
+  transform:scale(0.82);      /* ✅ look smaller, still 16 internally */
+  transform-origin:center;
 }
 body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
 
@@ -295,7 +297,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   line-height:1.55;
 }
 
-/* Centered buttons row */
 .centerRow{
   display:flex;
   gap:10px;
@@ -305,7 +306,7 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   margin-top:10px;
 }
 
-/* Mahjong board container WITHOUT outer square border */
+/* Mahjong board container (no outer frame) */
 .boardWrap{
   width:var(--boardSize);
   height:var(--boardSize);
@@ -325,19 +326,21 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   flex-direction:column;
   justify-content:space-between;
   gap:6px;
-  overflow:visible; /* for streak badge outside */
+  overflow:visible;
 }
 .seat.dealer{
   box-shadow:0 0 0 3px rgba(212,175,55,0.85), 0 0 18px rgba(212,175,55,0.18);
 }
 
-/* ✅ 玩家名可改 + 再細 2pt */
+/* ✅ 玩家名可改 + 視覺再細（內部 16，外觀縮） */
 .seat .name{
   width:100%;
   text-align:center;
   font-weight:900;
-  font-size:10px;
+  font-size:16px;
   padding:6px 8px;
+  transform:scale(0.72);
+  transform-origin:center;
 }
 .seat .score{
   text-align:center;
@@ -348,7 +351,7 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
 .score.pos{ color:#3ddc84; }
 .score.neg{ color:#ff4d4d; }
 
-/* ✅ 玩家box移除自摸/出銃，原位放斬（紅色，字高跟玩家名，長度跟名box） */
+/* Slash button */
 .slashBtn{
   width:100%;
   padding:6px 0;
@@ -357,29 +360,31 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   font-weight:900;
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
-  font-size:10px; /* 跟玩家名 */
+  font-size:16px;       /* internal 16 */
   line-height:1;
   background:var(--danger);
   color:#fff;
+  transform:scale(0.72); /* match name visual height */
+  transform-origin:center;
 }
 .slashBtn:disabled{ opacity:0.35; cursor:not-allowed; }
 
-/* streak badge OUTSIDE top-right */
+/* ✅ streak badge：移遠啲，避免疊住玩家 box */
 .streakBadge{
   position:absolute;
-  top:-10px;
-  right:-10px;
+  top:-18px;
+  right:-18px;
   background:rgba(212,175,55,0.22);
   border:1px solid rgba(212,175,55,0.55);
   color:var(--gold);
   font-weight:900;
-  font-size:12px;
-  padding:4px 7px;
+  font-size:11px;
+  padding:3px 6px;
   border-radius:999px;
   box-shadow:0 0 18px rgba(212,175,55,0.18);
 }
 
-/* seat positions (close to center to enlarge seats) */
+/* seat positions */
 #seatN{ top:0; left:50%; transform:translateX(-50%); }
 #seatS{ bottom:0; left:50%; transform:translateX(-50%); }
 #seatW{ left:0; top:50%; transform:translateY(-50%); }
@@ -397,7 +402,6 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   justify-content:center;
 }
 
-/* center outer+inner frame */
 .centerOuter{
   width:100%;
   height:100%;
@@ -419,34 +423,24 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   justify-content:center;
 }
 
-.dirGrid{
+/* ✅ 中間東南西北：改用 grid，保證唔疊住食胡掣 */
+.dirBox{
   width:100%;
   height:100%;
-  position:relative;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  grid-template-rows:1fr 1fr 1fr;
+  place-items:center;
   font-weight:900;
   color:var(--gold);
   font-size:12px;
 }
+.dirBox .dN{ grid-column:2; grid-row:1; align-self:start; margin-top:2px; }
+.dirBox .dS{ grid-column:2; grid-row:3; align-self:end; margin-bottom:2px; }
+.dirBox .dW{ grid-column:1; grid-row:2; justify-self:start; margin-left:2px; }
+.dirBox .dE{ grid-column:3; grid-row:2; justify-self:end; margin-right:2px; }
+.dirBox .mid{ grid-column:2; grid-row:2; z-index:2; }
 
-/* ✅ 東南西北貼近邊框少少，但唔疊住 */
-.dirGrid span{
-  position:absolute;
-  padding:0;
-  line-height:1;
-}
-.dirN{ top:2px; left:50%; transform:translateX(-50%); }
-.dirS{ bottom:2px; left:50%; transform:translateX(-50%); }
-.dirW{ left:2px; top:50%; transform:translateY(-50%); }
-.dirE{ right:2px; top:50%; transform:translateY(-50%); }
-
-/* ✅ 食胡掣置中，唔疊住東南西北 */
-.centerAction{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  z-index:2;
-}
 .huBtn{
   border:none;
   border-radius:10px;
@@ -609,12 +603,15 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
     </div>
 
     <div class="card">
-      <h2>底設定（自動加落總番）</h2>
-      <div class="row">
-        <span class="badge">底</span>
-        <input class="input num" type="number" id="baseFan" value="5" min="0">
-        <span class="small">番（預設 5）</span>
-        <button class="btn secondary" type="button" id="resetBaseBtn">重置底=5</button>
+      <h2>底設定</h2>
+      <!-- ✅ 底固定一行出番數（Tab2 唔需要） -->
+      <div class="row" style="justify-content:space-between;">
+        <div class="row" style="gap:8px;">
+          <span class="badge">底</span>
+          <input class="input num" type="number" id="baseFan" value="5" min="0">
+          <button class="btn secondary" type="button" id="resetBaseBtn">重置底=5</button>
+        </div>
+        <span class="badge gold">底：<span id="baseFanBadge">5</span> 番</span>
       </div>
       <div class="small" style="margin-top:6px;">提示：底會記住你上次設定（自動存檔）。</div>
     </div>
@@ -636,25 +633,20 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
   <div id="tab2" class="container" style="display:none;">
     <div class="t2TopBox">
 
-      <!-- ✅ 第一行直接係本局番數（同數字同一個 text box） -->
       <div class="t2FanBox">
         <span>本局番數</span>
         <span class="v" id="t2_baseFanBox">0</span>
       </div>
 
-      <!-- ✅ 起莊 / 執位 置中（本局番下一行） -->
       <div class="centerRow">
         <button class="btn secondary" type="button" id="btnSetDealer">起莊</button>
         <button class="btn secondary" type="button" id="btnSeatArrange">執位</button>
         <div class="badge gold" id="t2_pullBadge">針：0</div>
       </div>
 
-      <!-- ✅ 食胡資料：放呢度 -->
       <div class="t2Info" id="t2_status">✔ 撳中間「食胡」開始</div>
 
-      <!-- Board -->
       <div class="boardWrap" id="boardWrap">
-        <!-- Seats (square) -->
         <div class="seat" id="seatN">
           <div class="streakBadge" id="streakN" style="display:none;">連莊 2</div>
           <input class="input name" id="nameN" value="玩家1" maxlength="10">
@@ -683,26 +675,25 @@ body.white .fanCountInp{ border:1px solid rgba(0,0,0,0.2); }
           <button class="slashBtn" type="button" id="slashE" disabled>斬</button>
         </div>
 
-        <!-- Center -->
         <div class="center" id="centerBox">
           <div class="centerOuter">
             <div class="centerInner">
-              <div class="dirGrid" aria-hidden="true">
-                <span class="dirN">北</span>
-                <span class="dirS">南</span>
-                <span class="dirW">西</span>
-                <span class="dirE">東</span>
-
-                <div class="centerAction">
+              <!-- ✅ 改成 grid，唔會疊住 -->
+              <div class="dirBox" aria-hidden="true">
+                <div class="dN">北</div>
+                <div class="dS">南</div>
+                <div class="dW">西</div>
+                <div class="dE">東</div>
+                <div class="mid">
                   <button class="huBtn" type="button" id="btnHu">食胡</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
 
-      <!-- ✅ 撤銷/清零：放麻雀枱下面 -->
       <div class="centerRow" style="margin-top:12px;">
         <button class="btn secondary" type="button" id="t2_undoBtn">撤銷</button>
         <button class="btn danger" type="button" id="t2_resetBtn">清零</button>
@@ -910,7 +901,6 @@ function setTab(which){
     t2.style.display = "none";
     b1.classList.add("active");
     b2.classList.remove("active");
-    // ✅ Tab2 唔顯示 Tab1 總番固定條
     $("fixedTotal").style.display = "flex";
   }else{
     t1.style.display = "none";
@@ -919,7 +909,10 @@ function setTab(which){
     b1.classList.remove("active");
     $("fixedTotal").style.display = "none";
 
+    // ✅ 確保 Tab2 入去都係最新總番
+    updateTotalFan();
     syncBaseFanToTab2();
+
     renderDealerUI();
     renderStreakBadges();
     updateSlashButtons();
@@ -930,7 +923,7 @@ function setTab(which){
   }
 }
 
-/* ================= Tab1: fan list (collapsible) ================= */
+/* ================= Tab1: fan grid ================= */
 function renderFanGrid(){
   const grid = $("fanGrid");
   if(!grid) return;
@@ -939,7 +932,6 @@ function renderFanGrid(){
   fanData.forEach((group, idx)=>{
     const d = document.createElement("details");
     d.className = "fanGroup";
-    // default open first row only
     d.open = (idx < 2);
 
     const s = document.createElement("summary");
@@ -953,7 +945,6 @@ function renderFanGrid(){
     if(group.cat === "莊"){
       body.appendChild(makeFanLine("dealer_base", "莊", 1, false));
 
-      // ✅ 連莊次數：淨係入數字位（唔顯示點計）
       const line = document.createElement("div");
       line.className = "fanItemLine";
 
@@ -967,13 +958,13 @@ function renderFanGrid(){
       inp.className = "fanCountInp";
       inp.type = "number";
       inp.min = "0";
+      inp.max = "99";
       inp.value = "0";
       inp.id = "dealer_times";
       inp.addEventListener("input", ()=>{ updateTotalFan(); saveTab1State(); });
 
       line.appendChild(label);
       line.appendChild(inp);
-
       body.appendChild(line);
 
       d.appendChild(body);
@@ -1002,15 +993,19 @@ function makeFanLine(id, name, fan, hasCount){
   cb.dataset.fan = String(fan);
   cb.id = "cb_" + id;
 
+  const lab = document.createElement("label");
+  lab.setAttribute("for", cb.id);
+  lab.textContent = name;
+
+  const right = document.createElement("span");
+  right.className = "fanRight";
+  right.id = "fanRight_" + id;
+
   cb.addEventListener("change", ()=>{
     line.classList.toggle("active", cb.checked);
     updateTotalFan();
     saveTab1State();
   });
-
-  const lab = document.createElement("label");
-  lab.setAttribute("for", cb.id);
-  lab.textContent = name;
 
   line.appendChild(cb);
   line.appendChild(lab);
@@ -1019,24 +1014,26 @@ function makeFanLine(id, name, fan, hasCount){
     const count = document.createElement("input");
     count.type = "number";
     count.min = "0";
+    count.max = "99";
     count.value = "1";
     count.className = "fanCountInp fanCount";
     count.dataset.target = id;
     count.addEventListener("input", ()=>{
+      // ✅ 右邊直接出 fan*count
+      const c = Math.max(0, Math.min(99, safeInt(count.value, 0)));
+      count.value = String(c);
+      right.textContent = `${fan * c}番`;
       updateTotalFan();
       saveTab1State();
     });
     line.appendChild(count);
 
-    const span = document.createElement("span");
-    span.className = "fan";
-    span.textContent = `×${fan}番`;
-    line.appendChild(span);
+    // ✅ 初始顯示 fan*count（唔用 ×幾番）
+    right.textContent = `${fan * safeInt(count.value, 1)}番`;
+    line.appendChild(right);
   }else{
-    const span = document.createElement("span");
-    span.className = "fan";
-    span.textContent = `${fan}番`;
-    line.appendChild(span);
+    right.textContent = `${fan}番`;
+    line.appendChild(right);
   }
 
   return line;
@@ -1044,14 +1041,18 @@ function makeFanLine(id, name, fan, hasCount){
 
 /* ================= Tab1 totals ================= */
 function getBaseFan(){
-  const el = $("baseFan");
-  const base = safeInt(el?.value ?? "0", 0);
+  const base = safeInt($("baseFan")?.value ?? "0", 0);
   return base < 0 ? 0 : base;
 }
 function getRate(){
-  const el = $("t_rate");
-  const r = safeInt(el?.value ?? "1", 1);
+  const r = safeInt($("t_rate")?.value ?? "1", 1);
   return r < 0 ? 0 : r;
+}
+
+function syncBaseFanToTab2(){
+  if($("t2_baseFanBox") && $("totalFan")){
+    $("t2_baseFanBox").innerText = $("totalFan").innerText;
+  }
 }
 
 function updateTotalFan(){
@@ -1076,17 +1077,12 @@ function updateTotalFan(){
   total += getBaseFan();
 
   if($("totalFan")) $("totalFan").innerText = String(total);
+  if($("baseFanBadge")) $("baseFanBadge").innerText = String(getBaseFan());
   syncBaseFanToTab2();
-  aiSuggest();
 
+  aiSuggest();
   localStorage.setItem("baseFan", String(getBaseFan()));
   localStorage.setItem("rate", String(getRate()));
-}
-
-function syncBaseFanToTab2(){
-  if($("t2_baseFanBox") && $("totalFan")){
-    $("t2_baseFanBox").innerText = $("totalFan").innerText;
-  }
 }
 
 function clearTab1All(){
@@ -1096,7 +1092,13 @@ function clearTab1All(){
     if(line) line.classList.remove("active");
   });
   if($("dealer_times")) $("dealer_times").value = "0";
-  document.querySelectorAll(".fanCount").forEach(inp=>inp.value="1");
+  document.querySelectorAll(".fanCount").forEach(inp=>{
+    inp.value="1";
+    const id = inp.dataset.target;
+    const fan = safeInt(document.querySelector(`#cb_${id}`)?.dataset?.fan ?? "0", 0);
+    const right = $("fanRight_"+id);
+    if(right) right.textContent = `${fan * 1}番`;
+  });
   updateTotalFan();
   saveTab1State();
 }
@@ -1137,9 +1139,9 @@ function aiSuggest(){
   if(ids.has("nozi") && ids.has("flower") && !ids.has("noziflower"))
     msgs.push(`<span class="tip">👉 你勾咗「無字」+「花」，可以考慮用「無字花 5番」</span>`);
 
-  if(ids.has("flower")) msgs.push(`<span class="ok">ℹ️ 花數量：${getCountFor("flower")}（×1番）</span>`);
-  if(ids.has("zflower")) msgs.push(`<span class="ok">ℹ️ 正花數量：${getCountFor("zflower")}（×2番）</span>`);
-  if(ids.has("zi")) msgs.push(`<span class="ok">ℹ️ 字數量：${getCountFor("zi")}（×2番）</span>`);
+  if(ids.has("flower")) msgs.push(`<span class="ok">ℹ️ 花數量：${getCountFor("flower")}（合共 ${getCountFor("flower")*1} 番）</span>`);
+  if(ids.has("zflower")) msgs.push(`<span class="ok">ℹ️ 正花數量：${getCountFor("zflower")}（合共 ${getCountFor("zflower")*2} 番）</span>`);
+  if(ids.has("zi")) msgs.push(`<span class="ok">ℹ️ 字數量：${getCountFor("zi")}（合共 ${getCountFor("zi")*2} 番）</span>`);
   msgs.push(`<span class="ok">ℹ️ 底：${getBaseFan()}番（自動加）</span>`);
 
   box.innerHTML = msgs.length ? msgs.join("<br>") : `<div class="ok">✔ 暫時無衝突／建議</div>`;
@@ -1183,6 +1185,11 @@ function loadTab1State(){
       document.querySelectorAll(".fanCount").forEach(inp=>{
         const v = s.counts[inp.dataset.target];
         if(v !== undefined) inp.value = String(v);
+        // update right label
+        const id = inp.dataset.target;
+        const fan = safeInt(document.querySelector(`#cb_${id}`)?.dataset?.fan ?? "0", 0);
+        const right = $("fanRight_"+id);
+        if(right) right.textContent = `${fan * safeInt(inp.value, 0)}番`;
       });
     }
     if(s?.dealer_times !== undefined && $("dealer_times")) $("dealer_times").value = String(s.dealer_times);
@@ -1207,7 +1214,7 @@ let dealerStreak = 1;
 /* ✅ 針數：第一舖＝第1針 */
 let chain_lastWinnerSeat = null;
 let chain_lastSettleFan = 0;
-let chain_pullCount = 0; // display needle count: 1,2,3...
+let chain_pullCount = 0;
 
 let gameHistory = [];
 let undoStack = [];
@@ -1474,9 +1481,7 @@ function openHuModal(){
   huWinners = [];
   huLoser = null;
   huSelfmo = false;
-
   $("chkMulti").checked = false;
-
   renderHuPickLists();
   openMask("huMask");
 }
@@ -1491,7 +1496,6 @@ function renderHuPickLists(){
 
   const allowMulti = !!$("chkMulti")?.checked;
 
-  // winners
   SEATS.forEach(seat=>{
     const b = document.createElement("button");
     b.className = "pickBtn";
@@ -1499,26 +1503,16 @@ function renderHuPickLists(){
     b.textContent = `${getPlayerNameBySeat(seat)}（${seatLabel(seat)}）`;
     b.classList.toggle("active", huWinners.includes(seat));
     b.onclick = ()=>{
-      if(!allowMulti){
-        huWinners = [seat];
-      }else{
-        if(huWinners.includes(seat)) huWinners = huWinners.filter(x=>x!==seat);
-        else huWinners = [...huWinners, seat];
-      }
+      if(!allowMulti) huWinners = [seat];
+      else huWinners = huWinners.includes(seat) ? huWinners.filter(x=>x!==seat) : [...huWinners, seat];
+
       if(huLoser && huWinners.includes(huLoser)) huLoser = null;
-
-      // ✅ 自摸掣：揀完食胡玩家先出現；如果未揀，強制關
-      if(!huWinners.length){
-        huSelfmo = false;
-        huLoser = null;
-      }
-
+      if(!huWinners.length){ huSelfmo = false; huLoser = null; }
       renderHuPickLists();
     };
     wBox.appendChild(b);
   });
 
-  // losers: first option = 自摸 (only if winner selected)
   if(huWinners.length){
     const selfBtn = document.createElement("button");
     selfBtn.className = "pickBtn";
@@ -1533,7 +1527,6 @@ function renderHuPickLists(){
     lBox.appendChild(selfBtn);
   }
 
-  // loser players (exclude winner seats)
   SEATS.forEach(seat=>{
     if(huWinners.includes(seat)) return;
 
@@ -1546,10 +1539,7 @@ function renderHuPickLists(){
       b.classList.add("dim");
     }else{
       b.classList.toggle("active", huLoser === seat);
-      b.onclick = ()=>{
-        huLoser = seat;
-        renderHuPickLists();
-      };
+      b.onclick = ()=>{ huLoser = seat; renderHuPickLists(); };
     }
     lBox.appendChild(b);
   });
@@ -1570,12 +1560,10 @@ function settleRound({winners, loserSeat, selfmo}){
   }
 
   if(!Array.isArray(winners) || winners.length < 1) return false;
-
   if(!selfmo){
     if(!loserSeat || winners.includes(loserSeat)) return false;
   }
 
-  // snapshot
   pushUndoSnapshot(winners.length > 1 ? "settle_multi" : "settle");
 
   const win0 = winners[0];
@@ -1586,7 +1574,7 @@ function settleRound({winners, loserSeat, selfmo}){
 
   if(chain_lastWinnerSeat === win0){
     isChained = true;
-    chain_pullCount = chain_pullCount + 1; // 2,3,4...
+    chain_pullCount = chain_pullCount + 1;
     pulledFan = ceilUp(chain_lastSettleFan * 1.5 + baseFan);
   }else{
     isChained = false;
@@ -1598,8 +1586,9 @@ function settleRound({winners, loserSeat, selfmo}){
   const amount = settleFan * rate;
 
   if(selfmo){
-    // selfmo only support 1 winner
+    if(winners.length > 1){ alert("自摸暫不支援多個食胡玩家"); return false; }
     const win = win0;
+
     SEATS.forEach(seat=>{
       if(seat !== win){
         applyMoneyChangeSeat(seat, -amount);
@@ -1607,20 +1596,16 @@ function settleRound({winners, loserSeat, selfmo}){
       }
     });
 
-    // dealer
     if(win === dealerSeat) dealerStreak += 1;
     else { dealerSeat = win; dealerStreak = 1; }
 
     chain_lastWinnerSeat = win;
     chain_lastSettleFan = settleFan;
 
-    gameHistory.push({
-      ts: Date.now(),
-      winnerSeat: win, loserSeat: null, selfmo:true,
-      baseFan, pulledFan, settleFan, rate, amount,
-      winnerName: getPlayerNameBySeat(win), loserName:"",
-    });
+    gameHistory.push({ ts:Date.now(), winnerSeat:win, loserSeat:null, selfmo:true, baseFan, pulledFan, settleFan, rate, amount,
+      winnerName:getPlayerNameBySeat(win), loserName:"" });
 
+    // ✅ 實時更新分數顏色/數字
     renderSeatNamesAndScores();
     renderDealerUI();
     renderStreakBadges();
@@ -1640,7 +1625,6 @@ function settleRound({winners, loserSeat, selfmo}){
     return true;
   }
 
-  // eat (single or multi)
   if(winners.length === 1){
     const win = win0;
     applyMoneyChangeSeat(loserSeat, -amount);
@@ -1652,12 +1636,8 @@ function settleRound({winners, loserSeat, selfmo}){
     chain_lastWinnerSeat = win;
     chain_lastSettleFan = settleFan;
 
-    gameHistory.push({
-      ts: Date.now(),
-      winnerSeat: win, loserSeat, selfmo:false,
-      baseFan, pulledFan, settleFan, rate, amount,
-      winnerName: getPlayerNameBySeat(win), loserName: getPlayerNameBySeat(loserSeat),
-    });
+    gameHistory.push({ ts:Date.now(), winnerSeat:win, loserSeat, selfmo:false, baseFan, pulledFan, settleFan, rate, amount,
+      winnerName:getPlayerNameBySeat(win), loserName:getPlayerNameBySeat(loserSeat) });
 
     renderSeatNamesAndScores();
     renderDealerUI();
@@ -1678,17 +1658,11 @@ function settleRound({winners, loserSeat, selfmo}){
     return true;
   }
 
-  // multi winners: loser pays each winner
   winners.forEach(w=>{
     applyMoneyChangeSeat(loserSeat, -amount);
     applyMoneyChangeSeat(w, +amount);
-
-    gameHistory.push({
-      ts: Date.now(),
-      winnerSeat: w, loserSeat, selfmo:false,
-      baseFan, pulledFan, settleFan, rate, amount,
-      winnerName: getPlayerNameBySeat(w), loserName: getPlayerNameBySeat(loserSeat),
-    });
+    gameHistory.push({ ts:Date.now(), winnerSeat:w, loserSeat, selfmo:false, baseFan, pulledFan, settleFan, rate, amount,
+      winnerName:getPlayerNameBySeat(w), loserName:getPlayerNameBySeat(loserSeat) });
   });
 
   if(win0 === dealerSeat) dealerStreak += 1;
@@ -1857,7 +1831,6 @@ function bindEvents(){
 
   $("clearBtn")?.addEventListener("click", clearTab1All);
 
-  // tab2 names editable
   SEATS.forEach(seat=>{
     nameEl(seat)?.addEventListener("input", ()=>{
       setPlayerNameBySeat(seat, nameEl(seat).value || `玩家`);
@@ -1879,32 +1852,19 @@ function bindEvents(){
   $("huConfirm")?.addEventListener("click", ()=>{
     const allowMulti = $("chkMulti").checked;
 
-    if(!huWinners.length){
-      alert("未揀食胡玩家");
-      return;
-    }
-    if(!allowMulti && huWinners.length !== 1){
-      alert("未剔一炮多響：食胡玩家只可揀一個");
-      return;
-    }
+    if(!huWinners.length){ alert("未揀食胡玩家"); return; }
+    if(!allowMulti && huWinners.length !== 1){ alert("未剔一炮多響：食胡玩家只可揀一個"); return; }
+
     if(huSelfmo){
-      if(huWinners.length > 1){
-        alert("自摸暫不支援多個食胡玩家");
-        return;
-      }
       const ok = settleRound({ winners:[huWinners[0]], loserSeat:null, selfmo:true });
-      if(ok){ closeMask("huMask"); }
+      if(ok) closeMask("huMask");
       return;
     }
 
-    if(!huLoser){
-      alert("未揀出銃玩家");
-      return;
-    }
-
+    if(!huLoser){ alert("未揀出銃玩家"); return; }
     const winners = allowMulti ? huWinners.slice() : [huWinners[0]];
     const ok = settleRound({ winners, loserSeat: huLoser, selfmo:false });
-    if(ok){ closeMask("huMask"); }
+    if(ok) closeMask("huMask");
   });
 
   $("btnSetDealer")?.addEventListener("click", openDealerModal);
@@ -1921,7 +1881,6 @@ function bindEvents(){
   $("copyHistoryBtn")?.addEventListener("click", copyHistory);
   $("clearHistoryBtn")?.addEventListener("click", clearHistory);
 
-  // close modal if click mask
   ["huMask","dealerMask","seatMask"].forEach(id=>{
     $(id)?.addEventListener("click", (e)=>{
       if(e.target === $(id)) closeMask(id);
@@ -1936,7 +1895,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
   renderFanGrid();
   loadTab1State();
   updateTotalFan();
-  aiSuggest();
 
   loadTab2State();
   renderSeatNamesAndScores();
