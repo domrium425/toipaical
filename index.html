@@ -698,7 +698,7 @@ details[open] summary::before{ transform:rotate(90deg); }
   display:block;
   margin:0;
   padding:0;
-  transform: translateY(-1.5px) translateX(0.5pt);
+  transform: translateY(0.25pt) translateX(-0.25pt);
 }
 .iosSvgIcon path{
   fill:none;
@@ -744,7 +744,6 @@ details[open] summary::before{ transform:rotate(90deg); }
   white-space:nowrap;
 
   position:relative;
-  padding-left:40px; /* 留位比 menu icon */
 }
 
 .pillMenuBtn{
@@ -766,6 +765,16 @@ details[open] summary::before{ transform:rotate(90deg); }
   padding:0;
   -webkit-tap-highlight-color: transparent;
 }
+
+.pillCenter{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  pointer-events:none;
+}
+
 .pillMenuBtn:active{ transform:translateY(-50%) scale(0.94); }
 
 @media (max-width:380px){
@@ -844,6 +853,71 @@ body.lockScroll{ overflow:hidden; touch-action:none; }
 
 /* ===== small subtle tap feedback (ultimate) ===== */
 .btn:active{ transform: scale(0.98); }
+
+.fixedTotal.iosBar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+/* 左右兩粒圓掣固定同一寬度，唔畀佢 shrink */
+.fixedTotal.iosBar > .iosCircle{
+  flex: 0 0 44px;   /* ✅ 鎖死 44px */
+}
+
+/* 中間 pill 佔晒中間位 */
+.fixedTotal.iosBar > .iosPill{
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
+
+  display:flex;
+  align-items:center;
+  justify-content:center; /* ✅ pill 本身就置中 */
+  padding:10px 12px;      /* ✅ 唔好再用 padding-left:40px */
+}
+
+/* 左邊 menu icon 變 absolute，不影響中間置中 */
+.fixedTotal.iosBar .pillMenuBtn{
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform: translateY(-50%);
+
+  width:30px;
+  height:30px;
+}
+
+/* 中間文字/數字真置中（而且唔搶 click） */
+.fixedTotal.iosBar .pillCenter{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  pointer-events:none; /* ✅ 仍然可以點到 pill 或 bar */
+}
+
+/* 可選：細機再緊湊少少 */
+@media (max-width:380px){
+  .fixedTotal.iosBar > .iosCircle{ flex-basis:40px; }
+  .fixedTotal.iosBar .pillMenuBtn{ left:8px; width:28px; height:28px; }
+}
+
+/* 左右圓掣同 pill 同一套玻璃感 */
+.fixedTotal.iosBar > .iosCircle{
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+body.white .fixedTotal.iosBar > .iosCircle{
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(0,0,0,0.10);
+}
+
   </style>
 </head>
 
@@ -1021,8 +1095,10 @@ body.lockScroll{ overflow:hidden; touch-action:none; }
           <path d="M6 17h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
-      <span>總番數</span>
-      <span id="totalFan">0</span>
+      <div class="pillCenter">
+        <span>總番數</span>
+        <span id="totalFan">0</span>
+      </div>
     </div>
 
     <button class="iosCircle" id="toTab2Btn" type="button" aria-label="去計分區">
