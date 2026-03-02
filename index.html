@@ -99,6 +99,33 @@ body.white{
   font-size:16px; /* 防 zoom */
 }
 
+/* Fixbar右掣icon */
+#toTab2Btn .iosSvgIcon{
+  width:20px;
+  height:20px;
+}
+
+#toTab2Btn svg{
+  width:22px;
+  height:22px;
+}
+
+#toTab2Btn .iosChevronR{
+  width:20px;
+  height:20px;
+  display:block;
+  transform: translateX(0.25px);
+  transform: translateY(-1.5px);
+}
+
+#toTab2Btn .iosChevronR path{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
 /* ✅ 通用細數字 input */
 .miniNum{
   width:50px !important;
@@ -854,45 +881,36 @@ body.white .fixedTotal.iosBar{
   background:var(--muted);
   color:var(--gold);
 
+  position:relative;
+
   line-height:0;
   box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 }
 
+.iosCircle svg{display: block;}
+
 .iosSvgIcon{
-  width:20px;
-  height:20px;
-  vector-effect: non-scaling-stroke;
+  width:18px;
+  height:18px;
+
   display:block;      /* ❗關鍵：消 baseline */
-  flex-shrink:0;      /* ❗唔會被壓縮 */
+  flex:0 0 auto;
+
+  margin:0;
+  padding:0;
+
+  transform: translateX(0.5pt);
 }
 
-/* iOS-like icon tuning */
-.iosSvgIcon.iosRefresh{
-  width:20px;
-  height:20px;
-  display:block;
-  flex-shrink:0;
-}
-
-/* Make strokes feel like SF Symbols */
-.iosRefresh .arc,
-.iosRefresh .head{
+.iosSvgIcon path{
   fill:none;
   stroke:currentColor;
-  stroke-width:2.15;              /* iOS feel */
+
+  stroke-width:2;
   stroke-linecap:round;
   stroke-linejoin:round;
-}
 
-/* Arc shape: control the "gap" + curvature */
-.iosRefresh .arc{
-  /* Round-ish arc, iOS-like gap */
-  d: path("M19.6 12a7.6 7.6 0 1 1-2.35-5.35");
-}
-
-/* Arrow head: sit flush on arc */
-.iosRefresh .head{
-  d: path("M17.25 4.65h3.9v3.9");
+  vector-effect:non-scaling-stroke;
 }
 
 /* iOS press feedback (like Safari toolbar button) */
@@ -973,76 +991,6 @@ body.white .iosPill{
   .iosCircle{ width:40px; height:40px; font-size:17px; }
   .iosPill{ padding:9px 10px; gap:8px; }
   .iosPill .pillValue{ font-size:17px; }
-}
-
-/* ===== iOS 風格 → 向右箭咀 ===== */
-.arrowRight{
-  position: relative;
-  width: 10px;
-  height: 10px;
-  display:block;
-  flex:0 0 auto;
-  color:currentColor;
-}
-
-/* 上斜線 */
-.arrowRight::before,
-.arrowRight::after{
-  content:"";
-  position:absolute;
-  right:0;
-  width:9px;
-  height:2px;
-  background: currentColor;
-  border-radius:2px;
-  transform-origin:right center;
-}
-
-/* 上半 */
-.arrowRight::before{
-  top:4px;
-  transform: rotate(45deg);
-}
-
-/* 下半 */
-.arrowRight::after{
-  bottom:4px;
-  transform: rotate(-45deg);
-}
-
-.refreshIcon{
-  width:16px;
-  height:16px;
-  position:relative;
-  display:block;
-}
-
-/* 圓弧 */
-.refreshIcon::before{
-  content:"";
-  position:absolute;
-  inset:0;
-
-  border:2px solid currentColor;
-  border-right-color:transparent;   /* 留開口位 */
-  border-radius:50%;
-}
-
-/* 箭咀頭 */
-.refreshIcon::after{
-  content:"";
-  position:absolute;
-
-  right:-1px;
-  top:2px;
-
-  width:6px;
-  height:6px;
-
-  border-top:2px solid currentColor;
-  border-right:2px solid currentColor;
-
-  transform: rotate(45deg);
 }
 
   </style>
@@ -1240,7 +1188,15 @@ body.white .iosPill{
   </div>
 
   <button class="iosCircle" id="toTab2Btn">
-   <span class="arrowRight"></span>
+   <svg class="iosChevronR" viewBox="0 0 20 20">
+    <!-- 箭頭（用 stroke）向右/向上/大小 -->
+    <path d="M9.5 6.5 L14.5 12 L9.5 17.5"
+          fill="none";
+          stroke="currentColor";
+          stroke-width="2.4";
+          stroke-linecap="round";
+          stroke-linejoin="round"/>
+   </svg>
   </button>
 </div>
 
