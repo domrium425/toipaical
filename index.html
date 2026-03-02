@@ -1213,14 +1213,19 @@ body.white .iosPill{
   <button class="iosCircle">
     <svg class="iosSvgIcon" viewBox="0 0 24 24">
       <!-- 圓弧（有缺口） -->
-      <path d="M20 12a8 8 0 1 1-2.5-5.5"
+      <path d="M20 12
+               a8 8 0 1 1 -16 0
+               a8 8 0 0 1 8 -8
+               "
             fill="none"
             stroke="currentColor"
             stroke-width="2"
             stroke-linecap="round"/>
 
-      <!-- 箭頭（用 stroke） -->
-      <path d="M17.5 3.5v5h-5"
+      <!-- 箭頭（用 stroke）向右/向上/大小 -->
+      <path d="m11.5 1.25 
+               l3 3
+               -3 3"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
