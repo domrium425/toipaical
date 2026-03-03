@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
 
   <!-- ✅ iPhone「加入主畫面」專用 icon（PNG，iOS 可靠） -->
-  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="台牌神器">
@@ -35,6 +35,7 @@
   --glassLight: rgba(255,255,255,0.72);
   --glassBorderDark: rgba(255,255,255,0.14);
   --glassBorderLight: rgba(0,0,0,0.10);
+  --primary: var(--gold);
 }
 *{ box-sizing:border-box; }
 body{
@@ -60,6 +61,7 @@ body.white{
 
   --pos:#1f8a3a;
   --neg:#ff3b30;
+  --primary: var(--gold);
 }
 
 /* ===== 底設定 UI（同 rate 同款） ===== */
@@ -596,7 +598,13 @@ body.white .winBtn{ color:#fff; }
   justify-content:center;
   z-index:999;
   padding:0;
+  opacity:1;
+  transition: opacity 220ms ease;
 }
+.modalMask.closing{
+  opacity:0;
+}
+
 .modal{
   width:min(520px, 100%);
   background:var(--card);
@@ -608,6 +616,8 @@ body.white .winBtn{ color:#fff; }
   opacity:0;
   animation: sheetUp 260ms cubic-bezier(.2,.8,.2,1) forwards;
   padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  will-change: transform, opacity;
+  touch-action:none;
 }
 body.white .modal{
   border:1px solid rgba(0,0,0,0.08);
@@ -616,18 +626,25 @@ body.white .modal{
 @keyframes sheetUp{
   to{ transform: translateY(0); opacity:1; }
 }
+
+/* ✅ 你要：關閉先「彈一下」再落（rubber band close） */
 .modal.closing{
-  animation: sheetDown 220ms cubic-bezier(.4,0,1,1) forwards;
+  animation: sheetDownRubber 320ms cubic-bezier(.22,.9,.25,1) forwards;
 }
-@keyframes sheetDown{
-  to{ transform: translateY(24px); opacity:0; }
+@keyframes sheetDownRubber{
+  0%   { transform: translateY(0) scale(1); opacity:1; }
+  22%  { transform: translateY(-7px) scale(1.01); opacity:1; } /* 先彈一下 */
+  100% { transform: translateY(34px) scale(0.985); opacity:0; } /* 再落 */
 }
+
 .modalGrab{
   height:20px;
   display:flex;
   align-items:center;
   justify-content:center;
+  cursor:grab;
 }
+.modalGrab:active{ cursor:grabbing; }
 .modalGrab::before{
   content:"";
   width:44px;
@@ -642,7 +659,10 @@ body.white .modalGrab::before{ background: rgba(0,0,0,0.12); }
   text-align:center;
   font-weight:900;
   color:var(--gold);
+  cursor:grab;
 }
+.modalHeader:active{ cursor:grabbing; }
+
 .modalBody{ padding:10px 14px 12px 14px; }
 .modalFooter{ padding:10px 14px 12px 14px; }
 
@@ -654,7 +674,7 @@ body.white .modalGrab::before{ background: rgba(0,0,0,0.12); }
 .modalActions .btn{
   width:100%;
   padding:12px 12px;
-  border-radius:14px;
+  border-radius:999px;
 }
 
 .pickGrid2{
@@ -877,34 +897,16 @@ body.white .iosPill{
   opacity:0.92;
 }
 .iosPill .pillValue{
-  font-size:17px;
+  font-size:16px;
   color: var(--gold);
   text-align:center;
-  min-width: 2.2ch;
+  margin: 0 0.5px;
 }
 
 @media (max-width:380px){
   .iosCircle{ width:40px; height:40px; }
   .iosPill{ height:40px; }
   .pillCenter{ gap:8px; }
-}
-
-/* ✅ 1）同一行兩個 div box（唔係 card） */
-.boxRow2{
-  display:flex;
-  gap:12px;
-  align-items:stretch;
-  margin-bottom:14px;
-}
-.boxRow2 .box{
-  flex:1;
-  background:var(--card);
-  border-radius:18px;
-  padding:14px;
-  box-shadow: 0 0 22px var(--shadow);
-}
-@media (max-width: 560px){
-  .boxRow2{ flex-direction:column; }
 }
 
 /* ===== 兩個細Card一行 ===== */
@@ -936,30 +938,26 @@ body.white .iosPill{
   gap:1px;
   width:100%;
 }
-
-.miniInner .smallBtn{
-  flex-basis:auto;
-  width:50%;
-  margin-top:6px;
-  border-radius:999px;
-  height:20px;
-  align-items:center;
-  justify-content:center;
-  font-size:10px;
-  font-weight:900;
-}
-
 .miniInner span{
   font-weight: 700;
 }
-
 .miniInner input{
   color:var(--gold);
-  caret-color:var(--gold)
-;}
-
+  caret-color:var(--gold);
+}
 .miniInner input:focus{
   border-color: var(--gold);
+}
+
+/* ✅ 重置掣下一行（你之前已做到），保持 */
+.miniInner .smallBtn{
+  flex-basis:100%;
+  width:100%;
+  margin-top:8px;
+  border-radius:999px;
+  height:auto;
+  font-size:13px;
+  font-weight:900;
 }
 
 /* 小重置掣 */
@@ -970,9 +968,37 @@ body.white .iosPill{
 
 /* 手機安全 */
 @media(max-width:480px){
-  .dualCardRow{
-    gap:8px;
-  }
+  .dualCardRow{ gap:8px; }
+}
+
+/* ✅ 讓拖拽時不要選字 */
+.noselect, .noselect *{
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+#fanSummaryTotalValue{
+  color: var(--primary) !important;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0 7px;
+}
+
+#fanSummaryTotal{
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.line span:last-child{
+  font-size: 14px;
 }
 
   </style>
@@ -1001,28 +1027,27 @@ body.white .iosPill{
     </div>
 
     <!-- ===== 打幾錢 + 底番（同一行雙細Card）===== -->
-  <div class="dualCardRow">
+    <div class="dualCardRow">
+      <!-- 左：打幾錢 -->
+      <div class="miniCard">
+        <div class="miniInner">
+          <span>$</span>
+          <input type="number" id="rate" class="input miniNum" value="1" inputmode="numeric">
+          <span>番</span>
+          <button class="btn secondary smallBtn" id="resetRateBtn" type="button">重置</button>
+        </div>
+      </div>
 
-    <!-- 左：打幾錢 -->
-    <div class="miniCard">
-      <div class="miniInner">
-        <span>$</span>
-        <input type="number" id="rate" class="input miniNum" value="1" inputmode="numeric">
-        <span>番</span>
-        <button class="btn secondary smallBtn" id="resetRateBtn">重置</button>
+      <!-- 右：底番 -->
+      <div class="miniCard">
+        <div class="miniInner">
+          <span>底</span>
+          <input type="number" id="baseFan" class="input miniNum" value="0" inputmode="numeric">
+          <span>番</span>
+          <button class="btn secondary smallBtn" id="resetBaseBtn" type="button">重置</button>
+        </div>
       </div>
     </div>
-
-    <!-- 右：底番 -->
-    <div class="miniCard">
-      <div class="miniInner">
-        <span>底</span>
-        <input type="number" id="baseFan" class="input miniNum" value="0" inputmode="numeric">
-        <span>番</span>
-        <button class="btn secondary smallBtn" id="resetBaseBtn">重置</button>
-      </div>
-    </div>
-  </div>
 
     <div class="card">
       <h2>陰蟄錢</h2>
@@ -1158,7 +1183,7 @@ body.white .iosPill{
       <div class="modalBody">
         <div class="fanSummaryList" id="fanSummaryList"></div>
         <div class="fanSummaryTotal" id="fanSummaryTotal">
-          <span>總番數</span><span id="fanSummaryTotalValue">0番</span>
+          <span>總番數</span><span id="fanSummaryTotalValue">0</span>番
         </div>
       </div>
       <div class="modalFooter">
@@ -2030,20 +2055,44 @@ function clearHistory(){
 function openSheet(maskId){
   const m = $(maskId);
   if(!m) return;
+
+  // reset closing state
+  m.classList.remove("closing");
+  const modal = m.querySelector(".modal");
+  if(modal){
+    modal.classList.remove("closing");
+    modal.style.transition = "";
+    modal.style.transform = "";
+    modal.style.opacity = "";
+  }
+
   m.style.display = "flex";
+  document.body.classList.add("noselect");
 }
 function closeSheet(maskId){
   const m = $(maskId);
   if(!m) return;
   const modal = m.querySelector(".modal");
+
+  // mask fade
+  m.classList.add("closing");
+
   if(modal){
+    // ensure no drag inline transition fights with closing animation
+    modal.style.transition = "";
+    modal.style.transform = "";
     modal.classList.add("closing");
+
     modal.addEventListener("animationend", ()=>{
       modal.classList.remove("closing");
+      m.classList.remove("closing");
       m.style.display = "none";
+      document.body.classList.remove("noselect");
     }, {once:true});
   }else{
+    m.classList.remove("closing");
     m.style.display = "none";
+    document.body.classList.remove("noselect");
   }
 }
 function bindMaskTapToClose(maskId){
@@ -2051,6 +2100,118 @@ function bindMaskTapToClose(maskId){
   if(!m) return;
   m.addEventListener("click", (e)=>{
     if(e.target === m) closeSheet(maskId);
+  });
+}
+
+/* ✅ 拖拽關閉 + rubber band（所有 sheet 通用） */
+function attachSheetGestures(){
+  const masks = document.querySelectorAll(".modalMask");
+  masks.forEach((mask)=>{
+    const modal = mask.querySelector(".modal");
+    if(!modal) return;
+
+    const handles = [];
+    const g = modal.querySelector(".modalGrab");
+    const h = modal.querySelector(".modalHeader");
+    if(g) handles.push(g);
+    if(h) handles.push(h);
+
+    let dragging = false;
+    let startY = 0;
+    let lastY = 0;
+    let lastT = 0;
+    let curDy = 0;
+
+    const rubber = (dy)=>{
+      // dy 越大阻力越大（iOS 感）
+      const k = 180;
+      return dy / (1 + dy / k);
+    };
+
+    const setMaskAlpha = (dy)=>{
+      // dy 越大，mask 越透明
+      const t = Math.max(0, Math.min(1, dy / 280));
+      const base = 0.55; // 你原本 mask
+      const a = base * (1 - t * 0.75);
+      mask.style.background = `rgba(0,0,0,${a.toFixed(3)})`;
+    };
+
+    const snapBack = ()=>{
+      modal.style.transition = "transform 280ms cubic-bezier(.18,.95,.22,1)";
+      modal.style.transform = "translateY(0)";
+      mask.style.transition = "background 220ms ease";
+      mask.style.background = "rgba(0,0,0,0.55)";
+      window.setTimeout(()=>{
+        modal.style.transition = "";
+        mask.style.transition = "";
+      }, 300);
+    };
+
+    const onStart = (clientY)=>{
+      if(mask.style.display !== "flex") return;
+      dragging = true;
+      startY = clientY;
+      lastY = clientY;
+      lastT = performance.now();
+      curDy = 0;
+
+      modal.style.transition = "none";
+      mask.style.transition = "none";
+      document.body.classList.add("noselect");
+    };
+
+    const onMove = (clientY)=>{
+      if(!dragging) return;
+      const dyRaw = Math.max(0, clientY - startY);
+      const dy = rubber(dyRaw);
+      curDy = dyRaw;
+
+      modal.style.transform = `translateY(${dy}px)`;
+      setMaskAlpha(dyRaw);
+    };
+
+    const onEnd = ()=>{
+      if(!dragging) return;
+      dragging = false;
+
+      const now = performance.now();
+      const dt = Math.max(1, now - lastT);
+      const vy = (lastY - startY) / dt; // px/ms (rough)
+      const vel = vy * 1000 / 1000; // keep readable
+
+      // 條件：拖得夠遠 或者甩手夠快
+      const shouldClose = (curDy > 140) || (vel > 0.85);
+
+      // reset mask bg transition for next time
+      mask.style.transition = "";
+      if(shouldClose){
+        closeSheet(mask.id);
+      }else{
+        snapBack();
+      }
+    };
+
+    const onTouchStart = (e)=>{
+      if(e.touches.length !== 1) return;
+      onStart(e.touches[0].clientY);
+    };
+    const onTouchMove = (e)=>{
+      if(!dragging) return;
+      e.preventDefault();
+      const y = e.touches[0].clientY;
+      lastY = y;
+      lastT = performance.now();
+      onMove(y);
+    };
+    const onTouchEnd = ()=>{
+      onEnd();
+    };
+
+    handles.forEach((el)=>{
+      el.addEventListener("touchstart", onTouchStart, {passive:true});
+      el.addEventListener("touchmove", onTouchMove, {passive:false});
+      el.addEventListener("touchend", onTouchEnd, {passive:true});
+    });
   });
 }
 
@@ -2085,20 +2246,15 @@ function setRightBtnAsToTab2(){
 }
 function setRightBtnAsHistory(){
   const b = $("rightBarBtn");
-  /* ✅ 3）Tab2 右掣 icon：打橫三點（Safari style） */
+
+  /* ✅ Safari 風格「橫三點」：用 filled circles 更似 iOS */
   b.innerHTML = `
     <svg class="iosSvgIcon" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M6.5 12 h0"></path>
-      <path d="M12 12 h0"></path>
-      <path d="M17.5 12 h0"></path>
+      <circle cx="7" cy="12" r="1.5" fill="currentColor"></circle>
+      <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+      <circle cx="17" cy="12" r="1.5" fill="currentColor"></circle>
     </svg>
   `;
-  /* 用 stroke-width 做圓點 */
-  const paths = b.querySelectorAll("path");
-  paths.forEach(p=>{
-    p.style.strokeWidth = "4.5";
-    p.style.strokeLinecap = "round";
-  });
 
   b.onclick = ()=>{
     renderHistory();
@@ -2206,7 +2362,7 @@ function renderFanSummarySheet(){
     }
   }
 
-  $("fanSummaryTotalValue").textContent = `${grand}番`;
+  $("fanSummaryTotalValue").textContent = `${grand}`;
   $("totalFan").innerText = String(grand);
 }
 
@@ -2644,6 +2800,11 @@ function bindEvents(){
     updateTotalFan();
     saveTab1State();
   });
+  $("resetRateBtn").addEventListener("click", ()=>{
+    $("rate").value = "1";
+    updateTotalFan();
+    saveTab1State();
+  });
 
   $("fanPill").addEventListener("click", ()=>{
     renderFanSummarySheet();
@@ -2721,6 +2882,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   loadTheme();
   renderFanList();
   bindEvents();
+  attachSheetGestures(); // ✅ 拖拽關閉 + rubber band
 
   loadTab1State();
   updateTotalFan();
