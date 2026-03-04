@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="台牌神器">
@@ -259,17 +259,17 @@ summary::before{
 details[open] summary::before{ transform:rotate(90deg); }
 .sumGold{ color:var(--gold); font-weight:900; }
 
-/* ===================== ✅ 番表行：唔爆版 + 唔出 … + 至少 7 字同一行（你要求 7ch） ===================== */
+/* ===================== ✅ 番表行：Stepper 收窄距離 + 前面至少 6 字(6ch) + 番數更貼更窄 ===================== */
 .checkline{
   display:grid;
-  grid-template-columns: auto minmax(7ch, 1fr) 52px; /* ✅ 6ch → 7ch */
+  grid-template-columns: auto minmax(6ch, 1fr) 44px; /* ✅ 前面最少 6 字；右邊番數更窄 */
   align-items:center;
-  gap:8px;
+  gap:6px;                 /* ✅ 比之前更窄 */
   padding:7px 4px;
   border-bottom:1px dashed var(--line);
 
   width:100%;
-  min-width:0;                 /* ✅ 關鍵：防爆 */
+  min-width:0;             /* ✅ 防爆 */
 }
 .checkline:last-child{ border-bottom:none; }
 
@@ -280,20 +280,24 @@ details[open] summary::before{ transform:rotate(90deg); }
 
   font-weight:500;
 
-  /* ✅ 唔要 …：允許換行，但仍然至少 7 字會留喺同一行 */
+  /* ✅ 唔要 …：允許換行 */
   white-space:normal;
   overflow:visible;
   text-overflow:clip;
   word-break:break-word;
   line-height:1.2;
+
+  /* ✅ 名稱同番數更貼 */
+  padding-right:2px;
 }
 
-/* 右邊番數：固定右對齊 */
+/* 右邊番數：固定右對齊 + 更窄 */
 .checkline .fanRight{
   justify-self:end;
-  width:52px;
+  width:44px;              /* ✅ 收窄 */
   text-align:right;
   white-space:nowrap;
+  letter-spacing:0.2px;
 }
 
 .checkline .fan{ color:var(--gold); font-weight:900; } /* 番數保持重點 */
@@ -328,14 +332,14 @@ body.white .checkline.active{
 }
 .fanGrid details{ margin:0; }
 
-/* ===================== ✅ Stepper：再縮細 20%（保持你現有設計） ===================== */
+/* ===================== ✅ Stepper：再縮細 20% + 收窄距離（保持你設計） ===================== */
 .stepperWrap{
   display:inline-flex;
   align-items:center;
   justify-content:center;
 
-  gap:1px;                    /* ✅ 更窄 */
-  padding:2px 3px;            /* ✅ 更細 */
+  gap:0px;                    /* ✅ 收窄距離 */
+  padding:1px 2px;            /* ✅ 更細 */
   border-radius:999px;
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(128,128,128,0.22);
@@ -350,16 +354,16 @@ body.white .stepperWrap{
 }
 
 .stepBtn{
-  width:20px;                 /* ✅ 原本 22 → 20 */
-  height:20px;                /* ✅ 原本 22 → 20 */
+  width:18px;                 /* ✅ 再細 */
+  height:18px;
 
   border:none;
-  border-radius:7px;
+  border-radius:6px;
   background:transparent;
 
   color:var(--text);
   font-weight:900;
-  font-size:13px;             /* ✅ 原本 14 → 13 */
+  font-size:12px;
   line-height:1;
   padding:0;
   display:flex;
@@ -374,7 +378,7 @@ body.white .stepperWrap{
   min-width:14px;
   text-align:center;
   font-weight:900;
-  font-size:13px;             /* ✅ 原本 14 → 13 */
+  font-size:12px;             /* ✅ 更細 */
   color:var(--gold);
   line-height:1;
   transform: translateY(-0.5px);
@@ -1894,7 +1898,7 @@ function renderAllTab2(){
   }
 }
 
-/* ======= 以下 JS 你原本段落（保持不變） ======= */
+/* ⚠️ 為咗保持「完整可用」，我放回你原本整段 JS（由 applyTransfer 開始） */
 function pushUndoSnapshot(){
   undoStack.push(clone({
     scores, dealerPlayer, dealerStreak,
