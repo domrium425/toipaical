@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
 
   <!-- ✅ iPhone「加入主畫面」專用 icon（PNG，iOS 可靠） -->
-  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="台牌神器">
@@ -38,6 +38,10 @@
   --primary: var(--gold);
 }
 *{ box-sizing:border-box; }
+
+/* ✅ FIX: 防橫向爆 page（iOS details + grid 常見） */
+html, body{ width:100%; overflow-x:hidden; }
+
 body{
   margin:0;
   background:var(--bg);
@@ -190,6 +194,9 @@ body.white .tabBtn.active{ color:#fff; }
   padding:14px;
   margin-bottom:14px;
   box-shadow: 0 0 22px var(--shadow);
+
+  /* ✅ FIX: details / grid 內容再大都唔會撐爆出 card */
+  overflow:hidden;
 }
 .flatCard{ box-shadow:none; background:var(--card); }
 
@@ -238,6 +245,9 @@ details{
   border-radius:14px;
   padding:10px 10px;
   margin:10px 0;
+
+  /* ✅ FIX: grid item 可縮，避免橫向爆 page */
+  min-width:0;
 }
 details > summary{
   cursor:pointer;
@@ -269,32 +279,30 @@ details[open] summary::before{ transform:rotate(90deg); }
   border-bottom:1px dashed var(--line);
 
   width:100%;
-  min-width:0;                /* ✅ flex 內可縮，防爆 */
+  min-width:0;
 }
 .checkline:last-child{ border-bottom:none; }
 
-/* ✅ label（正花/字呢啲字唔要 bold；同時可縮、唔走位） */
 .checkline .nameLabel{
   flex:1;
-  min-width:0;                /* ✅ 關鍵：可縮 */
+  min-width:0;
   cursor:pointer;
   user-select:none;
 
-  font-weight:500;            /* ✅ 唔 bold */
+  font-weight:500;
   overflow:hidden;
   text-overflow:ellipsis;
-  white-space:nowrap;         /* ✅ 一行出晒（過長就 …） */
+  white-space:nowrap;
 }
 
-/* 右邊番數：固定右邊，唔會被擠走位 */
 .checkline .fanRight{
   flex-shrink:0;
-  width:52px;                 /* ✅ 固定寬度，對齊好睇 */
+  width:52px;
   text-align:right;
   white-space:nowrap;
 }
 
-.checkline .fan{ color:var(--gold); font-weight:900; } /* 番數保持重點 */
+.checkline .fan{ color:var(--gold); font-weight:900; }
 .checkline.active{
   background:rgba(212,175,55,0.12);
   border-radius:10px;
@@ -319,41 +327,56 @@ body.white .checkline.active{
 .aiBox .ok{ color:var(--sub); }
 
 .tab1FanBody{ font-size:12px; }
+
+/* ✅ FIX: 番表區變成「卡內可滾動」，開幾多個摺疊都唔會爆 page */
+#fanListMount.tab1FanBody{
+  max-height: 70vh;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding-right: 2px; /* iOS scrollbar 位 */
+}
+
 .fanGrid{
   display:grid;
   grid-template-columns: 1fr 1fr;
   gap:10px;
+
+  /* ✅ FIX: grid item 唔會因為高度互相拉伸而怪 */
+  align-items:start;
+
+  /* ✅ FIX: grid 內 item 可縮，防橫向爆 */
+  min-width:0;
 }
 .fanGrid details{ margin:0; }
 
-/* ===================== ✅ Stepper（最左、縮細、間距收窄 + 掣唔要圓形邊框） ===================== */
+/* ===================== ✅ Stepper（更細一級：保持你設計，但再瘦啲） ===================== */
 .stepperWrap{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  gap:1px;                 /* ✅ - + 同數字再收窄少少 */
-  padding:3px 4px;
+  gap:1px;
+  padding:2px 3px;              /* ✅ 再細 */
   border-radius:999px;
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(128,128,128,0.22);
-  flex-shrink:0;           /* ✅ 唔會被擠扁走樣 */
+  flex-shrink:0;
 }
 body.white .stepperWrap{
   background:rgba(0,0,0,0.03);
   border:1px solid rgba(0,0,0,0.12);
 }
 .stepBtn{
-  width:22px;
-  height:22px;
+  width:20px;                    /* ✅ 再細 */
+  height:20px;
 
-  /* ✅ 掣唔要圓形邊框：改做細圓角 + 無邊框 */
   border:none;
   border-radius:8px;
   background:transparent;
 
   color:var(--text);
   font-weight:900;
-  font-size:14px;          /* ✅ 掣字縮細兩 pt */
+  font-size:13px;                /* ✅ 再細 */
   line-height:1;
   padding:0;
   display:flex;
@@ -365,10 +388,10 @@ body.white .stepperWrap{
 .stepBtn:disabled{ opacity:0.35; }
 
 .stepVal{
-  min-width:14px;
+  min-width:12px;                /* ✅ 再細 */
   text-align:center;
   font-weight:900;
-  font-size:14px;          /* ✅ 數字縮細兩 pt */
+  font-size:13px;                /* ✅ 再細 */
   color:var(--gold);
   line-height:1;
   transform: translateY(-0.5px);
@@ -695,8 +718,8 @@ body.white .modal{
 }
 @keyframes sheetDownRubber{
   0%   { transform: translateY(0) scale(1); opacity:1; }
-  22%  { transform: translateY(-7px) scale(1.01); opacity:1; } /* 先彈一下 */
-  100% { transform: translateY(34px) scale(0.985); opacity:0; } /* 再落 */
+  22%  { transform: translateY(-7px) scale(1.01); opacity:1; }
+  100% { transform: translateY(34px) scale(0.985); opacity:0; }
 }
 
 .modalGrab{
@@ -1557,17 +1580,14 @@ function renderFanList(){
       line.className = "checkline";
       line.id = "line_"+id;
 
-      // ✅ 全部用 stepper（包括 連莊）
       const step = makeStepper(id, meta);
       line.appendChild(step);
 
       const lab = document.createElement("label");
       lab.className = "nameLabel";
       lab.textContent = name;
-      // 點字都加減（更順手）
       lab.addEventListener("click", ()=>{
         const vNow = safeInt(document.getElementById(`sv_${id}`)?.textContent ?? "0", 0);
-        // 不可重複：0/1 toggle；可重複：+1
         if(isRepeatable(meta)){
           setStepperValue(id, vNow + 1);
         }else{
@@ -1586,8 +1606,6 @@ function renderFanList(){
       line.appendChild(right);
 
       d.appendChild(line);
-
-      // init calc
       updatePerItemCalc(id);
     });
 
@@ -1603,7 +1621,6 @@ function updatePerItemCalc(id){
   const vEl = document.getElementById(`sv_${id}`);
   if(!span || !vEl) return;
 
-  // dealerTimes 特例：番數由次數算（2*次 + 1）
   if(rowMeta === "dealerTimes"){
     const times = Math.max(safeInt(vEl.textContent, 0), 0);
     const dealerFan = (times > 0) ? (times*2 + 1) : 0;
@@ -1660,7 +1677,6 @@ function getStepperCount(id){
 function updateTotalFan(){
   let total = 0;
 
-  // sum all items except dealerTimes (dealerTimes uses special calc)
   for(const g of fanData){
     for(const [id, name, fan, meta] of g.items){
       if(meta === "dealerTimes") continue;
@@ -1669,12 +1685,10 @@ function updateTotalFan(){
     }
   }
 
-  // dealerTimes
   const times = Math.max(getStepperCount("dealer_times"), 0);
   const dealerFan = (times > 0) ? (times*2 + 1) : 0;
   total += dealerFan;
 
-  // base
   total += getBaseFan();
 
   $("totalFan").innerText = String(total);
@@ -1689,7 +1703,6 @@ function updateTotalFan(){
 function aiSuggest(){
   const box = $("aiBox");
 
-  // ids selected if count > 0
   const ids = new Set();
   for(const g of fanData){
     for(const [id, name, fan, meta] of g.items){
@@ -1717,7 +1730,6 @@ function aiSuggest(){
 function saveTab1State(){
   const counts = {};
 
-  // save every id stepper value
   for(const g of fanData){
     for(const [id, name, fan, meta] of g.items){
       const vEl = document.getElementById(`sv_${id}`);
@@ -1753,7 +1765,6 @@ function loadTab1State(){
       }
     }
 
-    // refresh calc / active state
     for(const g of fanData){
       for(const [id] of g.items) updatePerItemCalc(id);
     }
@@ -1761,7 +1772,6 @@ function loadTab1State(){
 }
 
 function clearTab1All(){
-  // ✅ 只清晒番表 stepper + 連莊；底番保留；rate 保留
   for(const g of fanData){
     for(const [id, name, fan, meta] of g.items){
       setStepperValue(id, 0);
@@ -2175,7 +2185,6 @@ function openSheet(maskId){
   const m = $(maskId);
   if(!m) return;
 
-  // reset closing state
   m.classList.remove("closing");
   const modal = m.querySelector(".modal");
   if(modal){
@@ -2193,11 +2202,9 @@ function closeSheet(maskId){
   if(!m) return;
   const modal = m.querySelector(".modal");
 
-  // mask fade
   m.classList.add("closing");
 
   if(modal){
-    // ensure no drag inline transition fights with closing animation
     modal.style.transition = "";
     modal.style.transform = "";
     modal.classList.add("closing");
@@ -2927,7 +2934,6 @@ function bindEvents(){
     setTab(1);
   });
 
-  // ✅ Tab2 History sheet close by tapping mask
   bindMaskTapToClose("historyMask");
 
   for(let seatIdx=0; seatIdx<4; seatIdx++){
@@ -2993,9 +2999,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
   loadTheme();
   renderFanList();
   bindEvents();
-  attachSheetGestures(); // ✅ 拖拽關閉 + rubber band
+  attachSheetGestures();
 
-  // load saved, then update
   loadTab1State();
 
   for(const g of fanData){
