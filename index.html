@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
 
   <!-- ✅ iPhone「加入主畫面」專用 icon（PNG，iOS 可靠） -->
-  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="台牌神器">
@@ -260,15 +260,20 @@ summary::before{
 details[open] summary::before{ transform:rotate(90deg); }
 .sumGold{ color:var(--gold); font-weight:900; }
 
+/* ✅ 番表：保證一行唔走位 */
 .checkline{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
   padding:7px 4px;
   border-bottom:1px dashed var(--line);
+  white-space:nowrap;          /* ✅ 強制一行 */
 }
 .checkline:last-child{ border-bottom:none; }
-.checkline label{ flex:1; cursor:pointer; font-weight:700; } /* ✅ 正花呢啲字唔使 bold：統一用 700 */
+
+/* ✅ 正花/字呢啲字唔使 bold：全用較輕字重 */
+.checkline label{ flex:1; cursor:pointer; font-weight:500; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
 .checkline .fan{ color:var(--gold); font-weight:900; }
 .checkline.active{
   background:rgba(212,175,55,0.12);
@@ -300,30 +305,32 @@ body.white .checkline.active{
 }
 .fanGrid details{ margin:0; }
 
-/* ===================== ✅ NEW: Stepper（最左、縮細、間距收窄） ===================== */
+/* ===================== ✅ Stepper（更細、無圓形邊框、間距更窄、確保一行） ===================== */
 .stepperWrap{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  gap:2px;                 /* ✅ - + 同數字距離再收窄 */
-  padding:3px 4px;
-  border-radius:999px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(128,128,128,0.22);
+  gap:1px;                       /* ✅ - + 同數字距離再收窄 */
+  padding:2px 4px;
+  border-radius:10px;            /* ✅ 唔再圓形 pill */
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(128,128,128,0.18);
 }
 body.white .stepperWrap{
   background:rgba(0,0,0,0.03);
-  border:1px solid rgba(0,0,0,0.12);
+  border:1px solid rgba(0,0,0,0.10);
 }
+
+/* ✅ 掣：無圓形邊框 */
 .stepBtn{
-  width:22px;              /* ✅ 更細 */
-  height:22px;
-  border-radius:999px;
-  border:1px solid rgba(128,128,128,0.22);
+  width:20px;
+  height:20px;
+  border:none;                   /* ✅ 移除邊框 */
+  border-radius:0;               /* ✅ 唔要圓形 */
   background:transparent;
   color:var(--text);
-  font-weight:900;
-  font-size:14px;          /* ✅ 掣字縮細兩 pt（由 16 → 14） */
+  font-weight:800;
+  font-size:12px;                /* ✅ 掣字縮細兩 pt（由 14 → 12） */
   line-height:1;
   padding:0;
   display:flex;
@@ -331,27 +338,32 @@ body.white .stepperWrap{
   justify-content:center;
   -webkit-tap-highlight-color: transparent;
 }
-.stepBtn:active{ transform:scale(0.95); }
+.stepBtn:active{ transform:scale(0.90); }
+.stepBtn:disabled{ opacity:0.35; }
 
+/* ✅ 中間數字：再細 + 更窄 */
 .stepVal{
-  min-width:14px;          /* ✅ 更窄 */
+  min-width:12px;
   text-align:center;
-  font-weight:900;
-  font-size:14px;          /* ✅ 數字縮細兩 pt（由 16 → 14） */
+  font-weight:800;
+  font-size:12px;                /* ✅ 數字縮細兩 pt（由 14 → 12） */
   color:var(--gold);
   line-height:1;
   transform: translateY(-0.5px);
 }
-.stepBtn:disabled{ opacity:0.35; }
 
 .checkline .fanRight{
-  min-width:48px;
+  min-width:44px;                /* ✅ 右邊番數固定，避免換行 */
   text-align:right;
 }
 .checkline .nameLabel{
   flex:1;
   cursor:pointer;
   user-select:none;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 /* ================= TAB2 ================= */
 .t2TopBox{
