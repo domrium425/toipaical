@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
 
   <!-- ✅ iPhone「加入主畫面」專用 icon（PNG，iOS 可靠） -->
-  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="台牌神器">
@@ -268,7 +268,7 @@ details[open] summary::before{ transform:rotate(90deg); }
   border-bottom:1px dashed var(--line);
 }
 .checkline:last-child{ border-bottom:none; }
-.checkline label{ flex:1; cursor:pointer; }
+.checkline label{ flex:1; cursor:default; }
 .checkline .fan{ color:var(--gold); font-weight:900; }
 .checkline.active{
   background:rgba(212,175,55,0.12);
@@ -300,16 +300,56 @@ body.white .checkline.active{
 }
 .fanGrid details{ margin:0; }
 
-/* ✅ 數字 input（番表入面）再細：框大細不變，但字細 2pt（用縮放做到，避免 iOS zoom） */
-.input.count2{
-  width:3.2ch;
-  padding:0 6px;
+/* ===================== ✅ Tab1 Stepper（iOS - 0 +） ===================== */
+.stepper{
+  display:flex;
+  align-items:center;
+  gap:0;
+  border:1px solid var(--line);
+  background: rgba(255,255,255,0.03);
+  border-radius:999px;
+  overflow:hidden;
+  flex:0 0 auto;
+}
+body.white .stepper{
+  background: rgba(255,255,255,0.55);
+}
+.stepBtn{
+  width:28px;
+  height:22px;
+  border:none;
+  background:transparent;
+  color:var(--gold);
+  font-weight:900;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.stepBtn:active{ transform: scale(0.94); }
+.stepBtn:disabled{ opacity:0.35; }
+
+.stepVal{
+  width:28px;
+  height:22px;
+  border:none;
+  outline:none;
+  background:transparent;
+  color:var(--gold);
+  font-weight:900;
   text-align:center;
-  border-radius:8px;
-  height:16px;
-  line-height:16px;
-  transform: scale(0.69);
-  transform-origin:right center;
+  padding:0;
+  margin:0;
+  -webkit-appearance:none;
+}
+.stepVal::-webkit-outer-spin-button,
+.stepVal::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+.stepVal{
+  -moz-appearance: textfield;
 }
 
 /* ================= TAB2 ================= */
@@ -1062,7 +1102,7 @@ body.white .iosPill{
 
     <div class="card">
       <h2>番表</h2>
-      <div class="small"> ✔ 勾選即時計總番</div>
+      <div class="small"> ✔ 用 stepper 加減，即時計總番</div>
       <div class="xxxs">　</div>
       <div id="fanListMount" class="fanGrid tab1FanBody"></div>
     </div>
@@ -1070,7 +1110,7 @@ body.white .iosPill{
     <div class="card">
       <h2>🧠 番表 AI 建議</h2>
       <div class="aiBox" id="aiBox">
-        <div class="ok">✔ 等你勾選之後我先出提示</div>
+        <div class="ok">✔ 等你加番之後我先出提示</div>
       </div>
     </div>
   </div>
@@ -1359,13 +1399,13 @@ const fanData = [
     ["twoam","兩暗",5,false],["threeam","三暗",15,false],["fouram","四暗",30,false],["fiveam","五暗",60,false],["ganwu","間間胡",100,false],
   ]},
   { cat:"般高 + 相逢", items:[
-    ["bangao","般高",5,false],["threebangao","三般高",15,false],["fourbangao","四般高",30,false],
-    ["seungfung","相逢",3,false],["threeseungfung","三相逢",10,false],["fourseungfung","四相逢",30,false],["fiveseungfung","五相逢",60,false],
+    ["bangao","般高",5,true],["threebangao","三般高",15,false],["fourbangao","四般高",30,false],
+    ["seungfung","相逢",3,true],["threeseungfung","三相逢",10,false],["fourseungfung","四相逢",30,false],["fiveseungfung","五相逢",60,false],
     ["halfji","半姊妹",20,false],["fullji","全姊妹",40,false],
   ]},
   { cat:"兄弟姊妹（碰牌）", items:[
-    ["hingdai","兄弟",5,false],["small3hing","小三兄弟",15,false],["big3hing","大三兄弟",30,false],
-    ["jimai","姊妹",3,false],["small3ji","小三姊妹",10,false],["big3ji","大三姊妹",15,false],
+    ["hingdai","兄弟",5,true],["small3hing","小三兄弟",15,false],["big3hing","大三兄弟",30,false],
+    ["jimai","姊妹",3,true],["small3ji","小三姊妹",10,false],["big3ji","大三姊妹",15,false],
   ]},
   { cat:"步步高", items:[
     ["ming3color","明三色步步高",5,false],["am3color","暗三色步步高",10,false],
@@ -1426,7 +1466,31 @@ function setTab(which){
   updateFixBarForTab();
 }
 
-/* ================= Tab1：render 番表 ================= */
+/* ================= Tab1：Stepper helper ================= */
+function clamp(n, min, max){
+  if(!Number.isFinite(n)) return min;
+  return Math.max(min, Math.min(max, n));
+}
+function getStepCountById(id){
+  const inp = document.querySelector(`.fanStep[data-id="${id}"]`);
+  if(!inp) return 0;
+  return Math.max(safeInt(inp.value, 0), 0);
+}
+function setStepCountById(id, next){
+  const inp = document.querySelector(`.fanStep[data-id="${id}"]`);
+  if(!inp) return;
+  const repeatable = (inp.dataset.repeatable === "1");
+  const max = repeatable ? 99 : 1;
+  const v = clamp(safeInt(next, 0), 0, max);
+  inp.value = String(v);
+
+  const line = document.getElementById("line_"+id);
+  if(line) line.classList.toggle("active", v > 0);
+
+  updatePerItemCalc(id);
+}
+
+/* ================= Tab1：render 番表（✅ Stepper） ================= */
 function renderFanList(){
   const mount = $("fanListMount");
   mount.innerHTML = "";
@@ -1443,98 +1507,139 @@ function renderFanList(){
       line.className = "checkline";
       line.id = "line_"+id;
 
+      // ===== 連莊 stepper（只係 count，右邊顯示計法結果） =====
       if(meta === "dealerTimes"){
         const lab = document.createElement("label");
-        lab.textContent = "連莊次數";
+        lab.textContent = "連莊";
         lab.style.fontWeight = "900";
 
-        const inp = document.createElement("input");
-        inp.type = "number";
-        inp.min = "0";
-        inp.value = "0";
-        inp.className = "input count2";
-        inp.id = "dealer_times";
-        inp.inputMode = "numeric";
-        inp.addEventListener("input", ()=>{ updateTotalFan(); saveTab1State(); });
-
+        const step = makeStepper(id, /*repeatable*/true);
         const right = document.createElement("span");
         right.className = "fan";
         right.id = "dealer_times_calc";
         right.textContent = "0番";
 
+        line.appendChild(step);
         line.appendChild(lab);
-        line.appendChild(inp);
         line.appendChild(right);
         d.appendChild(line);
         return;
       }
 
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.className = "fanCheck";
-      cb.dataset.id = id;
-      cb.dataset.fan = String(fan);
-      cb.id = "cb_"+id;
-
-      cb.addEventListener("change", ()=>{
-        line.classList.toggle("active", cb.checked);
-        updateTotalFan();
-        saveTab1State();
-      });
+      // ===== 普通項目：用 stepper =====
+      const repeatable = (meta === true);
+      const step = makeStepper(id, repeatable);
 
       const lab = document.createElement("label");
-      lab.setAttribute("for", cb.id);
       lab.textContent = name;
 
-      line.appendChild(cb);
-      line.appendChild(lab);
+      const span = document.createElement("span");
+      span.className = "fan";
+      span.id = `calc_${id}`;
 
-      if(meta === true){
-        const count = document.createElement("input");
-        count.type = "number";
-        count.min = "0";
-        count.value = "1";
-        count.className = "input count2 fanCount";
-        count.dataset.target = id;
-        count.dataset.fan = String(fan);
-        count.inputMode = "numeric";
-
-        const span = document.createElement("span");
-        span.className = "fan";
-        span.id = `calc_${id}`;
-        span.textContent = `${fan}番`;
-
-        count.addEventListener("input", ()=>{
-          updatePerItemCalc(id);
-          updateTotalFan();
-          saveTab1State();
-        });
-
-        line.appendChild(count);
-        line.appendChild(span);
-        d.appendChild(line);
-
-        updatePerItemCalc(id);
+      // repeatable：顯示 fan*count（count=0 就顯示 0番）
+      // non-repeatable：顯示固定 fan（同你原本一樣）
+      if(repeatable){
+        span.textContent = `0番`;
       }else{
-        const span = document.createElement("span");
-        span.className = "fan";
         span.textContent = `${fan}番`;
-        line.appendChild(span);
-        d.appendChild(line);
       }
+
+      // store metadata on input for calc
+      const inp = step.querySelector(".fanStep");
+      inp.dataset.fan = String(fan);
+
+      line.appendChild(step);
+      line.appendChild(lab);
+      line.appendChild(span);
+      d.appendChild(line);
+
+      updatePerItemCalc(id);
     });
 
     mount.appendChild(d);
   });
 }
 
+function makeStepper(id, repeatable){
+  const wrap = document.createElement("div");
+  wrap.className = "stepper";
+  wrap.dataset.id = id;
+
+  const btnMinus = document.createElement("button");
+  btnMinus.type = "button";
+  btnMinus.className = "stepBtn";
+  btnMinus.textContent = "−";
+  btnMinus.setAttribute("aria-label", "減");
+
+  const inp = document.createElement("input");
+  inp.type = "number";
+  inp.className = "stepVal fanStep";
+  inp.value = "0";
+  inp.inputMode = "numeric";
+  inp.dataset.id = id;
+  inp.dataset.repeatable = repeatable ? "1" : "0";
+  inp.min = "0";
+  inp.max = repeatable ? "99" : "1";
+
+  const btnPlus = document.createElement("button");
+  btnPlus.type = "button";
+  btnPlus.className = "stepBtn";
+  btnPlus.textContent = "+";
+  btnPlus.setAttribute("aria-label", "加");
+
+  const applyAndSync = (next)=>{
+    const max = repeatable ? 99 : 1;
+    const v = clamp(safeInt(next, 0), 0, max);
+    inp.value = String(v);
+
+    const line = document.getElementById("line_"+id);
+    if(line) line.classList.toggle("active", v > 0);
+
+    updatePerItemCalc(id);
+    updateTotalFan();
+    saveTab1State();
+  };
+
+  btnMinus.onclick = ()=>{
+    applyAndSync(safeInt(inp.value, 0) - 1);
+  };
+  btnPlus.onclick = ()=>{
+    applyAndSync(safeInt(inp.value, 0) + 1);
+  };
+
+  // 允許直接打數（但會 clamp 0..1 或 0..99）
+  inp.addEventListener("input", ()=>{
+    applyAndSync(inp.value);
+  });
+
+  wrap.appendChild(btnMinus);
+  wrap.appendChild(inp);
+  wrap.appendChild(btnPlus);
+  return wrap;
+}
+
 function updatePerItemCalc(id){
-  const cntInput = document.querySelector(`.fanCount[data-target="${id}"]`);
+  const inp = document.querySelector(`.fanStep[data-id="${id}"]`);
   const span = document.getElementById(`calc_${id}`);
-  if(!cntInput || !span) return;
-  const fan = safeInt(cntInput.dataset.fan || "0", 0);
-  const count = Math.max(safeInt(cntInput.value, 0), 0);
-  span.textContent = `${fan*count}番`;
+  if(!inp || !span) return;
+
+  // dealer_times 另外處理
+  if(id === "dealer_times") return;
+
+  const fan = safeInt(inp.dataset.fan || "0", 0);
+  const count = Math.max(safeInt(inp.value, 0), 0);
+  const repeatable = (inp.dataset.repeatable === "1");
+
+  const line = document.getElementById("line_"+id);
+  if(line) line.classList.toggle("active", count > 0);
+
+  if(repeatable){
+    span.textContent = `${fan * count}番`;
+  }else{
+    // 不可重複：保持顯示原本 fan（同你之前一樣）
+    span.textContent = `${fan}番`;
+  }
 }
 
 /* ================= Tab1：總番 + AI ================= */
@@ -1546,27 +1651,30 @@ function getRate(){
   const r = safeInt($("rate")?.value ?? "1", 1);
   return r < 0 ? 0 : r;
 }
+
 function updateTotalFan(){
   let total = 0;
 
-  document.querySelectorAll(".fanCheck:checked").forEach(cb=>{
-    const fan = safeInt(cb.dataset.fan, 0);
-    const id = cb.dataset.id;
-    const cntInput = document.querySelector(`.fanCount[data-target="${id}"]`);
-    if(cntInput){
-      const count = Math.max(safeInt(cntInput.value, 0), 0);
-      total += fan * count;
-    }else{
-      total += fan;
-    }
+  // 普通番（由 stepper 取 count）
+  document.querySelectorAll(".fanStep").forEach(inp=>{
+    const id = inp.dataset.id;
+    if(id === "dealer_times") return;
+
+    const fan = safeInt(inp.dataset.fan || "0", 0);
+    const count = Math.max(safeInt(inp.value, 0), 0);
+    if(count <= 0) return;
+
+    total += fan * count;
   });
 
-  const times = Math.max(safeInt($("dealer_times")?.value ?? "0", 0), 0);
+  // 連莊
+  const times = Math.max(safeInt(document.querySelector(`.fanStep[data-id="dealer_times"]`)?.value ?? "0", 0), 0);
   const dealerFan = (times > 0) ? (times*2 + 1) : 0;
   const calc = $("dealer_times_calc");
   if(calc) calc.textContent = `${dealerFan}番`;
   total += dealerFan;
 
+  // 底
   total += getBaseFan();
 
   $("totalFan").innerText = String(total);
@@ -1577,13 +1685,22 @@ function updateTotalFan(){
   aiSuggest();
   syncFanBadgeToTab2();
 }
+
 function aiSuggest(){
   const box = $("aiBox");
   const ids = new Set();
-  document.querySelectorAll(".fanCheck:checked").forEach(cb=>ids.add(cb.dataset.id));
+
+  // count > 0 就當「有揀」
+  document.querySelectorAll(".fanStep").forEach(inp=>{
+    const id = inp.dataset.id;
+    if(id === "dealer_times") return;
+    const count = Math.max(safeInt(inp.value, 0), 0);
+    if(count > 0) ids.add(id);
+  });
+
   const msgs = [];
 
-  if(ids.has("flower") && ids.has("noflower")) msgs.push(`<span class="warn">⚠️「花」同「無花」唔可以同時勾</span>`);
+  if(ids.has("flower") && ids.has("noflower")) msgs.push(`<span class="warn">⚠️「花」同「無花」唔可以同時加</span>`);
   if(ids.has("zi") && ids.has("nozi")) msgs.push(`<span class="warn">⚠️「字」同「無字」衝突</span>`);
   if(ids.has("chun1color") && ids.has("hun1color")) msgs.push(`<span class="warn">⚠️「清一色」已包含「混一色」，建議只留清一色</span>`);
   if(ids.has("chunpyun") && ids.has("banpyun")) msgs.push(`<span class="warn">⚠️「全求人」通常涵蓋「半求人」，建議只留全求人</span>`);
@@ -1596,23 +1713,19 @@ function aiSuggest(){
 
 /* ================= localStorage（Tab1） ================= */
 function saveTab1State(){
-  const checks = {};
-  document.querySelectorAll(".fanCheck").forEach(cb=>{
-    checks[cb.dataset.id] = cb.checked ? 1 : 0;
-  });
   const counts = {};
-  document.querySelectorAll(".fanCount").forEach(inp=>{
-    counts[inp.dataset.target] = inp.value;
+  document.querySelectorAll(".fanStep").forEach(inp=>{
+    counts[inp.dataset.id] = inp.value;
   });
 
   const state = {
-    checks, counts,
-    dealer_times: $("dealer_times")?.value ?? "0",
-    baseFan: $("baseFan")?.value ?? "5",
+    counts,
+    baseFan: $("baseFan")?.value ?? "0",
     rate: $("rate")?.value ?? "1",
   };
   localStorage.setItem("tab1_state", JSON.stringify(state));
 }
+
 function loadTab1State(){
   const raw = localStorage.getItem("tab1_state");
   if(!raw) return;
@@ -1620,35 +1733,29 @@ function loadTab1State(){
     const s = JSON.parse(raw);
     if(s?.baseFan !== undefined) $("baseFan").value = String(s.baseFan);
     if(s?.rate !== undefined) $("rate").value = String(s.rate);
-    if(s?.dealer_times !== undefined && $("dealer_times")) $("dealer_times").value = String(s.dealer_times);
 
-    if(s?.checks){
-      document.querySelectorAll(".fanCheck").forEach(cb=>{
-        cb.checked = !!s.checks[cb.dataset.id];
-        const line = cb.closest(".checkline");
-        if(line) line.classList.toggle("active", cb.checked);
-      });
-    }
     if(s?.counts){
-      document.querySelectorAll(".fanCount").forEach(inp=>{
-        const v = s.counts[inp.dataset.target];
-        if(v !== undefined) inp.value = String(v);
-        updatePerItemCalc(inp.dataset.target);
+      // 先 set 值
+      Object.keys(s.counts).forEach((id)=>{
+        setStepCountById(id, s.counts[id]);
       });
     }
   }catch(e){}
 }
+
 function clearTab1All(){
-  document.querySelectorAll(".fanCheck").forEach(cb=>{
-    cb.checked = false;
-    const line = cb.closest(".checkline");
+  // ✅ 你要求：清晒啲番數（不包括底番）+ 全部數字清0
+  document.querySelectorAll(".fanStep").forEach(inp=>{
+    inp.value = "0";
+    const id = inp.dataset.id;
+    const line = document.getElementById("line_"+id);
     if(line) line.classList.remove("active");
+    updatePerItemCalc(id);
   });
-  document.querySelectorAll(".fanCount").forEach(inp=>{
-    inp.value="1";
-    updatePerItemCalc(inp.dataset.target);
-  });
-  if($("dealer_times")) $("dealer_times").value = "0";
+
+  const calc = $("dealer_times_calc");
+  if(calc) calc.textContent = "0番";
+
   updateTotalFan();
   saveTab1State();
 }
@@ -1909,7 +2016,7 @@ function settleClearForWinner(winnerPid, loserPidOrNull, isSelf, deltas, notes){
 function settleRound(winnerPid, loserPid, isSelf){
   const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
   if(baseFan <= 0){
-    alert("Tab1 總番數係 0，先去 Tab1 勾番");
+    alert("Tab1 總番數係 0，先去 Tab1 加番");
     return;
   }
   const rate = getRate();
@@ -2273,9 +2380,6 @@ function updateFixBarForTab(){
 
 /* ================== 總番 badge：同步番表 + 顯示揀咗咩 ================== */
 function computeFanSummary(){
-  const selectedIds = new Set();
-  document.querySelectorAll(".fanCheck:checked").forEach(cb=>selectedIds.add(cb.dataset.id));
-
   const groups = [];
   let grand = 0;
 
@@ -2283,8 +2387,9 @@ function computeFanSummary(){
     const rows = [];
     for(const it of g.items){
       const [id,name,fan,meta] = it;
+
       if(meta === "dealerTimes"){
-        const times = Math.max(safeInt($("dealer_times")?.value ?? "0", 0), 0);
+        const times = Math.max(safeInt(document.querySelector(`.fanStep[data-id="dealer_times"]`)?.value ?? "0", 0), 0);
         const dealerFan = (times > 0) ? (times*2 + 1) : 0;
         if(dealerFan > 0){
           rows.push({name:"連莊", detail:`${times} 次`, fan: dealerFan});
@@ -2293,11 +2398,14 @@ function computeFanSummary(){
         continue;
       }
 
-      if(!selectedIds.has(id)) continue;
+      const inp = document.querySelector(`.fanStep[data-id="${id}"]`);
+      if(!inp) continue;
 
-      if(meta === true){
-        const cntInput = document.querySelector(`.fanCount[data-target="${id}"]`);
-        const count = Math.max(safeInt(cntInput?.value ?? "1", 1), 0);
+      const count = Math.max(safeInt(inp.value, 0), 0);
+      if(count <= 0) continue;
+
+      const repeatable = (inp.dataset.repeatable === "1");
+      if(repeatable){
         const sum = fan * count;
         rows.push({name, detail:`${fan}番 × ${count}`, fan: sum});
         grand += sum;
@@ -2327,7 +2435,7 @@ function renderFanSummarySheet(){
 
   if(!groups.length){
     list.innerHTML = `<div class="small" style="text-align:center;color:var(--sub);padding:16px 6px;">
-      （未有勾選任何番）<br>去番表勾選先～
+      （未有加任何番）<br>去番表加番先～
     </div>`;
   }else{
     for(const g of groups){
@@ -2481,7 +2589,7 @@ function confirmWinModal(){
 
   const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
   if(baseFan <= 0){
-    alert("Tab1 總番數係 0，先去 Tab1 勾番");
+    alert("Tab1 總番數係 0，先去 Tab1 加番");
     return;
   }
   const rate = getRate();
