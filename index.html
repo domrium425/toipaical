@@ -268,7 +268,14 @@ details[open] summary::before{ transform:rotate(90deg); }
   border-bottom:1px dashed var(--line);
 }
 .checkline:last-child{ border-bottom:none; }
-.checkline label{ flex:1; cursor:pointer; }
+
+/* ✅ 你要：番表字（例如「正花」）唔使 bold */
+.checkline label{
+  flex:1;
+  cursor:pointer;
+  font-weight:500;
+}
+
 .checkline .fan{ color:var(--gold); font-weight:900; }
 .checkline.active{
   background:rgba(212,175,55,0.12);
@@ -300,61 +307,45 @@ body.white .checkline.active{
 }
 .fanGrid details{ margin:0; }
 
-/* ======================= ✅ Stepper（緊湊版 / 字細兩pt） ======================= */
+/* ================== ✅ Stepper（縮細：掣同字 -2pt） ================== */
 .stepper{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  background: rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:999px;
-  padding:4px 6px;
-  flex:0 0 auto;
-}
-body.white .stepper{
-  background: rgba(255,255,255,0.55);
-  border:1px solid rgba(0,0,0,0.10);
-}
-.stepBtn{
-  width:24px;               /* ✅ 縮細 */
-  height:24px;              /* ✅ 縮細 */
-  border:none;
-  border-radius:999px;
-  background: rgba(255,255,255,0.08);
-  color: var(--gold);
-  font-weight:900;
-  line-height:0;
   display:flex;
   align-items:center;
-  justify-content:center;
+  gap:4px;
+  font-size:12px; /* -2pt */
+  background:transparent;
+}
+.stepperBtn{
+  width:20px;     /* 細啲，唔逼爆 */
+  height:20px;
+  border-radius:6px;
+  border:none;
+  background:var(--muted);
+  color:var(--text);
+  font-size:12px; /* -2pt */
+  font-weight:700;
+  line-height:1;
   cursor:pointer;
   -webkit-tap-highlight-color: transparent;
-  padding:0;
 }
-body.white .stepBtn{
-  background: rgba(0,0,0,0.06);
-  color: var(--gold);
-}
-.stepBtn:active{ transform: scale(0.92); }
-.stepBtn:disabled{ opacity:0.35; cursor:default; transform:none; }
-
-.stepVal{
+.stepperBtn:active{ transform: scale(0.96); }
+.stepperVal{
   min-width:18px;
   text-align:center;
+  color:var(--gold);
   font-weight:900;
-  font-size:14px;           /* ✅ 字縮細兩pt（由 16 → 14） */
-  color: var(--gold);
-  transform: translateY(-0.25px);
-  letter-spacing:0.2px;
+  font-size:12px; /* -2pt */
+  line-height:1;
+}
+.stepperHiddenInput{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+  width:1px;
+  height:1px;
 }
 
-@media (max-width:380px){
-  .stepper{ gap:5px; padding:4px 6px; }
-  .stepBtn{ width:22px; height:22px; }
-  .stepVal{ font-size:14px; }
-}
-
-/* ================= TAB2（原封不動） ================= */
+/* ================= TAB2 ================= */
 .t2TopBox{
   background:var(--card);
   border-radius:18px;
@@ -669,7 +660,7 @@ body.white .modal{
   to{ transform: translateY(0); opacity:1; }
 }
 
-/* ✅ 關閉先「彈一下」再落（rubber band close） */
+/* ✅ 你要：關閉先「彈一下」再落（rubber band close） */
 .modal.closing{
   animation: sheetDownRubber 320ms cubic-bezier(.22,.9,.25,1) forwards;
 }
@@ -878,7 +869,6 @@ body.white .iosCircle{
   vector-effect:non-scaling-stroke;
 }
 
-/* ✅ Center glass badge：menu icon 最左 + 文字完全置中 */
 .iosPill{
   flex:1;
   min-width:0;
@@ -956,7 +946,6 @@ body.white .iosPill{
   margin:14px 0;
   margin-bottom:14px;
 }
-
 .miniCard{
   flex:1;
   background:var(--card);
@@ -967,7 +956,6 @@ body.white .iosPill{
   align-items:center;
   justify-content:center;
 }
-
 .miniInner{
   display:flex;
   flex-wrap:wrap;
@@ -986,7 +974,6 @@ body.white .iosPill{
 .miniInner input:focus{
   border-color: var(--gold);
 }
-
 .miniInner .smallBtn{
   flex-basis:100%;
   width:100%;
@@ -996,17 +983,14 @@ body.white .iosPill{
   font-size:13px;
   font-weight:900;
 }
-
 .smallBtn{
   padding:6px 10px;
   font-size:13px;
 }
-
 @media(max-width:480px){
   .dualCardRow{ gap:8px; }
 }
 
-/* ✅ 讓拖拽時不要選字 */
 .noselect, .noselect *{
   -webkit-user-select:none;
   user-select:none;
@@ -1096,7 +1080,7 @@ body.white .iosPill{
 
     <div class="card">
       <h2>番表</h2>
-      <div class="small"> ✔ 全部改用 Stepper：不可重複番只可 0/1｜可重複番可加次數</div>
+      <div class="small"> ✔ 勾選即時計總番</div>
       <div class="xxxs">　</div>
       <div id="fanListMount" class="fanGrid tab1FanBody"></div>
     </div>
@@ -1104,7 +1088,7 @@ body.white .iosPill{
     <div class="card">
       <h2>🧠 番表 AI 建議</h2>
       <div class="aiBox" id="aiBox">
-        <div class="ok">✔ 等你加完 Stepper 之後我先出提示</div>
+        <div class="ok">✔ 等你勾選之後我先出提示</div>
       </div>
     </div>
   </div>
@@ -1460,106 +1444,47 @@ function setTab(which){
   updateFixBarForTab();
 }
 
-/* ======================= ✅ Stepper Core（Tab1） ======================= */
-const stepState = {}; // { id: number }
-
-function setStepValue(id, v){
-  const line = document.getElementById("line_"+id);
-  const span = document.getElementById("stepv_"+id);
-  const minus = document.getElementById("stepm_"+id);
-  const plus  = document.getElementById("stepp_"+id);
-  if(!span) return;
-
-  const min = safeInt(span.dataset.min, 0);
-  const maxRaw = span.dataset.max;
-  const hasMax = (maxRaw !== "" && maxRaw !== null && maxRaw !== undefined);
-  const max = hasMax ? safeInt(maxRaw, 0) : null;
-
-  let nv = safeInt(v, 0);
-  if(nv < min) nv = min;
-  if(max !== null && nv > max) nv = max;
-
-  stepState[id] = nv;
-  span.textContent = String(nv);
-
-  if(line) line.classList.toggle("active", nv > 0);
-  if(minus) minus.disabled = (nv <= min);
-  if(plus)  plus.disabled = (max !== null && nv >= max);
-
-  // 右邊番數顯示更新（含可重複）
-  updateLineCalc(id);
-
-  // 總番更新
-  updateTotalFan();
-  saveTab1State();
-}
-
-function bumpStep(id, dir){
-  const cur = safeInt(stepState[id] ?? 0, 0);
-  setStepValue(id, cur + dir);
-}
-
-function makeStepper(id, {min=0, max=null, value=0}){
+/* ================== ✅ Stepper helper（用返原本 input logic） ================== */
+function makeStepper({ value=0, min=0, max=999, onChange }){
   const wrap = document.createElement("div");
   wrap.className = "stepper";
 
-  const minus = document.createElement("button");
-  minus.type = "button";
-  minus.className = "stepBtn";
-  minus.id = "stepm_"+id;
-  minus.textContent = "−";
-  minus.addEventListener("click", ()=>bumpStep(id, -1));
+  const btnMinus = document.createElement("button");
+  btnMinus.type = "button";
+  btnMinus.className = "stepperBtn";
+  btnMinus.textContent = "−";
 
   const val = document.createElement("span");
-  val.className = "stepVal";
-  val.id = "stepv_"+id;
-  val.dataset.min = String(min);
-  val.dataset.max = (max === null ? "" : String(max));
+  val.className = "stepperVal";
   val.textContent = String(value);
 
-  const plus = document.createElement("button");
-  plus.type = "button";
-  plus.className = "stepBtn";
-  plus.id = "stepp_"+id;
-  plus.textContent = "+";
-  plus.addEventListener("click", ()=>bumpStep(id, +1));
+  const btnPlus = document.createElement("button");
+  btnPlus.type = "button";
+  btnPlus.className = "stepperBtn";
+  btnPlus.textContent = "+";
 
-  wrap.appendChild(minus);
+  const setVal = (next)=>{
+    const v = Math.max(min, Math.min(max, safeInt(next, min)));
+    val.textContent = String(v);
+    if(typeof onChange === "function") onChange(v);
+  };
+
+  btnMinus.addEventListener("click", ()=> setVal(safeInt(val.textContent, value) - 1));
+  btnPlus.addEventListener("click", ()=> setVal(safeInt(val.textContent, value) + 1));
+
+  wrap.appendChild(btnMinus);
   wrap.appendChild(val);
-  wrap.appendChild(plus);
+  wrap.appendChild(btnPlus);
 
-  // init state（唔觸發 save，render 後再 load state）
-  stepState[id] = safeInt(value, 0);
-  window.setTimeout(()=>{
-    // refresh disabled/active after inserted
-    const cur = safeInt(stepState[id] ?? 0, 0);
-    const minV = min;
-    const maxV = (max === null ? null : max);
-    minus.disabled = (cur <= minV);
-    plus.disabled = (maxV !== null && cur >= maxV);
-  }, 0);
-
+  wrap.__set = setVal;
+  wrap.__get = ()=> safeInt(val.textContent, value);
   return wrap;
 }
 
-function getStepValue(id){
-  return safeInt(stepState[id] ?? 0, 0);
-}
-
-/* ================= Tab1：render 番表（全部 stepper） ================= */
-const fanMetaMap = {}; // id -> {fan, repeatable, dealerTimes?}
-
+/* ================= Tab1：render 番表 ================= */
 function renderFanList(){
   const mount = $("fanListMount");
   mount.innerHTML = "";
-
-  // build meta map
-  for(const g of fanData){
-    for(const it of g.items){
-      const [id, name, fan, meta] = it;
-      fanMetaMap[id] = { fan: safeInt(fan,0), meta };
-    }
-  }
 
   fanData.forEach((group, gi)=>{
     const d = document.createElement("details");
@@ -1573,102 +1498,122 @@ function renderFanList(){
       line.className = "checkline";
       line.id = "line_"+id;
 
-      // label
-      const lab = document.createElement("label");
-      lab.textContent = name;
-      lab.style.fontWeight = "900";
-
-      // right fan calc span (kept)
-      const right = document.createElement("span");
-      right.className = "fan";
-      right.id = "calc_"+id;
-
-      // stepper rules:
-      // - dealerTimes: min 0, max null, default 0 (show calc via formula)
-      // - repeatable (meta===true): min 0, max null, default 0
-      // - non-repeatable: min 0, max 1, default 0
-      let step;
       if(meta === "dealerTimes"){
-        step = makeStepper(id, {min:0, max:null, value:0});
+        const lab = document.createElement("label");
+        lab.textContent = "連莊次數";
+
+        // ✅ 隱藏 input：保持你原本 updateTotalFan / storage logic 唔變
+        const inp = document.createElement("input");
+        inp.type = "number";
+        inp.min = "0";
+        inp.value = "0";
+        inp.id = "dealer_times";
+        inp.className = "stepperHiddenInput";
+        inp.inputMode = "numeric";
+
+        const st = makeStepper({
+          value: safeInt(inp.value, 0),
+          min: 0,
+          max: 999,
+          onChange: (v)=>{
+            inp.value = String(v);
+            inp.dispatchEvent(new Event("input", {bubbles:true}));
+          }
+        });
+
+        inp.addEventListener("input", ()=>{ updateTotalFan(); saveTab1State(); });
+
+        const right = document.createElement("span");
+        right.className = "fan";
+        right.id = "dealer_times_calc";
         right.textContent = "0番";
-      }else if(meta === true){
-        step = makeStepper(id, {min:0, max:null, value:0});
-        right.textContent = "0番";
-      }else{
-        step = makeStepper(id, {min:0, max:1, value:0});
-        right.textContent = `${fan}番`;
+
+        line.appendChild(lab);
+        line.appendChild(st);
+        line.appendChild(inp);
+        line.appendChild(right);
+        d.appendChild(line);
+        return;
       }
 
-      // clicking label toggles (nonrepeat: 0/1; repeatable: 0->1; dealerTimes: +1)
-      lab.addEventListener("click", ()=>{
-        const cur = getStepValue(id);
-        if(meta === "dealerTimes"){
-          setStepValue(id, cur + 1);
-        }else if(meta === true){
-          if(cur === 0) setStepValue(id, 1);
-          else setStepValue(id, cur); // do nothing
-        }else{
-          setStepValue(id, cur ? 0 : 1);
-        }
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.className = "fanCheck";
+      cb.dataset.id = id;
+      cb.dataset.fan = String(fan);
+      cb.id = "cb_"+id;
+
+      cb.addEventListener("change", ()=>{
+        line.classList.toggle("active", cb.checked);
+        updateTotalFan();
+        saveTab1State();
       });
 
-      // attach stepper button events already in makeStepper;
-      // but we need to route through setStepValue for proper constraints & updates:
-      // override by binding to dom after insert:
-      const minusBtn = step.querySelector(".stepBtn:nth-child(1)");
-      const plusBtn  = step.querySelector(".stepBtn:nth-child(3)");
-      if(minusBtn) minusBtn.addEventListener("click", (e)=>{ e.stopPropagation(); });
-      if(plusBtn)  plusBtn.addEventListener("click", (e)=>{ e.stopPropagation(); });
+      const lab = document.createElement("label");
+      lab.setAttribute("for", cb.id);
+      lab.textContent = name;
 
-      // Final row
-      line.appendChild(step);
+      line.appendChild(cb);
       line.appendChild(lab);
-      line.appendChild(right);
-      d.appendChild(line);
+
+      if(meta === true){
+        // ✅ 原本 fanCount input 改為 stepper（但仍用 input 做資料源，logic 不變）
+        const count = document.createElement("input");
+        count.type = "number";
+        count.min = "0";
+        count.value = "1"; // 保持原本預設；清除會清到 0
+        count.className = "stepperHiddenInput fanCount";
+        count.dataset.target = id;
+        count.dataset.fan = String(fan);
+        count.inputMode = "numeric";
+
+        const st = makeStepper({
+          value: safeInt(count.value, 1),
+          min: 0,
+          max: 999,
+          onChange: (v)=>{
+            count.value = String(v);
+            count.dispatchEvent(new Event("input", {bubbles:true}));
+          }
+        });
+
+        const span = document.createElement("span");
+        span.className = "fan";
+        span.id = `calc_${id}`;
+        span.textContent = `${fan}番`;
+
+        count.addEventListener("input", ()=>{
+          updatePerItemCalc(id);
+          updateTotalFan();
+          saveTab1State();
+        });
+
+        line.appendChild(st);
+        line.appendChild(count);
+        line.appendChild(span);
+        d.appendChild(line);
+
+        updatePerItemCalc(id);
+      }else{
+        const span = document.createElement("span");
+        span.className = "fan";
+        span.textContent = `${fan}番`;
+        line.appendChild(span);
+        d.appendChild(line);
+      }
     });
 
     mount.appendChild(d);
   });
-
-  // initial UI calc
-  for(const g of fanData){
-    for(const [id] of g.items){
-      updateLineCalc(id, true);
-    }
-  }
 }
 
-/* 右側番數顯示 */
-function updateLineCalc(id, silent=false){
-  const info = fanMetaMap[id];
-  const span = $("calc_"+id);
-  const line = $("line_"+id);
-  if(!info || !span) return;
-
-  const v = getStepValue(id);
-
-  if(info.meta === "dealerTimes"){
-    const times = Math.max(v, 0);
-    const dealerFan = (times > 0) ? (times*2 + 1) : 0;
-    span.textContent = `${dealerFan}番`;
-    if(line) line.classList.toggle("active", times > 0);
-    return;
-  }
-
-  if(info.meta === true){
-    const f = safeInt(info.fan, 0);
-    span.textContent = `${f * Math.max(v,0)}番`;
-    if(line) line.classList.toggle("active", v > 0);
-    return;
-  }
-
-  // non-repeatable (0/1)
-  span.textContent = `${safeInt(info.fan,0)}番`;
-  if(line) line.classList.toggle("active", v > 0);
-
-  if(!silent){
-    // nothing
-  }
+function updatePerItemCalc(id){
+  const cntInput = document.querySelector(`.fanCount[data-target="${id}"]`);
+  const span = document.getElementById(`calc_${id}`);
+  if(!cntInput || !span) return;
+  const fan = safeInt(cntInput.dataset.fan || "0", 0);
+  const count = Math.max(safeInt(cntInput.value, 0), 0);
+  span.textContent = `${fan*count}番`;
 }
 
 /* ================= Tab1：總番 + AI ================= */
@@ -1680,30 +1625,27 @@ function getRate(){
   const r = safeInt($("rate")?.value ?? "1", 1);
   return r < 0 ? 0 : r;
 }
-
 function updateTotalFan(){
   let total = 0;
 
-  // sum from steppers
-  for(const g of fanData){
-    for(const [id, name, fan, meta] of g.items){
-      const v = Math.max(getStepValue(id), 0);
-
-      if(meta === "dealerTimes"){
-        const dealerFan = (v > 0) ? (v*2 + 1) : 0;
-        total += dealerFan;
-        continue;
-      }
-
-      if(meta === true){
-        total += safeInt(fan,0) * v;
-      }else{
-        if(v > 0) total += safeInt(fan,0);
-      }
+  document.querySelectorAll(".fanCheck:checked").forEach(cb=>{
+    const fan = safeInt(cb.dataset.fan, 0);
+    const id = cb.dataset.id;
+    const cntInput = document.querySelector(`.fanCount[data-target="${id}"]`);
+    if(cntInput){
+      const count = Math.max(safeInt(cntInput.value, 0), 0);
+      total += fan * count;
+    }else{
+      total += fan;
     }
-  }
+  });
 
-  // add base fan
+  const times = Math.max(safeInt($("dealer_times")?.value ?? "0", 0), 0);
+  const dealerFan = (times > 0) ? (times*2 + 1) : 0;
+  const calc = $("dealer_times_calc");
+  if(calc) calc.textContent = `${dealerFan}番`;
+  total += dealerFan;
+
   total += getBaseFan();
 
   $("totalFan").innerText = String(total);
@@ -1714,21 +1656,13 @@ function updateTotalFan(){
   aiSuggest();
   syncFanBadgeToTab2();
 }
-
 function aiSuggest(){
   const box = $("aiBox");
   const ids = new Set();
-
-  for(const g of fanData){
-    for(const [id, , , meta] of g.items){
-      if(meta === "dealerTimes") continue;
-      const v = getStepValue(id);
-      if(v > 0) ids.add(id);
-    }
-  }
-
+  document.querySelectorAll(".fanCheck:checked").forEach(cb=>ids.add(cb.dataset.id));
   const msgs = [];
-  if(ids.has("flower") && ids.has("noflower")) msgs.push(`<span class="warn">⚠️「花」同「無花」唔可以同時揀</span>`);
+
+  if(ids.has("flower") && ids.has("noflower")) msgs.push(`<span class="warn">⚠️「花」同「無花」唔可以同時勾</span>`);
   if(ids.has("zi") && ids.has("nozi")) msgs.push(`<span class="warn">⚠️「字」同「無字」衝突</span>`);
   if(ids.has("chun1color") && ids.has("hun1color")) msgs.push(`<span class="warn">⚠️「清一色」已包含「混一色」，建議只留清一色</span>`);
   if(ids.has("chunpyun") && ids.has("banpyun")) msgs.push(`<span class="warn">⚠️「全求人」通常涵蓋「半求人」，建議只留全求人</span>`);
@@ -1741,21 +1675,23 @@ function aiSuggest(){
 
 /* ================= localStorage（Tab1） ================= */
 function saveTab1State(){
-  const step = {};
-  for(const g of fanData){
-    for(const [id] of g.items){
-      step[id] = getStepValue(id);
-    }
-  }
+  const checks = {};
+  document.querySelectorAll(".fanCheck").forEach(cb=>{
+    checks[cb.dataset.id] = cb.checked ? 1 : 0;
+  });
+  const counts = {};
+  document.querySelectorAll(".fanCount").forEach(inp=>{
+    counts[inp.dataset.target] = inp.value;
+  });
 
   const state = {
-    step,
-    baseFan: $("baseFan")?.value ?? "0",
+    checks, counts,
+    dealer_times: $("dealer_times")?.value ?? "0",
+    baseFan: $("baseFan")?.value ?? "5",
     rate: $("rate")?.value ?? "1",
   };
   localStorage.setItem("tab1_state", JSON.stringify(state));
 }
-
 function loadTab1State(){
   const raw = localStorage.getItem("tab1_state");
   if(!raw) return;
@@ -1763,63 +1699,38 @@ function loadTab1State(){
     const s = JSON.parse(raw);
     if(s?.baseFan !== undefined) $("baseFan").value = String(s.baseFan);
     if(s?.rate !== undefined) $("rate").value = String(s.rate);
+    if(s?.dealer_times !== undefined && $("dealer_times")) $("dealer_times").value = String(s.dealer_times);
 
-    if(s?.step){
-      // apply without double-saving too early
-      for(const k in s.step){
-        if(document.getElementById("stepv_"+k)){
-          const v = safeInt(s.step[k], 0);
-          // direct set without recursive save spam:
-          stepState[k] = v;
-          const span = document.getElementById("stepv_"+k);
-          if(span) span.textContent = String(v);
-
-          const min = safeInt(span.dataset.min, 0);
-          const maxRaw = span.dataset.max;
-          const hasMax = (maxRaw !== "" && maxRaw !== null && maxRaw !== undefined);
-          const max = hasMax ? safeInt(maxRaw, 0) : null;
-          const minus = document.getElementById("stepm_"+k);
-          const plus  = document.getElementById("stepp_"+k);
-
-          const nv = Math.max(v, min);
-          stepState[k] = nv;
-          if(span) span.textContent = String(nv);
-          if(minus) minus.disabled = (nv <= min);
-          if(plus)  plus.disabled = (max !== null && nv >= max);
-          updateLineCalc(k, true);
-        }
-      }
+    if(s?.checks){
+      document.querySelectorAll(".fanCheck").forEach(cb=>{
+        cb.checked = !!s.checks[cb.dataset.id];
+        const line = cb.closest(".checkline");
+        if(line) line.classList.toggle("active", cb.checked);
+      });
+    }
+    if(s?.counts){
+      document.querySelectorAll(".fanCount").forEach(inp=>{
+        const v = s.counts[inp.dataset.target];
+        if(v !== undefined) inp.value = String(v);
+        updatePerItemCalc(inp.dataset.target);
+      });
     }
   }catch(e){}
 }
 
-/* ✅ Fix Bar 左掣：清晒 Tab1 Stepper（不包括底番）｜全部數字清0 */
+/* ✅ 你要：Fix Bar 清除（唔包括底番），而且「全部數字清0」 */
 function clearTab1All(){
-  // set all steppers to 0
-  for(const g of fanData){
-    for(const [id] of g.items){
-      if(document.getElementById("stepv_"+id)){
-        stepState[id] = 0;
-        const span = document.getElementById("stepv_"+id);
-        if(span) span.textContent = "0";
-        const minus = document.getElementById("stepm_"+id);
-        const plus  = document.getElementById("stepp_"+id);
+  document.querySelectorAll(".fanCheck").forEach(cb=>{
+    cb.checked = false;
+    const line = cb.closest(".checkline");
+    if(line) line.classList.remove("active");
+  });
+  document.querySelectorAll(".fanCount").forEach(inp=>{
+    inp.value="0"; // ✅ 清 0
+    updatePerItemCalc(inp.dataset.target);
+  });
+  if($("dealer_times")) $("dealer_times").value = "0"; // ✅ 清 0
 
-        const min = safeInt(span?.dataset.min ?? "0", 0);
-        const maxRaw = span?.dataset.max;
-        const hasMax = (maxRaw !== "" && maxRaw !== null && maxRaw !== undefined);
-        const max = hasMax ? safeInt(maxRaw, 0) : null;
-
-        if(minus) minus.disabled = (0 <= min);
-        if(plus)  plus.disabled = (max !== null && 0 >= max);
-        updateLineCalc(id, true);
-        const line = $("line_"+id);
-        if(line) line.classList.remove("active");
-      }
-    }
-  }
-
-  // ⚠️ 不郁 baseFan（你要求：不包括底番）
   updateTotalFan();
   saveTab1State();
 }
@@ -2080,7 +1991,7 @@ function settleClearForWinner(winnerPid, loserPidOrNull, isSelf, deltas, notes){
 function settleRound(winnerPid, loserPid, isSelf){
   const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
   if(baseFan <= 0){
-    alert("Tab1 總番數係 0，先去 Tab1 加番");
+    alert("Tab1 總番數係 0，先去 Tab1 勾番");
     return;
   }
   const rate = getRate();
@@ -2343,8 +2254,9 @@ function attachSheetGestures(){
       const now = performance.now();
       const dt = Math.max(1, now - lastT);
       const vy = (lastY - startY) / dt;
+      const vel = vy * 1000 / 1000;
 
-      const shouldClose = (curDy > 140) || (vy > 0.85);
+      const shouldClose = (curDy > 140) || (vel > 0.85);
 
       mask.style.transition = "";
       if(shouldClose){
@@ -2366,7 +2278,9 @@ function attachSheetGestures(){
       lastT = performance.now();
       onMove(y);
     };
-    const onTouchEnd = ()=>{ onEnd(); };
+    const onTouchEnd = ()=>{
+      onEnd();
+    };
 
     handles.forEach((el)=>{
       el.addEventListener("touchstart", onTouchStart, {passive:true});
@@ -2430,8 +2344,11 @@ function updateFixBarForTab(){
   }
 }
 
-/* ================== 總番 badge：同步番表 + 顯示揀咗咩（Stepper 版） ================== */
+/* ================== 總番 badge：同步番表 + 顯示揀咗咩 ================== */
 function computeFanSummary(){
+  const selectedIds = new Set();
+  document.querySelectorAll(".fanCheck:checked").forEach(cb=>selectedIds.add(cb.dataset.id));
+
   const groups = [];
   let grand = 0;
 
@@ -2439,26 +2356,27 @@ function computeFanSummary(){
     const rows = [];
     for(const it of g.items){
       const [id,name,fan,meta] = it;
-      const v = Math.max(getStepValue(id), 0);
-
       if(meta === "dealerTimes"){
-        const dealerFan = (v > 0) ? (v*2 + 1) : 0;
+        const times = Math.max(safeInt($("dealer_times")?.value ?? "0", 0), 0);
+        const dealerFan = (times > 0) ? (times*2 + 1) : 0;
         if(dealerFan > 0){
-          rows.push({name:"連莊", detail:`${v} 次`, fan: dealerFan});
+          rows.push({name:"連莊", detail:`${times} 次`, fan: dealerFan});
           grand += dealerFan;
         }
         continue;
       }
 
+      if(!selectedIds.has(id)) continue;
+
       if(meta === true){
-        if(v <= 0) continue;
-        const sum = safeInt(fan,0) * v;
-        rows.push({name, detail:`${fan}番 × ${v}`, fan: sum});
+        const cntInput = document.querySelector(`.fanCount[data-target="${id}"]`);
+        const count = Math.max(safeInt(cntInput?.value ?? "1", 1), 0);
+        const sum = fan * count;
+        rows.push({name, detail:`${fan}番 × ${count}`, fan: sum});
         grand += sum;
       }else{
-        if(v <= 0) continue;
-        rows.push({name, detail:`${fan}番`, fan: safeInt(fan,0)});
-        grand += safeInt(fan,0);
+        rows.push({name, detail:`${fan}番`, fan: fan});
+        grand += fan;
       }
     }
     if(rows.length){
@@ -2482,7 +2400,7 @@ function renderFanSummarySheet(){
 
   if(!groups.length){
     list.innerHTML = `<div class="small" style="text-align:center;color:var(--sub);padding:16px 6px;">
-      （未有加任何番）<br>去番表加先～
+      （未有勾選任何番）<br>去番表勾選先～
     </div>`;
   }else{
     for(const g of groups){
@@ -2636,7 +2554,7 @@ function confirmWinModal(){
 
   const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
   if(baseFan <= 0){
-    alert("Tab1 總番數係 0，先去 Tab1 加番");
+    alert("Tab1 總番數係 0，先去 Tab1 勾番");
     return;
   }
   const rate = getRate();
@@ -3034,15 +2952,15 @@ function bindEvents(){
 /* init */
 document.addEventListener("DOMContentLoaded", ()=>{
   loadTheme();
-
-  renderFanList();          // stepper mounted
+  renderFanList();       // ✅ 已經用 stepper
   bindEvents();
   attachSheetGestures();
 
-  loadTab1State();          // load stepper values
-  updateTotalFan();         // compute total after load
+  loadTab1State();
+  updateTotalFan();
 
   seatMap = loadSeatMap();
+
   loadTab2State();
   renderAllTab2();
   renderHistory();
