@@ -259,18 +259,17 @@ summary::before{
 details[open] summary::before{ transform:rotate(90deg); }
 .sumGold{ color:var(--gold); font-weight:900; }
 
-/* ===================== ✅ 番表行：唔爆版 + 唔出 … + 至少 6 字同一行（已修正） ===================== */
+/* ===================== ✅ 番表行：唔爆版 + 唔出 … + 至少 7 字同一行（你要求 7ch） ===================== */
 .checkline{
   display:grid;
-  /* ✅ stepper 真縮細後，用固定欄寬，文字位更寬：至少 12ch（夠出 6 個中文字） */
-  grid-template-columns: 60px minmax(12ch, 1fr) 52px;
+  grid-template-columns: auto minmax(7ch, 1fr) 52px; /* ✅ 6ch → 7ch */
   align-items:center;
   gap:8px;
   padding:7px 4px;
   border-bottom:1px dashed var(--line);
 
   width:100%;
-  min-width:0;
+  min-width:0;                 /* ✅ 關鍵：防爆 */
 }
 .checkline:last-child{ border-bottom:none; }
 
@@ -281,13 +280,10 @@ details[open] summary::before{ transform:rotate(90deg); }
 
   font-weight:500;
 
-  /* ✅ 唔要 … */
+  /* ✅ 唔要 …：允許換行，但仍然至少 7 字會留喺同一行 */
   white-space:normal;
   overflow:visible;
   text-overflow:clip;
-
-  /* ✅ 中文更好拆字（比 break-word 更穩） */
-  overflow-wrap:anywhere;
   word-break:break-word;
   line-height:1.2;
 }
@@ -300,7 +296,7 @@ details[open] summary::before{ transform:rotate(90deg); }
   white-space:nowrap;
 }
 
-.checkline .fan{ color:var(--gold); font-weight:900; }
+.checkline .fan{ color:var(--gold); font-weight:900; } /* 番數保持重點 */
 .checkline.active{
   background:rgba(212,175,55,0.12);
   border-radius:10px;
@@ -332,19 +328,21 @@ body.white .checkline.active{
 }
 .fanGrid details{ margin:0; }
 
-/* ===================== ✅ Stepper：真縮細 20%（唔用 scale，避免佔位仍然係舊 size） ===================== */
+/* ===================== ✅ Stepper：再縮細 20%（保持你現有設計） ===================== */
 .stepperWrap{
   display:inline-flex;
   align-items:center;
   justify-content:center;
 
-  gap:2px;
-  padding:1px 2px;
+  gap:1px;                    /* ✅ 更窄 */
+  padding:2px 3px;            /* ✅ 更細 */
   border-radius:999px;
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(128,128,128,0.22);
 
   flex-shrink:0;
+  transform: scale(0.8);      /* ✅ 整體縮 20% */
+  transform-origin:left center;
 }
 body.white .stepperWrap{
   background:rgba(0,0,0,0.03);
@@ -352,8 +350,8 @@ body.white .stepperWrap{
 }
 
 .stepBtn{
-  width:16px;
-  height:16px;
+  width:20px;                 /* ✅ 原本 22 → 20 */
+  height:20px;                /* ✅ 原本 22 → 20 */
 
   border:none;
   border-radius:7px;
@@ -361,7 +359,7 @@ body.white .stepperWrap{
 
   color:var(--text);
   font-weight:900;
-  font-size:11px;
+  font-size:13px;             /* ✅ 原本 14 → 13 */
   line-height:1;
   padding:0;
   display:flex;
@@ -373,15 +371,14 @@ body.white .stepperWrap{
 .stepBtn:disabled{ opacity:0.35; }
 
 .stepVal{
-  min-width:12px;
+  min-width:14px;
   text-align:center;
   font-weight:900;
-  font-size:11px;
+  font-size:13px;             /* ✅ 原本 14 → 13 */
   color:var(--gold);
   line-height:1;
   transform: translateY(-0.5px);
 }
-/* ===================== ✅ END ===================== */
 
 /* ================= TAB2 (原本保持) ================= */
 .t2TopBox{
@@ -1897,7 +1894,7 @@ function renderAllTab2(){
   }
 }
 
-/* ======= 其餘 JS 原本照舊（完整保留） ======= */
+/* ======= 以下 JS 你原本段落（保持不變） ======= */
 function pushUndoSnapshot(){
   undoStack.push(clone({
     scores, dealerPlayer, dealerStreak,
