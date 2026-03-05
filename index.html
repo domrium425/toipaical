@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="台牌神器">
@@ -259,20 +259,17 @@ summary::before{
 details[open] summary::before{ transform:rotate(90deg); }
 .sumGold{ color:var(--gold); font-weight:900; }
 
-/* ===================== ✅ 番表行：唔爆版 + 唔出 … + 至少 6/7 字同一行 + 距離收窄 ===================== */
+/* ===================== ✅ 番表行：stepper更貼 + 名至少6字(你要求改7ch) + 右邊番數更貼 ===================== */
 .checkline{
   display:grid;
-  /* stepper | name | fan */
-  grid-template-columns: auto minmax(7ch, 1fr) 50px; /* ✅ minmax 改 7ch */
+  grid-template-columns: auto minmax(7ch, 1fr) 46px; /* ✅ 7ch；右邊收窄 */
   align-items:center;
-
-  gap:6px;                 /* ✅ 全部再收窄 */
-  column-gap:6px;
-  padding:7px 2px;         /* ✅ 左右更貼 */
+  gap:6px;                 /* ✅ 收窄距離 */
+  padding:7px 4px;
   border-bottom:1px dashed var(--line);
 
   width:100%;
-  min-width:0;             /* ✅ 關鍵：防爆 */
+  min-width:0;
 }
 .checkline:last-child{ border-bottom:none; }
 
@@ -289,12 +286,13 @@ details[open] summary::before{ transform:rotate(90deg); }
   line-height:1.2;
 }
 
-/* 右邊番數：固定右對齊（同前面距離再收窄） */
+/* 右邊番數：更窄、更貼、固定右對齊 */
 .checkline .fanRight{
   justify-self:end;
-  width:50px;
+  width:46px;              /* ✅ 原 52 → 46 */
   text-align:right;
   white-space:nowrap;
+  font-size:13px;          /* ✅ 略細，避免擠 */
 }
 
 .checkline .fan{ color:var(--gold); font-weight:900; }
@@ -329,14 +327,14 @@ body.white .checkline.active{
 }
 .fanGrid details{ margin:0; }
 
-/* ===================== ✅ Stepper：再收窄 + 保持縮細 20% ===================== */
+/* ===================== ✅ Stepper：再縮細 20%（保持你現有設計） ===================== */
 .stepperWrap{
   display:inline-flex;
   align-items:center;
   justify-content:center;
 
-  gap:0px;                   /* ✅ 再收窄 */
-  padding:1px 2px;           /* ✅ 更細 */
+  gap:1px;
+  padding:2px 3px;
   border-radius:999px;
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(128,128,128,0.22);
@@ -351,8 +349,8 @@ body.white .stepperWrap{
 }
 
 .stepBtn{
-  width:19px;
-  height:19px;
+  width:20px;
+  height:20px;
 
   border:none;
   border-radius:7px;
@@ -1776,7 +1774,7 @@ let gameHistory = [];
 
 let seatMap = loadSeatMap();
 
-/* ✅ 拉狀態：仍用 pair 存，但 enforce「每個被拉方最多 1 條」 */
+/* ✅ 多條「拉」同時存在（pair-based） */
 let pullPairs = {};
 function pairKey(puller, pulled){ return `${puller}>${pulled}`; }
 function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
@@ -1792,19 +1790,30 @@ function syncFanBadgeToTab2(){
   if(badge) badge.textContent = `本局番數：${total}`;
 }
 
-/* ====== ✅ 新增：找「某人被邊個拉」(最多 1 條) ====== */
-function getIncomingPairOf(pulledPid){
-  for(const k in pullPairs){
-    const p = pullPairs[k];
-    if(p && p.pulled === pulledPid) return p;
+function ensurePair(puller, pulled, baseFan){
+  const k = pairKey(puller, pulled);
+  if(!pullPairs[k]){
+    pullPairs[k] = { puller, pulled, fan: baseFan, needles: 1, ts: Date.now() };
+    return pullPairs[k];
   }
-  return null;
+  const cur = pullPairs[k];
+  const nextFan = ceilUp(cur.fan * 1.5 + baseFan);
+  pullPairs[k] = { puller, pulled, fan: nextFan, needles: (cur.needles||0) + 1, ts: Date.now() };
+  return pullPairs[k];
 }
-function getAllPairsByPuller(pullerPid){
+function getPairsWherePulledIs(pid){
   const out = [];
   for(const k in pullPairs){
     const p = pullPairs[k];
-    if(p && p.puller === pullerPid) out.push(p);
+    if(p && p.pulled === pid) out.push(p);
+  }
+  return out;
+}
+function getPairsWherePullerIs(pid){
+  const out = [];
+  for(const k in pullPairs){
+    const p = pullPairs[k];
+    if(p && p.puller === pid) out.push(p);
   }
   return out;
 }
@@ -1819,28 +1828,15 @@ function clearAllPairs(){
 function syncPulledNeedleFromPairs(){
   pulledNeedle = [0,0,0,0];
   for(let pid=0; pid<4; pid++){
-    const inc = getIncomingPairOf(pid);
-    pulledNeedle[pid] = inc ? safeInt(inc.needles,0) : 0;
+    const incoming = getPairsWherePulledIs(pid);
+    if(!incoming.length){
+      pulledNeedle[pid] = 0;
+    }else{
+      let maxN = 0;
+      for(const p of incoming) maxN = Math.max(maxN, safeInt(p.needles,0));
+      pulledNeedle[pid] = maxN;
+    }
   }
-}
-
-/* ====== ✅ 重要：ensurePair enforce「被拉方唯一」 ====== */
-function ensurePair(puller, pulled, baseFan){
-  // 如果 pulled 之前已經被其他人拉，先清走（避免同時兩條拉）
-  const existing = getIncomingPairOf(pulled);
-  if(existing && existing.puller !== puller){
-    deletePair(existing.puller, existing.pulled);
-  }
-
-  const k = pairKey(puller, pulled);
-  if(!pullPairs[k]){
-    pullPairs[k] = { puller, pulled, fan: baseFan, needles: 1, ts: Date.now() };
-    return pullPairs[k];
-  }
-  const cur = pullPairs[k];
-  const nextFan = ceilUp(cur.fan * 1.5 + baseFan);
-  pullPairs[k] = { puller, pulled, fan: nextFan, needles: (cur.needles||0) + 1, ts: Date.now() };
-  return pullPairs[k];
 }
 
 function renderAllTab2(){
@@ -1867,11 +1863,16 @@ function renderAllTab2(){
 
     const piEl = $("pi"+seatIdx);
     if(piEl){
-      const inc = getIncomingPairOf(pid);
-      if(!inc){
+      const incoming = getPairsWherePulledIs(pid);
+      if(!incoming.length){
         piEl.textContent = "";
+      }else if(incoming.length === 1){
+        const p = incoming[0];
+        piEl.textContent = `被拉緊第 ${safeInt(p.needles,0)} 針`;
       }else{
-        piEl.textContent = `被拉緊第 ${safeInt(inc.needles,0)} 針`;
+        let maxN = 0;
+        for(const p of incoming) maxN = Math.max(maxN, safeInt(p.needles,0));
+        piEl.textContent = `被拉 ${incoming.length} 條｜最高第 ${maxN} 針`;
       }
     }
 
@@ -1890,16 +1891,107 @@ function renderAllTab2(){
 
     const sl = $("sl"+seatIdx);
     if(sl){
-      const inc = getIncomingPairOf(pid);
-      const n = inc ? safeInt(inc.needles,0) : 0;
-      sl.disabled = !(n > 0 && n % 3 === 0);
+      const incoming = getPairsWherePulledIs(pid);
+      const canSlash = incoming.some(p => {
+        const n = safeInt(p.needles,0);
+        return n > 0 && n % 3 === 0;
+      });
+      sl.disabled = !canSlash;
     }
   }
 }
 
-/* ======= 其餘 JS 原本照舊（你文件剩低部分我冇改，為免太長略過） ======= */
+/* ======= 修復：清拉規則（劈 / 引撆） =======
+   ✅ 自摸：贏家被拉 → 一律「劈半」清拉（對每一個拉家）
+   ✅ 食出：贏家被拉 → 如果拉家==出銃者 => 劈半；否則 => 引撆（全數清拉）
+   ✅ 任何一局完成前，輸家（自摸三家 / 出銃者）作為拉方嘅其他拉，要由被拉方「引撆」清掉（分數唔應該再變除咗呢條清拉本身）
+*/
+function applyTransfer(fromPid, toPid, fan, rate, deltas){
+  const amt = fan * rate;
+  deltas[fromPid] -= amt;
+  deltas[toPid] += amt;
+  return amt;
+}
+function applyHalfTransferFloor(fromPid, toPid, fan, rate, deltas){
+  const halfFan = Math.floor(fan / 2);
+  const amt = halfFan * rate;
+  deltas[fromPid] -= amt;
+  deltas[toPid] += amt;
+  return { halfFan, amt };
+}
 
-/* ⚠️ 為咗保持「完整可用」，我放回你原本整段 JS（由 applyTransfer 開始） */
+/* ✅ 清「某個人」身上所有 incoming 拉 */
+function clearIncomingForWinner(winnerPid, loserPidOrNull, isSelf, deltas, notes){
+  const incoming = getPairsWherePulledIs(winnerPid);
+  if(!incoming.length) return;
+
+  for(const pair of incoming){
+    const puller = pair.puller;
+    const pulled = pair.pulled;
+    const fan = safeInt(pair.fan, 0);
+    const rate = getRate();
+
+    if(fan <= 0){
+      deletePair(puller, pulled);
+      continue;
+    }
+
+    // ✅ 自摸：一律當「劈」去清（你要求）
+    // ✅ 食出：只對「出銃者（loser）」劈，其餘係引撆
+    const isPik = isSelf ? true : (typeof loserPidOrNull === "number" && loserPidOrNull === puller);
+
+    if(isPik){
+      const r = applyHalfTransferFloor(pulled, puller, fan, rate, deltas);
+      notes.push(`劈：${getPlayerName(pulled)} → ${getPlayerName(puller)} 半數拉番${r.halfFan}（$${r.amt}）清拉`);
+    }else{
+      const amt = applyTransfer(pulled, puller, fan, rate, deltas);
+      notes.push(`引撆：${getPlayerName(pulled)} → ${getPlayerName(puller)} 全數拉番${fan}（$${amt}）清拉`);
+    }
+
+    deletePair(puller, pulled);
+  }
+}
+
+/* ✅ 清「輸家(們)」作為拉方嘅其他拉：被拉方一律引撆清掉 */
+function clearOutgoingForLosers(loserPids, skipPulledSet, deltas, notes){
+  const rate = getRate();
+  const losers = new Set(loserPids);
+
+  for(const lp of losers){
+    const out = getPairsWherePullerIs(lp);
+    for(const pair of out){
+      const puller = pair.puller;
+      const pulled = pair.pulled;
+
+      // 已經喺 incoming 清咗嘅，唔再重覆
+      if(skipPulledSet && skipPulledSet.has(pulled)) continue;
+
+      const fan = safeInt(pair.fan, 0);
+      if(fan <= 0){
+        deletePair(puller, pulled);
+        continue;
+      }
+
+      // ✅ 引撆：被拉方 → 拉方（全數）
+      const amt = applyTransfer(pulled, puller, fan, rate, deltas);
+      notes.push(`引撆：${getPlayerName(pulled)} → ${getPlayerName(puller)} 全數拉番${fan}（$${amt}）清拉`);
+
+      deletePair(puller, pulled);
+    }
+  }
+}
+
+/* ✅ 非一炮多響模式：保證同一個「被拉方」最多只會有 1 條拉 */
+function enforceSingleIncomingForPulled(pulledPid, keepPullerPid){
+  const incoming = getPairsWherePulledIs(pulledPid);
+  if(incoming.length <= 1) return;
+  for(const p of incoming){
+    if(p.puller !== keepPullerPid){
+      deletePair(p.puller, p.pulled);
+    }
+  }
+}
+
 function pushUndoSnapshot(){
   undoStack.push(clone({
     scores, dealerPlayer, dealerStreak,
@@ -1934,73 +2026,28 @@ function undoLast(){
   restoreSnapshot(snap);
 }
 
-/* ✅ 斬：此玩家 incoming 拉一刀清晒 */
+/* ✅ 斬：此玩家所有 incoming 拉一刀清晒 */
 function slashSeat(seatIdx){
   const pid = getPidAtSeatIndex(seatIdx);
-  const inc = getIncomingPairOf(pid);
-  const n = inc ? safeInt(inc.needles,0) : 0;
-  if(!(n > 0 && n % 3 === 0)) return;
+  const incoming = getPairsWherePulledIs(pid);
+  const canSlash = incoming.some(p=>{
+    const n = safeInt(p.needles,0);
+    return n > 0 && n % 3 === 0;
+  });
+  if(!canSlash) return;
 
   pushUndoSnapshot();
 
-  deletePair(inc.puller, inc.pulled);
+  for(const p of incoming){
+    deletePair(p.puller, p.pulled);
+  }
   $("t2_info").textContent = `⚔️ ${getPlayerName(pid)} 已斬（清拉）`;
 
   renderAllTab2();
   saveTab2State();
 }
 
-function applyTransfer(fromPid, toPid, fan, rate, deltas){
-  const amt = fan * rate;
-  deltas[fromPid] -= amt;
-  deltas[toPid] += amt;
-  return amt;
-}
-function applyHalfTransferFloor(fromPid, toPid, fan, rate, deltas){
-  const halfFan = Math.floor(fan / 2);
-  const amt = halfFan * rate;
-  deltas[fromPid] -= amt;
-  deltas[toPid] += amt;
-  return { halfFan, amt };
-}
-
-/* ===================== ✅ FIX：清拉規則（劈/引撆） =====================
-   規則實作（按你描述）：
-   - 如果贏家本身被某人拉緊（只有 1 條）：
-     1) 贏家先向拉方「劈」半數拉番（自摸/食胡都一樣）
-     2) 同一個拉方拉緊嘅其他被拉方，即刻對拉方「引撆」全數拉番，並清走
-   - 清完舊拉先結算本局番數 + 建新拉
-*/
-function preClearPullsBeforeSettle(winnerPid, loserPidOrNull, isSelf, deltas, notes){
-  const incoming = getIncomingPairOf(winnerPid);
-  if(!incoming) return;
-
-  const puller = incoming.puller;
-  const pulled = incoming.pulled;
-  const fan = safeInt(incoming.fan, 0);
-  const rate = getRate();
-
-  if(fan > 0){
-    const r = applyHalfTransferFloor(pulled, puller, fan, rate, deltas);
-    const loseTxt = (typeof loserPidOrNull === "number")
-      ? `（食胡：出銃 ${getPlayerName(loserPidOrNull)}）`
-      : `（自摸）`;
-    notes.push(`劈${loseTxt}：${getPlayerName(pulled)} → ${getPlayerName(puller)} 半數拉番${r.halfFan}（$${r.amt}）清拉`);
-  }
-  deletePair(puller, pulled);
-
-  // 同一拉方 puller 拉緊其他人：全部引撆全數清走
-  const others = getAllPairsByPuller(puller).filter(p => p.pulled !== winnerPid);
-  for(const p of others){
-    const fan2 = safeInt(p.fan, 0);
-    if(fan2 > 0){
-      const amt2 = applyTransfer(p.pulled, p.puller, fan2, rate, deltas);
-      notes.push(`引撆：${getPlayerName(p.pulled)} → ${getPlayerName(p.puller)} 全數拉番${fan2}（$${amt2}）清拉`);
-    }
-    deletePair(p.puller, p.pulled);
-  }
-}
-
+/* ✅ 核心結算：單贏家（自摸 / 食出） */
 function settleRound(winnerPid, loserPid, isSelf){
   const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
   if(baseFan <= 0){
@@ -2008,16 +2055,25 @@ function settleRound(winnerPid, loserPid, isSelf){
     return;
   }
   const rate = getRate();
+
   const losers = isSelf ? [0,1,2,3].filter(p=>p!==winnerPid) : [loserPid];
   const deltas = [0,0,0,0];
   const notes = [];
 
-  // ✅ 先清拉（劈/引撆）
-  preClearPullsBeforeSettle(winnerPid, isSelf ? null : loserPid, isSelf, deltas, notes);
+  // 1) 先清贏家身上啲拉（自摸：一律劈；食出：出銃者劈，其餘引撆）
+  clearIncomingForWinner(winnerPid, isSelf ? null : loserPid, isSelf, deltas, notes);
 
-  // ✅ 然後先計本局新番，並建立新一輪拉
+  // 2) 再清輸家(們) 作為拉方嘅其他拉（引撆），避免出現你講 A 分數升 / 其他人再扣
+  //    skipPulledSet：避免重覆清「輸家 → 贏家」嗰條（已經喺 step1 清咗）
+  const skipPulled = new Set([winnerPid]);
+  clearOutgoingForLosers(losers, skipPulled, deltas, notes);
+
+  // 3) 完成清拉後，再開始今舖新拉（並確保非一炮多響時：同一被拉方唔會多過 1 條拉）
   const perSettle = [];
   for(const lp of losers){
+    // ✅ 非多響：如果 lp 之前竟然有多條 incoming，強制只留「今局贏家」(保險)
+    enforceSingleIncomingForPulled(lp, winnerPid);
+
     const pair = ensurePair(winnerPid, lp, baseFan);
     const settleFan = safeInt(pair.fan, baseFan);
     const amount = settleFan * rate;
@@ -2032,9 +2088,11 @@ function settleRound(winnerPid, loserPid, isSelf){
     }
   }
 
+  // 4) 入分 + 動畫
   for(let p=0;p<4;p++) scores[p] += deltas[p];
   for(let p=0;p<4;p++) showScoreDeltaForPid(p, deltas[p]);
 
+  // 5) 連莊
   if(winnerPid === dealerPlayer){
     dealerStreak[dealerPlayer] = (dealerStreak[dealerPlayer]||0) + 1;
   }else{
@@ -2450,7 +2508,7 @@ function renderFanSummarySheet(){
   $("totalFan").innerText = String(grand);
 }
 
-/* ======================= 食胡 modal（保持原本邏輯） ======================= */
+/* ======================= 食胡 modal（保持原本邏輯 + 修多響清拉） ======================= */
 let modalWin = new Set();
 let modalLose = null;
 let modalSelf = false;
@@ -2540,6 +2598,7 @@ function confirmWinModal(){
 
   pushUndoSnapshot();
 
+  // ✅ 單贏家（沿用 settleRound，已修好清拉）
   if(modalSelf){
     if(modalWin.size !== 1){
       alert("自摸暫時只可揀一個食胡玩家");
@@ -2563,11 +2622,7 @@ function confirmWinModal(){
     return;
   }
 
-  /* 一炮多響（保持原本，但清拉規則會由 settleRound 內處理）
-     你原本多響係逐個 settleClearForWinner，呢度我保持簡化：只係做結算，
-     清拉亦會按第一個 winner 入 settleRound 的規則跑一次。
-     如果你想多響逐個 winner 都做清拉（更嚴格），你再同我講我就幫你加。
-  */
+  /* ✅ 一炮多響：允許輸家同時有多條拉（唔做 enforceSingleIncoming） */
   const baseFan = safeInt($("totalFan")?.innerText ?? "0", 0);
   if(baseFan <= 0){
     alert("Tab1 總番數係 0，先去 Tab1 撳 stepper");
@@ -2580,9 +2635,15 @@ function confirmWinModal(){
   const deltas = [0,0,0,0];
   const notes = [];
 
-  // ✅ 先用第一個 winner 做一次清拉（劈/引撆），避免舊拉殘留
-  preClearPullsBeforeSettle(winners[0], loser, false, deltas, notes);
+  // 1) 每個贏家先清自己身上啲拉（食出：只對輸家劈，其餘引撆）
+  for(const w of winners){
+    clearIncomingForWinner(w, loser, false, deltas, notes);
+  }
 
+  // 2) 出銃者作為輸家：清佢作拉方嘅其他拉（引撆）
+  clearOutgoingForLosers([loser], new Set(winners), deltas, notes);
+
+  // 3) 再計多響新拉（同一輸家會有多條拉：B>loser、C>loser…）
   const perSettle = [];
   for(const w of winners){
     const pair = ensurePair(w, loser, baseFan);
