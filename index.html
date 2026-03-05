@@ -340,17 +340,17 @@ body.white .checkline.active{
   display:grid;
   grid-template-columns: 1fr 1fr;
   gap:10px;
+  row-gap:0px;
   margin-top:6px;
 }
 .oddInnerGrid .checkline{
-  background: rgba(255,255,255,0.02);
-  border-radius:12px;
-  border-bottom:1px dashed rgba(128,128,128,0.18);
+  background: transparent;
+  border-radius:0;
+  box-shadow:none;
+  border-bottom:1px dashed var(--line);
 }
-body.white .oddInnerGrid .checkline{
-  background: rgba(255,255,255,0.55);
-}
-.oddInnerGrid .checkline:last-child{ border-bottom:1px dashed rgba(128,128,128,0.18); }
+
+.oddInnerGrid .checkline:last-child{ border-bottom:none; }
 
 /* ===================== ✅ Stepper：再縮細 20%（保持你現有設計） ===================== */
 .stepperWrap{
