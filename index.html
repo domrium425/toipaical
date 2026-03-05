@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='black'/%3E%3Ctext x='50%25' y='62%25' font-size='110' text-anchor='middle' fill='%23d4af37'%3E%F0%9F%80%84%3C/text%3E%3C/svg%3E">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAF/0lEQVR4nO3dS2hVVRzH8c+M0aQmGmW0Qm6oZVqGmQeQ0m2yq2s0mJmQx6pQZg9iQ2aKQZkqkVhWZbQmQm5mWmJbK2kq9e0lGm2b+9zv3b8z3fY7zv3h8f3m8z7n3vOe+55z7n8wqf9gkAAABg6o0kz0cAAACwq3l8vQAAAIAGYgkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAABgkQkAAAA4z8F2r2m4gAAAABJRU5ErkJggg==" />
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="台牌神器">
@@ -1797,6 +1797,7 @@ function ensurePair(puller, pulled, baseFan){
     return pullPairs[k];
   }
   const cur = pullPairs[k];
+  // ✅ 公式確認：上一針 * 1.5 + 新番，向上取整
   const nextFan = ceilUp(cur.fan * 1.5 + baseFan);
   pullPairs[k] = { puller, pulled, fan: nextFan, needles: (cur.needles||0) + 1, ts: Date.now() };
   return pullPairs[k];
@@ -1837,6 +1838,18 @@ function syncPulledNeedleFromPairs(){
       pulledNeedle[pid] = maxN;
     }
   }
+}
+
+/* ✅ Ultimate Engine：記住上一局「贏家/輸家/是否多響」(用嚟判斬拉=引撆) */
+let lastRound = null;
+function setLastRound(ctx){
+  lastRound = {
+    ts: Date.now(),
+    winner: typeof ctx?.winner === "number" ? ctx.winner : null,
+    losers: Array.isArray(ctx?.losers) ? ctx.losers.slice() : [],
+    isSelf: !!ctx?.isSelf,
+    isMulti: !!ctx?.isMulti,
+  };
 }
 
 function renderAllTab2(){
@@ -1998,7 +2011,8 @@ function pushUndoSnapshot(){
     playerNames, pulledNeedle,
     history: gameHistory,
     seatMap,
-    pullPairs
+    pullPairs,
+    lastRound
   }));
   if(undoStack.length > 80) undoStack.shift();
 }
@@ -2012,6 +2026,7 @@ function restoreSnapshot(snap){
   gameHistory = snap.history || [];
   seatMap = snap.seatMap || {E:0,S:2,W:3,N:1};
   pullPairs = snap.pullPairs || {};
+  lastRound = snap.lastRound ?? null;
 
   saveSeatMap(seatMap);
 
@@ -2026,7 +2041,11 @@ function undoLast(){
   restoreSnapshot(snap);
 }
 
-/* ✅ 斬：此玩家所有 incoming 拉一刀清晒 */
+/* ✅ 斬：此玩家所有 incoming 拉一刀清晒
+   ✅ 新增規則（你追加）：
+      如果「上一局食胡者」唔係（拉方/被拉者）任何一位，
+      被拉者做「斬」→ 當作「引撆」清拉（分數不加減，記錄為引撆原因：斬）
+*/
 function slashSeat(seatIdx){
   const pid = getPidAtSeatIndex(seatIdx);
   const incoming = getPairsWherePulledIs(pid);
@@ -2038,12 +2057,45 @@ function slashSeat(seatIdx){
 
   pushUndoSnapshot();
 
+  const notes = [];
+  const cleared = [];
+
   for(const p of incoming){
+    const n = safeInt(p.needles,0);
+    if(!(n > 0 && n % 3 === 0)) continue;
+
+    const winner = (lastRound && typeof lastRound.winner === "number") ? lastRound.winner : null;
+    const isThirdPartyWin = (typeof winner === "number") && (winner !== p.puller) && (winner !== p.pulled);
+
+    if(isThirdPartyWin){
+      notes.push(`引撆（斬）：${getPlayerName(p.pulled)} ↔ ${getPlayerName(p.puller)}（上一局食胡：${getPlayerName(winner)}）清拉`);
+      cleared.push({type:"yenpek_slash", puller:p.puller, pulled:p.pulled, needles:n, winner});
+    }else{
+      notes.push(`斬：${getPlayerName(p.pulled)} 清拉（${getPlayerName(p.puller)} 第${n}針）`);
+      cleared.push({type:"slash", puller:p.puller, pulled:p.pulled, needles:n, winner});
+    }
+
     deletePair(p.puller, p.pulled);
   }
-  $("t2_info").textContent = `⚔️ ${getPlayerName(pid)} 已斬（清拉）`;
+
+  if(!cleared.length){
+    // 理論上唔會入到嚟
+    $("t2_info").textContent = `⚔️ ${getPlayerName(pid)} 斬（無可斬拉）`;
+  }else{
+    $("t2_info").innerHTML = `⚔️ ${getPlayerName(pid)} 已斬<br>` + notes.map(x=>`｜${x}`).join("<br>");
+  }
+
+  gameHistory.push({
+    kind:"slash",
+    ts: Date.now(),
+    player: pid,
+    notes: clone(notes),
+    cleared: clone(cleared),
+    lastRound: clone(lastRound)
+  });
 
   renderAllTab2();
+  renderHistory();
   saveTab2State();
 }
 
@@ -2063,15 +2115,14 @@ function settleRound(winnerPid, loserPid, isSelf){
   // 1) 先清贏家身上啲拉（自摸：一律劈；食出：出銃者劈，其餘引撆）
   clearIncomingForWinner(winnerPid, isSelf ? null : loserPid, isSelf, deltas, notes);
 
-  // 2) 再清輸家(們) 作為拉方嘅其他拉（引撆），避免出現你講 A 分數升 / 其他人再扣
-  //    skipPulledSet：避免重覆清「輸家 → 贏家」嗰條（已經喺 step1 清咗）
+  // 2) 再清輸家(們) 作為拉方嘅其他拉（引撆）
   const skipPulled = new Set([winnerPid]);
   clearOutgoingForLosers(losers, skipPulled, deltas, notes);
 
   // 3) 完成清拉後，再開始今舖新拉（並確保非一炮多響時：同一被拉方唔會多過 1 條拉）
   const perSettle = [];
   for(const lp of losers){
-    // ✅ 非多響：如果 lp 之前竟然有多條 incoming，強制只留「今局贏家」(保險)
+    // ✅ 非多響：同一被拉方最多 1 條 incoming
     enforceSingleIncomingForPulled(lp, winnerPid);
 
     const pair = ensurePair(winnerPid, lp, baseFan);
@@ -2129,6 +2180,9 @@ function settleRound(winnerPid, loserPid, isSelf){
     pullPairsAfter: clone(pullPairs)
   });
 
+  // ✅ 記住上一局（用於「斬=引撆」判斷）
+  setLastRound({ winner:winnerPid, losers, isSelf, isMulti:false });
+
   renderAllTab2();
   renderHistory();
   saveTab2State();
@@ -2145,11 +2199,23 @@ function renderHistory(){
 
   box.innerHTML = gameHistory.slice().reverse().map((r, idxFromEnd)=>{
     const roundNo = gameHistory.length - idxFromEnd;
+
     if(r.kind === "yin"){
       return `
         <div style="padding:10px;border-radius:14px;background:var(--muted);margin-bottom:10px;">
           <div style="font-weight:900;">#${roundNo} 陰蟄錢：${r.yinType} → ${getPlayerName(r.player)}</div>
           <div style="font-size:13px;color:var(--sub);margin-top:4px;">${fmtTime(r.ts)}｜已按規則加減分</div>
+        </div>
+      `;
+    }
+
+    if(r.kind === "slash"){
+      const who = getPlayerName(r.player);
+      const extra = (Array.isArray(r.notes) && r.notes.length) ? r.notes.join("｜") : "（已清拉）";
+      return `
+        <div style="padding:10px;border-radius:14px;background:var(--muted);margin-bottom:10px;">
+          <div style="font-weight:900;">#${roundNo} ⚔️ 斬拉：${who}</div>
+          <div style="font-size:13px;color:var(--sub);margin-top:4px;">${fmtTime(r.ts)}｜${extra}</div>
         </div>
       `;
     }
@@ -2177,9 +2243,17 @@ async function copyHistory(){
   if(!gameHistory.length){ alert("無紀錄可以複製"); return; }
   const lines = gameHistory.map((r,idx)=>{
     const no = idx+1;
+
     if(r.kind === "yin"){
       return `#${no} 陰蟄錢：${r.yinType} → ${getPlayerName(r.player)}｜已按規則加減分`;
     }
+
+    if(r.kind === "slash"){
+      const who = getPlayerName(r.player);
+      const extra = (Array.isArray(r.notes) && r.notes.length) ? r.notes.join("｜") : "（已清拉）";
+      return `#${no} ⚔️ 斬拉：${who}｜${extra}`;
+    }
+
     const winName = getPlayerName(r.winner);
     const typeTxt = r.isSelf ? "自摸" : `食胡（食 ${getPlayerName(r.loser)}）`;
     const extra = [
@@ -2508,7 +2582,7 @@ function renderFanSummarySheet(){
   $("totalFan").innerText = String(grand);
 }
 
-/* ======================= 食胡 modal（保持原本邏輯 + 修多響清拉） ======================= */
+/* ======================= 食胡 modal（保持原本邏輯 + 修多響清拉 + 多拉規則） ======================= */
 let modalWin = new Set();
 let modalLose = null;
 let modalSelf = false;
@@ -2689,6 +2763,9 @@ function confirmWinModal(){
     deltas: clone(deltas),
     pullPairsAfter: clone(pullPairs)
   });
+
+  // ✅ 記住上一局（多響）
+  setLastRound({ winner: leader, losers:[loser], isSelf:false, isMulti:true });
 
   renderAllTab2();
   renderHistory();
@@ -2908,7 +2985,8 @@ function saveTab2State(){
     playerNames, pulledNeedle,
     history: gameHistory,
     seatMap,
-    pullPairs
+    pullPairs,
+    lastRound
   };
   localStorage.setItem("tab2_state", JSON.stringify(state));
 }
@@ -2932,6 +3010,7 @@ function loadTab2State(){
     }else{
       pullPairs = {};
     }
+    lastRound = s?.lastRound ?? lastRound ?? null;
   }catch(e){}
 }
 
@@ -3015,6 +3094,7 @@ function bindEvents(){
     scores = [0,0,0,0];
     clearAllPairs();
     dealerStreak = [0,0,0,0];
+    lastRound = null;
     $("t2_info").textContent = "🧹 已清零";
     renderAllTab2();
     saveTab2State();
