@@ -402,7 +402,7 @@ body.white .seat.dealer{ border-color: rgba(0,122,255,0.90); box-shadow:0 0 0 2p
 .pullInfo{ font-size:12px; color:var(--sub); line-height:1; transform: scale(0.88); transform-origin:center; margin-top:2px; min-height:14px; }
 .streakBadge{ position:absolute; top:-10px; right:-10px; background:rgba(212,175,55,0.95); color:#000; border-radius:999px; padding:2px 8px; font-size:12px; font-weight:900; box-shadow:0 0 10px rgba(212,175,55,0.25); display:none; z-index:5; }
 body.white .streakBadge{ background:rgba(0,122,255,0.92); color:#fff; box-shadow:0 0 10px rgba(0,122,255,0.18); }
-.slashBtn{ height:20px; width:70%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:900; border:none; border-radius:8px; background:#cc0000; color:#fff; transform: translateY(-7px); padding:0; }
+.slashBtn{ height:20px; width:70%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:900; border:none; border-radius:999px; background:#cc0000; color:#fff; transform: translateY(-7px); padding:0; }
 .slashBtn:disabled{ opacity:0.35; }
 .center{ width:100%; height:100%; position:relative; border-radius:18px; overflow:hidden; display:flex; justify-content:center; align-items:center; background: radial-gradient(120% 120% at 50% 45%, rgba(255,255,255,0.08), rgba(0,0,0,0.25) 60%), linear-gradient(135deg, #0e4a2a, #07361f); }
 .center::before{ content:""; position:absolute; inset:0; border-radius:18px; pointer-events:none; background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.10) 12%, rgba(255,255,255,0.04) 25%, rgba(0,0,0,0.12) 38%, rgba(255,255,255,0.05) 55%, rgba(0,0,0,0.10) 70%, rgba(255,255,255,0.03) 100%), repeating-linear-gradient(90deg, rgba(0,0,0,0.16) 0px, rgba(0,0,0,0.16) 2px, rgba(255,255,255,0.03) 3px, rgba(255,255,255,0.03) 6px), linear-gradient(135deg, #5a3a1f, #3b2414 55%, #2a180d); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding:10px; box-shadow: 0 18px 28px rgba(0,0,0,0.35), inset 0 0 0 2px rgba(255,255,255,0.10), inset 0 0 22px rgba(0,0,0,0.35); }
@@ -490,7 +490,8 @@ body.white .tlCard{ border:1px solid rgba(0,0,0,0.10); }
 .pillMini{ display:inline-flex; align-items:center; gap:6px; padding:2px 8px; border-radius:999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); font-size:12px; color: var(--sub); }
 body.white .pillMini{ background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.08); }
 .mono{ font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; letter-spacing:0.1px; }
-#historyModal .modalHeader{ content:"📜 食胡紀錄"; }
+
+/* 食胡紀錄 sheet scroll */
 #historyModal .modalBody{
   max-height:min(60vh, 520px);
   overflow-y:auto;
@@ -499,6 +500,42 @@ body.white .pillMini{ background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0
 }
 #historyModal .modalBody::-webkit-scrollbar{ width:7px; }
 #historyModal .modalBody::-webkit-scrollbar-thumb{ background:rgba(128,128,128,0.45); border-radius:999px; }
+
+/* 總番數詳情 sheet：iOS calculator 風格 */
+#fanSummaryModal .modal{
+  overflow:hidden;
+}
+#fanSummaryModal .modalBody{
+  max-height:min(68vh, 560px);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding-right:10px;
+  padding-bottom:84px;
+}
+#fanSummaryModal .modalBody::-webkit-scrollbar{ width:7px; }
+#fanSummaryModal .modalBody::-webkit-scrollbar-thumb{ background:rgba(128,128,128,0.45); border-radius:999px; }
+#fanSummaryTotal{
+  position:sticky;
+  bottom:-1px;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  margin-top:12px;
+  padding:14px 10px calc(14px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg, rgba(28,28,28,0.88), rgba(28,28,28,0.98));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-top:1px solid rgba(255,255,255,0.10);
+  box-shadow:0 -8px 24px rgba(0,0,0,0.22);
+}
+body.white #fanSummaryTotal{
+  background:linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.98));
+  border-top:1px solid rgba(0,0,0,0.08);
+  box-shadow:0 -8px 24px rgba(0,0,0,0.08);
+}
+
 @media (max-width:430px){ :root{ --appScale:0.965; } }
 @media (max-width:402px){ :root{ --appScale:0.93; } }
 @media (max-width:380px){
@@ -600,7 +637,7 @@ function updatePerItemCalc(id){ const meta=findItemMetaById(id), baseFan=safeInt
 function getBaseFan(){ const base=safeInt($("baseFan")?.value ?? "0",0); return base<0?0:base; }
 function getRate(){ const r=safeInt($("rate")?.value ?? "1",1); return r<0?0:r; }
 function updateTotalFan(){ let total=0; for(const g of fanData){ for(const [id,name,fan,meta] of g.items){ const cnt=getStepperCount(id); if(cnt<=0) continue; total += meta==="dealer" ? dealerFanByStepper(cnt) : safeInt(fan,0)*cnt; } } total+=getBaseFan(); $("totalFan").innerText=String(total); localStorage.setItem("baseFan", String(getBaseFan())); localStorage.setItem("rate", String(getRate())); aiSuggest(); syncFanBadgeToTab2(); }
-function aiSuggest(){ const box=$("aiBox"); const picked=[]; for(const g of fanData) for(const [id,name,fan,meta] of g.items){ const cnt=getStepperCount(id); if(cnt<=0) continue; picked.push(meta==="dealer" ? `👑 莊 × ${cnt} → ${dealerFanByStepper(cnt)}番` : `${name}：${fan}番 × ${cnt} → ${safeInt(fan,0)*cnt}番`); } const msgs=[]; if(!picked.length) msgs.push(`<span class="ok">✔ 等你撳 stepper 之後我先出提示</span>`); else { msgs.push(`<span class="tip">✅ 已選：</span><span class="ok">${picked.slice(0,6).join("｜")}</span>`); if(picked.length>6) msgs.push(`<span class="ok">（仲有 ${picked.length-6} 項…）</span>`); } msgs.push(`<span class="ok">ℹ️ 底：${getBaseFan()}番</span>`); msgs.push(`<span class="ok">ℹ️ 1番 = $${getRate()}</span>`); box.innerHTML=msgs.join("<br>"); }
+function aiSuggest(){ const box=$("aiBox"); const picked=[]; for(const g of fanData) for(const [id,name,fan,meta] of g.items){ const cnt=getStepperCount(id); if(cnt<=0) continue; picked.push(meta==="dealer" ? `👑 莊 × ${cnt} → ${dealerFanByStepper(cnt)}番` : `${name}：${fan}番 × ${cnt} → ${safeInt(fan,0)*cnt}番`); } const msgs=[]; if(!picked.length); else { msgs.push(`<span class="tip">✅ 已選：</span><span class="ok">${picked.slice(0,6).join("｜")}</span>`); if(picked.length>6) msgs.push(`<span class="ok">（仲有 ${picked.length-6} 項…）</span>`); } msgs.push(`<span class="ok">ℹ️ 底：${getBaseFan()}番</span>`); msgs.push(`<span class="ok">ℹ️ 1番 = $${getRate()}</span>`); box.innerHTML=msgs.join("<br>"); }
 function saveTab1State(){ const counts={}; for(const g of fanData) for(const [id,name,fan,meta] of g.items){ const vEl=document.getElementById(`sv_${id}`); if(vEl) counts[id]=String(clampStepperValue(vEl.textContent,meta)); } localStorage.setItem("tab1_state", JSON.stringify({counts, baseFan:$("baseFan")?.value ?? "0", rate:$("rate")?.value ?? "1"})); }
 function loadTab1State(){ const raw=localStorage.getItem("tab1_state"); if(!raw) return; try{ const s=JSON.parse(raw); if(s?.baseFan!==undefined) $("baseFan").value=String(s.baseFan); if(s?.rate!==undefined) $("rate").value=String(s.rate); if(s?.counts) for(const g of fanData) for(const [id,name,fan,meta] of g.items){ const v=s.counts[id]; if(v!==undefined) setStepperValue(id, clampStepperValue(v,meta)); } for(const g of fanData) for(const [id] of g.items) updatePerItemCalc(id); }catch(e){} }
 function clearTab1All(){ for(const g of fanData) for(const [id,name,fan,meta] of g.items){ setStepperValue(id,0); updatePerItemCalc(id); } updateTotalFan(); saveTab1State(); }
@@ -620,7 +657,7 @@ function getPairsWherePulledIs(pid){ const out=[]; for(const k in pullPairs){ co
 function getPairsWherePullerIs(pid){ const out=[]; for(const k in pullPairs){ const p=pullPairs[k]; if(p&&p.puller===pid) out.push(p); } out.sort((a,b)=>(b.ts||0)-(a.ts||0)); return out; }
 function deletePair(puller,pulled){ delete pullPairs[pairKey(puller,pulled)]; }
 function clearAllPairs(){ pullPairs={}; syncPulledNeedleFromPairs(); }
-function syncPulledNeedleFromPairs(){ pulledNeedle=[0,0,0,0]; for(let pid=0; pid<4; pid++){ const incoming=getPairsWherePulledIs(pid); if(!incoming.length) pulledNeedle[pid]=0; else { let maxN=0; for(const p of incoming) maxN=Math.max(maxN,safeInt(p.needles,0)); pulledNeedle[pid]=maxN; } } }
+function syncPulledNeedleFromPairs(){ pulledNeedle=[0,0,0,0]; for(let pid=0; pid<4; pid++){ const incoming=getPairsWherePulledIs(pid); if(!incoming.length) pulledNeedle[pid]=0; else { let maxN=0; for(const p of incoming) maxN=Math.max(maxN, safeInt(p.needles,0)); pulledNeedle[pid]=maxN; } } }
 function canHaveMultiIncomingNow(){ return multiChainPending===true; }
 function sanitizePullPairs(){ if(canHaveMultiIncomingNow()) return; const incomingByPulled=new Map(); for(const k in pullPairs){ const p=pullPairs[k]; if(!p) continue; const arr=incomingByPulled.get(p.pulled)||[]; arr.push(p); incomingByPulled.set(p.pulled, arr); } let fixed=false, fixes=[]; for(const [pulled, arr] of incomingByPulled.entries()){ if(arr.length<=1) continue; let keep=arr[0]; for(const p of arr) if((p.ts||0)>(keep.ts||0)) keep=p; for(const p of arr){ if(p===keep) continue; deletePair(p.puller,p.pulled); fixed=true; fixes.push(`自動修正：${getPlayerName(p.pulled)} 同時有多條拉，已移除 ${getPlayerName(p.puller)}→${getPlayerName(p.pulled)}`); } }
  if(fixed){ syncPulledNeedleFromPairs(); $("t2_info").innerHTML=`🛠️ 系統自動修正拉關係<br>${fixes.map(x=>`｜${x}`).join("<br>")}`; gameHistory.push({kind:"fix", ts:Date.now(), fixes:clone(fixes), pullPairsAfter:clone(pullPairs)}); renderHistory(); saveTab2State(); } }
